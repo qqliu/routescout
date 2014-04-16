@@ -1,17 +1,24 @@
 #container {
 	border:1px solid black;
 	width: 400px;
-	margin:0px auto
+	margin:0px auto;
 }
+
+
 
 #routes {
 	margin-left: 15%;
+  margin-right: 15%;
 }
 
-#routes li {
-	font-size: 2em;
+#routes button {
+	font-size: 1.25em;
 	line-height:150%;
 	cursor: pointer;
+  margin-top: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  vertical-align: baseline;
 }
 
 #sort-by-label {
