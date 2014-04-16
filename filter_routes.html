@@ -29,6 +29,8 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+  //re-add class to force CSS
+  $(".criteria-slider").slider().addClass("criteria-slider");
   });    
 </script>
 </head>
@@ -38,7 +40,29 @@
 <br /><br /><br /><br />
 <h1><u>Filter</u> <u>Routes</u></h1>
 <br /><br />
-</ol>
+
+<table class="test">
+  <tr>
+      <td>Overall Safety</td>
+      <td><div id="slider" class="criteria-slider"></td>
+  </tr>
+  <tr>
+      <td>Fewest Accidents</td>
+      <td><div id="slider" class="criteria-slider"></td>
+  </tr>
+  <tr>
+      <td>% Bike Lanes</td>
+      <td><div id="slider" class="criteria-slider"></td>
+  </tr>
+  <tr>
+      <td>Efficiency</td>
+      <td><div id="slider" class="criteria-slider"></td>
+  </tr>
+  <tr>
+      <td>Scenery</td>
+      <td><div id="slider" class="criteria-slider"></td>
+  </tr>
+</table>
 
 </center>
 </body>
