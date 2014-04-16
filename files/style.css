@@ -5,3 +5,7 @@ font-family: 'Lily Script One', cursive;
 .nav h1 {
 color: #ffffff;
 }
+
+#center-this-navbar {
+	display:table; margin:0 auto;
+}
