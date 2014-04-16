@@ -1,12 +1,36 @@
+#container {
+	border:1px solid black;
+	width: 400px;
+	margin:0px auto
+}
+
+#routes {
+	margin-left: 15%;
+}
+
+#routes li {
+	font-size: 2em;
+	line-height:150%;
+	cursor: pointer;
+}
+
+#sort-by-label {
+	margin-left: 17%;
+}
+
 table.test td {
-    /*background-color: lime;*/
+    /* background-color: lime; */
     margin: 12px 12px 12px 12px;
     padding: 12px 12px 12px 12px;
+	white-space: nowrap;	/* prevent weird resizing after slider move*/
 }
+
 table.test {
   border-collapse: separate;
-  border-spacing: 10px;
+  border-spacing: 1px;
   *border-collapse: expression('separate', cellSpacing = '10px');
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .criteria-slider {

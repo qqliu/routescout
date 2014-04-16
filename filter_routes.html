@@ -29,18 +29,25 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
-  //re-add class to force CSS
-  $(".criteria-slider").slider().addClass("criteria-slider");
+    //re-add class to force CSS
+    $(".criteria-slider").slider({value: 50}).addClass("criteria-slider");
   });    
 </script>
 </head>
 
 <body>
-<center>
+<div id="container">
 <br /><br /><br /><br />
-<h1><u>Filter</u> <u>Routes</u></h1>
-<br /><br />
-
+<center>
+<h2><u>Possible</u> <u>Routes</u></h2>
+</center>
+<br />
+<ol id="routes">
+<li>Cambridge St.</li>
+<li>Newbury St.</li>
+</ol>
+<br />
+<div id="sort-by-label"><b>Sort Routes By:</b></div>
 <table class="test">
   <tr>
       <td>Overall Safety</td>
@@ -67,7 +74,7 @@
   <button id="route" class="btn btn-large" ><a href="navigation.html" style="text-decoration: none">
     Filter!</a></button>
 </div>
-</center>
+</div>
 </body>
 
 </html>
