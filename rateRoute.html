@@ -9,6 +9,7 @@
 <link href="files/bootstrap.css" rel="stylesheet">
 <link href="popups/popups.css" rel="stylesheet">
 <link href="test_iframe.css" rel="stylesheet">
+
 <link rel="stylesheet" href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css">
 <link href='http://fonts.googleapis.com/css?family=Lily+Script+One' rel='stylesheet' type='text/css'>
 <!-- Load any supplemental Javascript libraries here -->
@@ -26,6 +27,9 @@
 <script src="files/bootstrap-carousel.js"></script>
 <script src="files/bootstrap-typeahead.js"></script>
 <script type="text/javascript" src="files/jquery-ui-1.10.4/ui/jquery-ui.js"></script>
+<script src="ratePlugin/jquery.raty.min.js"></script>
+
+
 <style>
 h1{
 	margin-top: 30px;
@@ -33,54 +37,79 @@ margin-bottom: 20px;
 
 }
 
+h3 {
+  margin-right: 25px;
+margin-left:25px;
+margin-right: 10px;
+margin-bottom: 20px;
 
+
+}
 .item{
  margin-top: 20px;
  margin-bottom: 20px;
  font-size: 18px;
 }
 #bottom-buttons{
-margin-top: 50px;
-margin-left: 20px;
+margin-top: 10px;
+margin-left: 55px;
 margin-right: 20px;
+}
+#stars{
+
 }
 
 </style>
 
-<h1 style="text-align:center">Route 1:</h1>
-<div class="row-fluid"></div>
-<ol id="list">
-	
+<h1 style="text-align:center">Rate this Route!</h1>
 
-  <h4><li class="item">Head north on Washington St toward Hayward Pl</li></h4>
-   <h4><li class="item">Turn left onto Temple Pl</li></h4>
-    <h4><li class="item">Turn left onto Tremont St</li></h4>
-</ol>
+<div class="row-fluid">
+<div class="span4"><h3>Safety:</h3></div>
+  <div class="span4 offset3 ">
+<div class="stars"></div>
+  </div>
+ </div>
+
+
+ <div class="row-fluid">
+<div class="span4"><h3>Efficiency</h3></div>
+  <div class="span4 offset3">
+<div class="stars"></div>
+  </div>
+ </div>
+
+<div class="row-fluid">
+<div class="span4"><h3>Scenery</h3></div>
+  <div class="span4 offset2">
+<div class="stars"></div>
+  </div>
+ </div>
 
 
 <div id="bottom-buttons" class="row-fluid">
-	<div class="span5 offset2">
-<div id="route-find" style="text-align:center">
-	<button id="savedButton" class="btn btn-large" data-toggle="modal" data-target="#saveModal">
-  Save Route!
-</button>
+	
 
-</div>
-</div>
 <div class="span6 offset7">
 <div id="route-find" style="text-align:center">
-	<button id="route" class="btn btn-large" ><a href="rateRoute.html" style="text-decoration: none">
-		Rate this Route</a></button>
+	<button id="route" class="btn btn-large" ><a href="navigation.html" style="text-decoration: none">
+		Rate!</a></button>
 </div>
 </div>
 </div>
 
 
 <script>
-$("#savedButton").click(function() {
-    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
-}); 
+$(".stars").raty(
+{
+   //starOff  : 'star-off-big.png',
+  //starOn   : 'star-on-big.png'
+}
+  );
+
+
+
 </script>
+
 <!--
 <div id="route-find" style="text-align:center">
 	<button id="route" class="btn btn-success btn-large" ><a href="filter_routes.html" style="text-decoration: none">
