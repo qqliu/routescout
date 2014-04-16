@@ -33,16 +33,23 @@ margin-bottom: 20px;
 
 }
 
+
 .item{
  margin-top: 20px;
  margin-bottom: 20px;
  font-size: 18px;
 }
+#bottom-buttons{
+margin-top: 50px;
+margin-left: 20px;
+margin-right: 20px;
+}
+
 </style>
 
 <h1 style="text-align:center">Route 1:</h1>
 <div class="row-fluid"></div>
-<ol>
+<ol id="list">
 	
 
   <h4><li class="item">Head north on Washington St toward Hayward Pl</li></h4>
@@ -51,6 +58,20 @@ margin-bottom: 20px;
 </ol>
 
 
+<div id="bottom-buttons" class="row-fluid">
+	<div class="span5 offset2">
+<div id="route-find" style="text-align:center">
+	<button id="route" class="btn btn-large" ><a href="test_iframe.html" style="text-decoration: none">
+		Save Route!</a></button>
+</div>
+</div>
+<div class="span6 offset7">
+<div id="route-find" style="text-align:center">
+	<button id="route" class="btn btn-large" ><a href="test_iframe.html" style="text-decoration: none">
+		Rate this Route</a></button>
+</div>
+</div>
+</div>
 <!--
 <div id="route-find" style="text-align:center">
 	<button id="route" class="btn btn-success btn-large" ><a href="filter_routes.html" style="text-decoration: none">
