@@ -1,0 +1,35 @@
+.from-to {
+	margin-top: 10px;
+	margin-bottom:20px;
+
+}
+
+#test
+{ display: inline-block; }
+
+ul
+{
+    list-style-type: none;
+}
+
+.btn-group inline
+{
+margin-left: 20px;
+
+}
+
+h3 {
+font-family: 'Lily Script One', cursive;
+}
+
+/*
+#route:active {
+
+	background-color: white;
+}
+
+#route:link {
+
+	background-color:white;
+}
+*/
