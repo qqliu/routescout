@@ -98,3 +98,24 @@ margin-right: 15px;
 #second {
 	display: none;
 }
+
+#togglefeatures {
+	float: right;
+	text-align: right;
+}
+
+#toggle-label {
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+.toggle-button {
+	display: inline;
+	margin-left: 45px;
+}
+
+.toggle-img {
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
