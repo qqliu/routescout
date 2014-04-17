@@ -27,6 +27,19 @@
 <script src="files/bootstrap-typeahead.js"></script>
 <script type="text/javascript" src="files/jquery-ui-1.10.4/ui/jquery-ui.js"></script>
 
+<script type="text/javascript">
+  if (window.location.href.match("quanquan")) {
+      document.domain = "quanquan.scripts.mit.edu";
+  } 
+
+  $(document).ready(function() {
+    $("#route").click(function() {
+      parent.showBottomFrame();
+    });
+    
+  });  
+</script>
+
 <style>
 .from-to{
 	margin-right: 15px;
@@ -53,8 +66,7 @@
 
 
 <div id="route-find" style="text-align:center">
-	<button id="route" class="btn btn-large" ><a href="test_iframe.html" style="text-decoration: none">
-		Search For Routes!</a></button>
+	<button id="route" class="btn btn-large" >Search For Routes!</button>
 </div>
 
 

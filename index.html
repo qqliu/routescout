@@ -16,6 +16,14 @@
       </script>
 
     <script>
+    if (window.location.href.match("quanquan")) {
+        document.domain = "quanquan.scripts.mit.edu";
+    } 
+    
+    function showBottomFrame() {
+      alert("kobe");
+    }
+    
     function initialize() {
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
         
