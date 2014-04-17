@@ -40,9 +40,16 @@ margin-bottom: 20px;
  font-size: 18px;
 }
 #bottom-buttons{
-margin-top: 50px;
+position: relative;
+top: -25px;
+margin-top: 0px;
 margin-left: 20px;
 margin-right: 20px;
+}
+
+body {
+    overflow-x:hidden;
+    overflow-y:hidden;
 }
 
 .go-back {
@@ -61,20 +68,19 @@ a:hover {
 
 </style>
 
+<body>
+
 <div class = "go-back" style="padding: 10px;">
 <a href="filter_routes.html"><img src="back-arrow.png"></a>
 </div>
 
-<h1 style="text-align:center">Route 1:</h1>
-<div class="row-fluid"></div>
+<h2 style="text-align:center"><u>Selected</u> <u>Route</u></h2>
 
-<div style="padding: 20px;">
+<div style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;">
 	<ol id="list">
-		
-	
-	  <h4><li class="item">Head north on Washington St toward Hayward Pl</li></h4>
-	   <h4><li class="item">Turn left onto Temple Pl</li></h4>
-	    <h4><li class="item">Turn left onto Tremont St</li></h4>
+	  <li class="item">Head north on Washington St toward Hayward Pl</li>
+	  	<li class="item">Turn left onto Temple Pl</li>
+	    <li class="item">Turn left onto Tremont St</li>
 	</ol>
 
 </div>
@@ -95,6 +101,8 @@ a:hover {
 </div>
 </div>
 </div>
+
+</body>
 
 
 <script>

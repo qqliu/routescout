@@ -60,14 +60,16 @@ margin-bottom: 20px;
  font-size: 18px;
 }
 #bottom-buttons{
-margin-top: 10px;
+margin-top: -10px;
 margin-left: 55px;
 margin-right: 20px;
 }
 #stars{
 
 }
-
+body {
+    overflow-x:hidden;
+}
 
 .go-back {
 	width:20px;
@@ -87,11 +89,12 @@ a:hover {
 
 </style>
 
+<body>
 <div class = "go-back" style="padding: 10px;">
 <a href="navigation.html"><img src="back-arrow.png"></a>
 </div>
 
-<h1 style="text-align:center">Rate this Route!</h1>
+<h2 style="text-align:center"><u>Rate</u> <u>this</u> <u>Route!</u></h2>
 
 <div class="row-fluid">
 <div class="span4"><h3>Safety:</h3></div>
@@ -126,7 +129,7 @@ a:hover {
 </div>
 </div>
 </div>
-
+</body>
 
 <script>
 $(".stars").raty(

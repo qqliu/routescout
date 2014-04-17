@@ -1,4 +1,4 @@
-h2, h1, h3 {
+h2, h1 {
 font-family: 'Lily Script One', cursive;
 }
 
@@ -7,6 +7,14 @@ font-family: 'Lily Script One', cursive;
 	text-decoration: none;
 }
 
+#green-buttons {
+	text-align: left;
+}
+
+#map {
+	position: relative;
+	left: 80px;
+}
 
 #first {
 	position: relative;
@@ -103,4 +111,25 @@ margin-right: 15px;
 
 #second {
 	display: none;
+}
+
+#togglefeatures {
+	float: right;
+	text-align: right;
+}
+
+#toggle-label {
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+.toggle-button {
+	display: inline;
+	margin-left: 45px;
+}
+
+.toggle-img {
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
 }
