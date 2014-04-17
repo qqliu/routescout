@@ -16,17 +16,8 @@
       </script>
 
     <script>
-
-    function showBottomFrame() {
-      console.log("calling parent");
-      alert(parent.document.getElementById("second"));
-    }
     
     function initialize() {
-        if (!window.location.href.match("quanquan")) {
-          $("#second").show();
-        }
-    
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
         var directionsDisplay = new google.maps.DirectionsRenderer();
         var directionsService = new google.maps.DirectionsService();
@@ -109,7 +100,7 @@
         </div>
 	  </div>
     </div>
-    <div class="container-fluid span15">
+    <div  class="container-fluid span15">
       <div class="row-fluid">
         <div class="container-fluid span15">
           <div class="row-fluid">
