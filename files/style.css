@@ -73,3 +73,7 @@ font-family: 'Lily Script One', cursive;
 #savedroutes {
 	cursor: pointer;
 }
+
+#second {
+	display: none;
+}

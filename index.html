@@ -82,6 +82,17 @@
             });
         } 
 
+      $("#savedroutes").click(function() {
+        $("#second").attr("src", "myroutes.html").show();
+      });
+      
+      $("#route").click(function(e) {
+        $("#second").fadeIn();
+        if ($("#second").attr("src") == "myroutes.html") {
+          $("#second").attr("src", "filter_routes.html");
+        }
+        e.preventDefault();
+      });
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
