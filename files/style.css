@@ -2,6 +2,11 @@ h2, h1 {
 font-family: 'Lily Script One', cursive;
 }
 
+#first {
+	position: relative;
+	left: 8px;
+}
+
 #leftside {
 	position: relative;
 	left: 20px;
