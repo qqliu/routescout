@@ -31,6 +31,15 @@
 
 
 <style>
+
+a {
+	color: #000000;
+}
+a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
 h1{
 	margin-top: 30px;
 margin-bottom: 20px;
@@ -58,6 +67,7 @@ margin-right: 20px;
 #stars{
 
 }
+
 
 </style>
 
@@ -91,7 +101,7 @@ margin-right: 20px;
 
 <div class="span6 offset7">
 <div id="route-find" style="text-align:center">
-	<button id="route" class="btn btn-large" ><a href="navigation.html" style="text-decoration: none">
+	<button id="route" type="button" class="btn btn-large" onClick=" $('#save').css({'color': 'black'}); return false;"><a href="navigation.html" style="text-decoration: none">
 		Rate!</a></button>
 </div>
 </div>
@@ -106,6 +116,9 @@ $(".stars").raty(
 }
   );
 
+$("#route").click(function() {
+    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+}); 
 
 
 </script>
