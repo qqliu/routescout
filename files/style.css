@@ -1,6 +1,12 @@
-h2, h1, h3 {
+h2, h1 {
 font-family: 'Lily Script One', cursive;
 }
+
+#savedroutes, #logout, #savedroutes:hover, #logout:hover {
+	color: #ffffff;
+	text-decoration: none;
+}
+
 
 #first {
 	position: relative;
