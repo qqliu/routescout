@@ -41,3 +41,11 @@ font-family: 'Lily Script One', cursive;
 	height: 50px;
 	display:table; margin:0 auto;
 }
+
+#logout {
+	cursor: pointer;
+}
+
+#savedroutes {
+	cursor: pointer;
+}
