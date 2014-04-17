@@ -18,7 +18,7 @@
     <script>
 
     function showBottomFrame() {
-      $("#second").fadeIn();
+      alert("kobe");
     }
     
     function initialize() {
@@ -43,11 +43,6 @@
         });
       
         infowindow.open(map,marker);
-        
-        //hide the frame if running on quanquan.scripts
-        if (!window.location.href.match("quanquan")) {
-          $("#second").show();
-        }
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
