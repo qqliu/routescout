@@ -19,10 +19,12 @@ font-family: 'Lily Script One', cursive;
 	font-family: 'Lily Script One', cursive;	
 }
 
+/*
 .container-fluid {
 	position: relative;
 	top: 20px;
 }
+*/
 
 #header {
 	position: relative;
@@ -38,8 +40,4 @@ font-family: 'Lily Script One', cursive;
 #center-this-navbar {
 	height: 50px;
 	display:table; margin:0 auto;
-}
-
-#second {
-	display: none;
 }
