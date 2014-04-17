@@ -41,6 +41,7 @@
     var adding;
     var message;
     var feature;
+    var markers = [];
     
     function toggleActive(button) {
 	var active = $(button).hasClass("active");
@@ -80,6 +81,9 @@
       marker.info = new google.maps.InfoWindow({
         content: adding == "caution" ? "Caution! " + message : "Tip: " + message
       });
+      
+      marker.type = feature.type;
+      markers.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
 	  marker.info.open(map, this);
       });
@@ -198,6 +202,24 @@
 	$("#report-button").removeClass("active");
 	$("#tip-button").removeClass("active");
       });
+      
+      $('.filters:checkbox').click(function(){
+	if(!$(this).is(':checked')){
+	    var id = $(this).attr("value");
+	    for (var i = 0;  i < markers.length; i++) {
+		if (markers[i].type == id) {
+		    markers[i].setVisible(false);
+		}
+	    }
+	} else {
+	    var id = $(this).attr("value");
+	    for (var i = 0;  i < markers.length; i++) {
+		if (markers[i].type == id) {
+		    markers[i].setVisible(true);
+		}
+	    }
+	}
+      });
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -290,9 +312,9 @@ a:hover {
 	<div class="span8" id="map">
   <div id="togglefeatures">
   <div id="toggle-label" class="toggle-button">Toggle Visibility:</div>
-  <div class="toggle-button"><img class="toggle-img" src="files/icon_biking.png" />Bike Lanes <input type="checkbox" checked></div>
-  <div class="toggle-button"><img class="toggle-img" src="popups/star-32.png" />Tips <input type="checkbox" checked></div>
-  <div class="toggle-button"><img class="toggle-img" src="popups/caution.png" />Accidents <input type="checkbox" checked></div>
+  <div class="toggle-button"><img class="toggle-img" src="files/icon_biking.png" />Bike Lanes <input class = "filters" type="checkbox" value = "lanes" checked></div>
+  <div class="toggle-button"><img class="toggle-img" src="popups/star-32.png" />Tips <input class="filters" type="checkbox" value = "star" checked></div>
+  <div class="toggle-button"><img class="toggle-img" src="popups/caution.png" />Accidents <input class="filters" type="checkbox" value="caution" checked></div>
 
         <div id="googleMap" style="width:700px;height:550px;"></div>
 	<div id="green-buttons">
