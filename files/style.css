@@ -7,6 +7,11 @@ font-family: 'Lily Script One', cursive;
 	left: 8px;
 }
 
+#content {
+	position: relative;
+	top: 20px;
+}
+
 #test {
 	display: block;
 }
