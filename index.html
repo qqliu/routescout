@@ -14,8 +14,51 @@
     <link href="files/example-fluid-layout.css" rel="stylesheet">
       <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
       </script>
+      <p><a id="report-button" class="popup-button btn btn-success btn-large">Report Accident</a></p>
+      <p><a id="tip-button" class="popup-button btn btn-success btn-large">Add Tip</a></p>
 
     <script>
+      
+    var map;
+    var adding;
+    
+    function toggleActive(button) {
+	var active = $(button).hasClass("active");
+	if (!active) {
+	    $(button).addClass("active");
+	    if ($(button).attr("id") == "report-button") {
+		$("#tip-button").removeClass("active");
+	    } else {
+		$("#report-button").removeClass("active");
+	    }
+	} else {
+	    map.setOptions({ draggableCursor: 'default' });
+	    $(button).removeClass("active");
+	}
+    }
+    
+    var iconBase = 'popups/';
+    var icons = {
+      thumbstack: {
+	icon: iconBase + 'thumbtack-blue.png'
+      },
+      caution: {
+	icon: iconBase + 'caution.png'
+      },
+      star: {
+	icon: iconBase + 'star-32.png'
+      }
+    };
+    
+    function addMarker(feature) {
+      var marker = new google.maps.Marker({
+	position: feature.position,
+	icon: icons[feature.type].icon,
+	map: feature.map
+      });
+      map.setOptions({ draggableCursor: 'default' });
+      adding = undefined;
+    }
     
     function initialize() {
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
@@ -27,43 +70,25 @@
           zoom:16,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
-        var map=new google.maps.Map(document.getElementById("googleMap")
+        map=new google.maps.Map(document.getElementById("googleMap")
           ,mapProp);
-        
-        /*var marker=new google.maps.Marker({
-          position:myCenter,
-          });
-
-        marker.setMap(map);*/
-        
-        /*var infowindow = new google.maps.InfoWindow({
-            content:"Start here!"
-        });
-              infowindow.open(map,marker);*/
-        
-        var drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: google.maps.drawing.OverlayType.MARKER,
-            drawingControl: true,
-            drawingControlOptions: {
-              position: google.maps.ControlPosition.TOP_CENTER,
-              drawingModes: [
-                google.maps.drawing.OverlayType.MARKER
-              ]
-            },
-            markerOptions: {
-              icon: 'popups/thumbtack-blue.png'
-            },
-            circleOptions: {
-              fillColor: '#ffff00',
-              fillOpacity: 1,
-              strokeWeight: 5,
-              clickable: false,
-              editable: true,
-              zIndex: 1
-            }
-          });
-        
-        drawingManager.setMap(map);
+	
+	map.setOptions({ draggableCursor: 'default' });
+	
+	google.maps.event.addListener(map, 'click', function(event) {
+	    var feature;
+	    if (adding == "star") {
+		feature = {position: event.latLng, type: "star", map: map};
+	    } else if (adding == "caution") {
+		feature = {position: event.latLng, type: "caution", map: map};
+	    }
+	    if (feature != undefined && feature != null) {
+		addMarker(feature);
+	    }
+	    $("#report-button").removeClass("active");
+	    $("#tip-button").removeClass("active");
+	});
+	
         directionsDisplay.setMap(map);
         Route();
         
@@ -81,6 +106,18 @@
             } else { alert("couldn't get directions:"+status); }
             });
         } 
+    
+      $("#report-button").click(function() {
+          map.setOptions({ draggableCursor : "url(popups/caution.png), auto" });
+          adding = "caution";
+          toggleActive(this);
+      });
+      
+      $("#tip-button").click(function() {
+          map.setOptions({ draggableCursor: "url(popups/star-32.png), auto" });
+          adding = "star";
+          toggleActive(this);
+      });
 
       $("#savedroutes").click(function() {
         $("#second").attr("src", "myroutes.html").show();
