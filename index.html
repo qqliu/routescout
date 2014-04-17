@@ -18,10 +18,15 @@
     <script>
 
     function showBottomFrame() {
-      alert("kobe");
+      console.log("calling parent");
+      alert(parent.document.getElementById("second"));
     }
     
     function initialize() {
+        if (!window.location.href.match("quanquan")) {
+          $("#second").show();
+        }
+    
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
         var directionsDisplay = new google.maps.DirectionsRenderer();
         var directionsService = new google.maps.DirectionsService();
@@ -43,8 +48,7 @@
         /*var infowindow = new google.maps.InfoWindow({
             content:"Start here!"
         });
-      
-        infowindow.open(map,marker);*/
+              infowindow.open(map,marker);*/
         
         var drawingManager = new google.maps.drawing.DrawingManager({
             drawingMode: google.maps.drawing.OverlayType.MARKER,
@@ -86,6 +90,7 @@
             } else { alert("couldn't get directions:"+status); }
             });
         } 
+
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
