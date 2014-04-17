@@ -18,11 +18,18 @@
     <script>
 
     function showBottomFrame() {
+      console.log("calling parent");
       alert(parent.document.getElementById("second"));
     }
     
     function initialize() {
+        if (!window.location.href.match("quanquan")) {
+          $("#second").show();
+        }
+    
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+        var directionsService = new google.maps.DirectionsService();
         
         var mapProp = {
           center:new google.maps.LatLng(42.3522, -71.0627),
@@ -32,21 +39,58 @@
         var map=new google.maps.Map(document.getElementById("googleMap")
           ,mapProp);
         
-        var marker=new google.maps.Marker({
+        /*var marker=new google.maps.Marker({
           position:myCenter,
           });
 
-        marker.setMap(map);
+        marker.setMap(map);*/
         
-        var infowindow = new google.maps.InfoWindow({
+        /*var infowindow = new google.maps.InfoWindow({
             content:"Start here!"
         });
-      
-        infowindow.open(map,marker);
+              infowindow.open(map,marker);*/
         
-        if (!window.location.href.match("quanquan")) {
-          $("#second").show();
-        }
+        var drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: google.maps.drawing.OverlayType.MARKER,
+            drawingControl: true,
+            drawingControlOptions: {
+              position: google.maps.ControlPosition.TOP_CENTER,
+              drawingModes: [
+                google.maps.drawing.OverlayType.MARKER
+              ]
+            },
+            markerOptions: {
+              icon: 'popups/thumbtack-blue.png'
+            },
+            circleOptions: {
+              fillColor: '#ffff00',
+              fillOpacity: 1,
+              strokeWeight: 5,
+              clickable: false,
+              editable: true,
+              zIndex: 1
+            }
+          });
+        
+        drawingManager.setMap(map);
+        directionsDisplay.setMap(map);
+        Route();
+        
+        function Route() {
+            var start = new google.maps.LatLng(42.3522, -71.0627);
+            var end =new google.maps.LatLng(42.355, -71.065556);
+            var request = {
+            origin:start,
+            destination:end,
+            travelMode: google.maps.TravelMode.WALKING
+             };
+             directionsService.route(request, function(result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(result);
+            } else { alert("couldn't get directions:"+status); }
+            });
+        } 
+
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
