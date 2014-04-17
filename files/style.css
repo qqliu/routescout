@@ -2,10 +2,35 @@ h2, h1 {
 font-family: 'Lily Script One', cursive;
 }
 
-.nav h1 {
-color: #ffffff;
+#leftside {
+	position: relative;
+	left: 20px;
+	font-size: 20px;
+	top: 23px;
+	margin: 0;
+	font-weight: bold;
+	text-rendering: optimizelegibility;
+	color: #ffffff;
+	font-family: 'Lily Script One', cursive;	
+}
+
+.container-fluid {
+	position: relative;
+	top: 20px;
+}
+
+#header {
+	position: relative;
+	top: 12px;
+	font-size: 40px;
+	margin: 0;
+	font-weight: bold;
+	text-rendering: optimizelegibility;
+	color: #ffffff;
+	font-family: 'Lily Script One', cursive;
 }
 
 #center-this-navbar {
+	height: 50px;
 	display:table; margin:0 auto;
 }
