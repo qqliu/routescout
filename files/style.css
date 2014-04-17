@@ -9,3 +9,7 @@ color: #ffffff;
 #center-this-navbar {
 	display:table; margin:0 auto;
 }
+
+#second {
+	display: none;
+}
