@@ -1,4 +1,4 @@
-h2, h1 {
+h2, h1, h3 {
 font-family: 'Lily Script One', cursive;
 }
 
@@ -6,6 +6,30 @@ font-family: 'Lily Script One', cursive;
 	position: relative;
 	left: 8px;
 }
+
+#content {
+	position: relative;
+	top: 20px;
+}
+
+#test {
+	display: block;
+}
+
+#route-find {
+	margin-top: 10px;
+}
+
+#two {
+	position: relative;
+	left: 2px;
+	width: 355px;
+	padding: 5px;
+	margin: 0px;
+	background-color: #ffffff;
+	display: block;
+}
+
 
 #leftside {
 	position: relative;
