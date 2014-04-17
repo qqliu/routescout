@@ -9,18 +9,37 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-   <link href="files/style.css" rel="stylesheet">
-   <link href="files/bootstrap.css" rel="stylesheet">
+    <link href="files/style.css" rel="stylesheet">
+    <link href="files/bootstrap.css" rel="stylesheet">
     <link href="files/example-fluid-layout.css" rel="stylesheet">
-      <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
-      </script>
-      <p><a id="report-button" class="popup-button btn btn-success btn-large">Report Accident</a></p>
-      <p><a id="tip-button" class="popup-button btn btn-success btn-large">Add Tip</a></p>
+    <link href="popups/popups.css" rel="stylesheet">
+    <link rel="stylesheet" href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css">
+    
+    <!-- Load any supplemental Javascript libraries here -->
+    <script src="files/jquery.js"></script>
+    <script src="files/bootstrap-transition.js"></script>
+    <script src="files/bootstrap-alert.js"></script>
+    <script src="files/bootstrap-modal.js"></script>
+    <script src="files/bootstrap-dropdown.js"></script>
+    <script src="files/bootstrap-scrollspy.js"></script>
+    <script src="files/bootstrap-tab.js"></script>
+    <script src="files/bootstrap-tooltip.js"></script>
+    <script src="files/bootstrap-popover.js"></script>
+    <script src="files/bootstrap-button.js"></script>
+    <script src="files/bootstrap-collapse.js"></script>
+    <script src="files/bootstrap-carousel.js"></script>
+    <script src="files/bootstrap-typeahead.js"></script>
+    <script type="text/javascript" src="files/jquery-ui-1.10.4/ui/jquery-ui.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
+    <p><a id="report-button" class="popup-button btn btn-success btn-large">Report Accident</a></p>
+    <p><a id="tip-button" class="popup-button btn btn-success btn-large">Add Tip</a></p>
 
     <script>
       
     var map;
     var adding;
+    var message;
+    var feature;
     
     function toggleActive(button) {
 	var active = $(button).hasClass("active");
@@ -34,6 +53,7 @@
 	} else {
 	    map.setOptions({ draggableCursor: 'default' });
 	    $(button).removeClass("active");
+	    adding = undefined;
 	}
     }
     
@@ -56,6 +76,12 @@
 	icon: icons[feature.type].icon,
 	map: feature.map
       });
+      marker.info = new google.maps.InfoWindow({
+        content: adding == "caution" ? "Caution! " + message : "Tip: " + message
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+	  marker.info.open(map, this);
+      });
       map.setOptions({ draggableCursor: 'default' });
       adding = undefined;
     }
@@ -75,19 +101,28 @@
 	
 	map.setOptions({ draggableCursor: 'default' });
 	
+	//show popup
+	$("#popup").dialog({autoOpen: false});
+	
 	google.maps.event.addListener(map, 'click', function(event) {
-	    var feature;
 	    if (adding == "star") {
 		feature = {position: event.latLng, type: "star", map: map};
+		$("#popup-title").text("Add Tip");
+		$("#popup").dialog("option", { position: [485 + event.pixel.x, 180 + event.pixel.y] });
+		$("#popup").dialog('open');
 	    } else if (adding == "caution") {
 		feature = {position: event.latLng, type: "caution", map: map};
+		$("#popup-title").text("Report Accident");
+		$("#popup").dialog("option", { position: [485 + event.pixel.x, 180 + event.pixel.y] });
+		$("#popup").dialog('open');
 	    }
-	    if (feature != undefined && feature != null) {
-		addMarker(feature);
-	    }
-	    $("#report-button").removeClass("active");
-	    $("#tip-button").removeClass("active");
 	});
+	
+	function addStarCaution() {
+	  if (feature != undefined && feature != null) {
+	      addMarker(feature);
+	  }
+	}
 	
         directionsDisplay.setMap(map);
         Route();
@@ -105,7 +140,7 @@
               directionsDisplay.setDirections(result);
             } else { alert("couldn't get directions:"+status); }
             });
-        } 
+        }
     
       $("#report-button").click(function() {
           map.setOptions({ draggableCursor : "url(popups/caution.png), auto" });
@@ -129,6 +164,16 @@
           $("#second").attr("src", "filter_routes.html");
         }
         e.preventDefault();
+      });
+      
+      //install handler for submit button
+      $('#popup-submit').click(function() {
+	message = $('#popup-textbox').val();
+	$("#popup").dialog('close');
+	addStarCaution();
+	$("#popup-textbox").val("");
+	$("#report-button").removeClass("active");
+	$("#tip-button").removeClass("active");
       });
     }
 
@@ -211,6 +256,13 @@ a:hover {
 </div>
 </div>
 </div>
+<div hidden id="popup">
+  <center>
+  <p id="popup-title">Title</p>
+    <textarea id="popup-textbox" cols="25" rows="5"></textarea>
+    <p><a id="popup-submit" class="btn btn-success btn-large">Submit</a></p>
+  </center>
+</div>
 <div class="container-fluid">
 	<div class="span8">
         <div id="googleMap" style="width:900px;height:600px;"></div>
@@ -220,24 +272,6 @@ a:hover {
 
     </div><!--/.fluid-container-->
     </div>
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="files/jquery.js"></script>
-    <script src="files/bootstrap-transition.js"></script>
-    <script src="files/bootstrap-alert.js"></script>
-    <script src="files/bootstrap-modal.js"></script>
-    <script src="files/bootstrap-dropdown.js"></script>
-    <script src="files/bootstrap-scrollspy.js"></script>
-    <script src="files/bootstrap-tab.js"></script>
-    <script src="files/bootstrap-tooltip.js"></script>
-    <script src="files/bootstrap-popover.js"></script>
-    <script src="files/bootstrap-button.js"></script>
-    <script src="files/bootstrap-collapse.js"></script>
-    <script src="files/bootstrap-carousel.js"></script>
-    <script src="files/bootstrap-typeahead.js"></script>
-
-  
 </div></div>
 </div>
 </body></html>
