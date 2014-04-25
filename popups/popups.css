@@ -18,3 +18,7 @@
 	position: absolute;
 	z-index: 1000;
 }
+
+#popup-submit {
+	color: #ffffff;
+}
