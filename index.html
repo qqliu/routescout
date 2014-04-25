@@ -33,11 +33,8 @@
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
     <script>
       
-    var map;
-    var adding;
-    var message;
-    var feature;
-    var markers = [];
+    var map, adding, message, feature, messageId = 0;
+    var markers = {};
     
     function toggleActive(button) {
 	var active = $(button).hasClass("active");
@@ -75,17 +72,23 @@
 	map: feature.map
       });
       marker.info = new google.maps.InfoWindow({
-        content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div>" : "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div>"
+        content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" +
+	    messageId + "'>Delete</button>": "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>"
       });
       
       marker.type = feature.type;
-      markers.push(marker);
+      markers[messageId] = marker;
       google.maps.event.addListener(marker, 'click', function() {
 	  marker.info.open(map, this);
       });
       map.setOptions({ draggableCursor: 'default' });
       adding = undefined;
     }
+    
+    function deleteMarker(id) {
+	markers[id.split("message")[1]].setMap(null);
+	delete markers[id];
+    };
     
     function initialize() {
         var myCenter=new google.maps.LatLng(42.3522, -71.0627);
@@ -163,7 +166,7 @@
 	    Route();
 	    AnotherRoute();
 	}
-    
+      
       $("#report-button").click(function() {
           map.setOptions({ draggableCursor : "url(popups/caution.png) 16 30, default" });
           adding = "caution";
@@ -201,19 +204,20 @@
 	$("#popup-textbox").val("");
 	$("#report-button").removeClass("active");
 	$("#tip-button").removeClass("active");
+	messageId += 1;
       });
       
       $('.filters:checkbox').click(function(){
 	if(!$(this).is(':checked')){
 	    var id = $(this).attr("value");
-	    for (var i = 0;  i < markers.length; i++) {
+	    for (var i in dictionary) {
 		if (markers[i].type == id) {
 		    markers[i].setVisible(false);
 		}
 	    }
 	} else {
 	    var id = $(this).attr("value");
-	    for (var i = 0;  i < markers.length; i++) {
+	    for (var i in dictionary) {
 		if (markers[i].type == id) {
 		    markers[i].setVisible(true);
 		}
