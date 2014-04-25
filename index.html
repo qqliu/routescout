@@ -31,10 +31,6 @@
     <script src="files/bootstrap-typeahead.js"></script>
     <script type="text/javascript" src="files/jquery-ui-1.10.4/ui/jquery-ui.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
-    
-      <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&sensor=false&libraries=drawing"></script>
-      </script>
-
     <script>
       
     var map;
@@ -169,13 +165,13 @@
 	}
     
       $("#report-button").click(function() {
-          map.setOptions({ draggableCursor : "url(popups/caution.png), auto" });
+          map.setOptions({ draggableCursor : "url(popups/caution.png) 25 40, default" });
           adding = "caution";
           toggleActive(this);
       });
       
       $("#tip-button").click(function() {
-          map.setOptions({ draggableCursor: "url(popups/star-32.png), auto" });
+          map.setOptions({ draggableCursor: "url(popups/star-32.png) 16 30, default" });
           adding = "star";
           toggleActive(this);
       });
