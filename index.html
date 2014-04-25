@@ -75,7 +75,7 @@
 	map: feature.map
       });
       marker.info = new google.maps.InfoWindow({
-        content: adding == "caution" ? "Caution! " + message : "Tip: " + message
+        content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div>" : "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div>"
       });
       
       marker.type = feature.type;
@@ -165,7 +165,7 @@
 	}
     
       $("#report-button").click(function() {
-          map.setOptions({ draggableCursor : "url(popups/caution.png) 25 40, default" });
+          map.setOptions({ draggableCursor : "url(popups/caution.png) 16 30, default" });
           adding = "caution";
           toggleActive(this);
       });
@@ -191,7 +191,11 @@
       
       //install handler for submit button
       $('#popup-submit').click(function() {
-	message = $('#popup-textbox').val();
+	lines = $('#popup-textbox').val().split('\n');
+	message = "";
+	for(var i = 0; i < lines.length; i++){
+	    message += "<span style='float:left;'>" + lines[i] + "</span><br />";
+	}
 	$("#popup").dialog('close');
 	addStarCaution();
 	$("#popup-textbox").val("");
