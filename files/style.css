@@ -133,3 +133,7 @@ margin-right: 15px;
 	height: 30px;
 	vertical-align: middle;
 }
+
+#googleMap img {
+	max-width: inherit;
+}
