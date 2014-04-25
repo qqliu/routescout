@@ -210,14 +210,14 @@
       $('.filters:checkbox').click(function(){
 	if(!$(this).is(':checked')){
 	    var id = $(this).attr("value");
-	    for (var i in dictionary) {
+	    for (var i in markers) {
 		if (markers[i].type == id) {
 		    markers[i].setVisible(false);
 		}
 	    }
 	} else {
 	    var id = $(this).attr("value");
-	    for (var i in dictionary) {
+	    for (var i in markers) {
 		if (markers[i].type == id) {
 		    markers[i].setVisible(true);
 		}
