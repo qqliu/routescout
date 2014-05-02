@@ -1,69 +1,68 @@
- a {
-  color: #000000;
+a {
+    color: #000;
 }
 
 a:hover {
-  color:#FFFFFF;
-  text-decoration: none;
+    color: #FFF;
+    text-decoration: none;
 }
 
-h2, h1 {
-font-family: 'Lily Script One', cursive;
+h2,h1 {
+    font-family: 'Lily Script One', cursive;
 }
 
-#savedroutes, #logout, #savedroutes:hover, #logout:hover {
-	color: #ffffff;
-	text-decoration: none;
+#savedroutes,#logout,#savedroutes:hover,#logout:hover {
+    color: #fff;
+    text-decoration: none;
 }
 
 #green-buttons {
-	text-align: left;
+    text-align: left;
 }
 
 #map {
-	position: relative;
-	left: 80px;
+    position: relative;
+    left: 80px;
 }
 
 #first {
-	position: relative;
-	left: 8px;
+    position: relative;
+    left: 8px;
 }
 
 #content {
-	position: relative;
-	top: 20px;
+    position: relative;
+    top: 20px;
 }
 
 #test {
-	display: block;
+    display: block;
 }
 
 #route-find {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 
 #two {
-	position: relative;
-	left: 2px;
-	width: 355px;
-	padding: 5px;
-	margin: 0px;
-	background-color: #ffffff;
-	display: block;
+    position: relative;
+    left: 2px;
+    width: 355px;
+    padding: 5px;
+    margin: 0;
+    background-color: #fff;
+    display: block;
 }
 
-
 #leftside {
-	position: relative;
-	left: 20px;
-	font-size: 20px;
-	top: 23px;
-	margin: 0;
-	font-weight: bold;
-	text-rendering: optimizelegibility;
-	color: #ffffff;
-	font-family: 'Lily Script One', cursive;	
+    position: relative;
+    left: 20px;
+    font-size: 20px;
+    top: 23px;
+    margin: 0;
+    font-weight: 700;
+    text-rendering: optimizelegibility;
+    color: #fff;
+    font-family: 'Lily Script One', cursive;
 }
 
 /*
@@ -72,132 +71,126 @@ font-family: 'Lily Script One', cursive;
 	top: 20px;
 }
 */
-
-.logout-saved
-{
-position: relative;
-left: 20px;
-font-size: 20px;
-top: 23px;
-margin: 0;
-font-weight: bold;
-text-rendering: optimizelegibility;
-color: #ffffff;
-font-family: 'Lily Script One', cursive;
-font-size: 2.0em;
-height: 25px;
-margin:0 auto;
-text-decoration:none;
-margin-right: 15px;
-
+.logout-saved {
+    position: relative;
+    left: 20px;
+    font-size: 20px;
+    top: 23px;
+    margin: 0;
+    font-weight: 700;
+    text-rendering: optimizelegibility;
+    color: #fff;
+    font-family: 'Lily Script One', cursive;
+    font-size: 2em;
+    height: 25px;
+    margin: 0 auto;
+    text-decoration: none;
+    margin-right: 15px;
 }
 
-
-
 #header {
-	position: relative;
-	top: 12px;
-	font-size: 40px;
-	margin: 0;
-	font-weight: bold;
-	text-rendering: optimizelegibility;
-	color: #ffffff;
-	font-family: 'Lily Script One', cursive;
+    position: relative;
+    top: 12px;
+    font-size: 40px;
+    margin: 0;
+    font-weight: 700;
+    text-rendering: optimizelegibility;
+    color: #fff;
+    font-family: 'Lily Script One', cursive;
 }
 
 #center-this-navbar {
-	height: 50px;
-	display:table; margin:0 auto;
+    height: 50px;
+    display: table;
+    margin: 0 auto;
 }
 
 #logout {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #savedroutes {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #second {
-	display: none;
+    display: none;
 }
 
 #togglefeatures {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
 }
 
 #toggle-label {
-	font-weight: bold;
-	font-size: 1.25em;
+    font-weight: 700;
+    font-size: 1.25em;
 }
 
 .toggle-button {
-	display: inline;
-	margin-left: 45px;
+    display: inline;
+    margin-left: 45px;
 }
 
 .toggle-img {
-	width: 30px;
-	height: 30px;
-	vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
 }
 
 #googleMap img {
-	max-width: inherit;
+    max-width: inherit;
 }
 
 .test {
-  padding: 0px;
-  margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
-h1{
-  margin-top: 30px;
-margin-bottom: 20px;
-
+h1 {
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
-
-.item{
- margin-top: 20px;
- margin-bottom: 20px;
- font-size: 18px;
+.item {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 18px;
 }
-#bottom-buttons{
-position: relative;
-top: -25px;
-margin-top: 0px;
-margin-left: 20px;
-margin-right: 20px;
+
+#bottom-buttons {
+    position: relative;
+    top: -25px;
+    margin-top: 0;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 body {
-    overflow-x:hidden;
-    overflow-y:hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .go-back {
-  width:20px;
-  height: 20px;
-
+    width: 20px;
+    height: 20px;
 }
 
 a {
-  color: #000000;
+    color: #000;
 }
+
 a:hover {
-  color: #000000;
-  text-decoration: none;
+    color: #000;
+    text-decoration: none;
 }
 
-
-#first
-{
-    overflow:hidden;
+#first {
+    overflow: hidden;
     background: url(texture-noise-beige-blur-lt.gif);
 }
+
 #second {
-    overflow:hidden;
-    background:url(texture-noise-beige-blur-lt.gif);
+    overflow: hidden;
+    background: url(texture-noise-beige-blur-lt.gif);
 }
