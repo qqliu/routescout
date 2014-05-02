@@ -93,10 +93,8 @@
                             <div class="container-fluid" id="containerfluid">
                                 <br>
 
-                                <h2><span style=
-                                "text-decoration: underline">Possible</span>
-                                <span style=
-                                "text-decoration: underline">Routes</span></h2><br>
+                                <h2><span>Possible</span>
+                                <span>Routes</span></h2>
 
 
                                 <div id="routes">
@@ -108,7 +106,7 @@
                                         <li><button class="btn btn-large" id=
                                         "route-2" type="button">Newbury St.</button></li>
                                     </ol>
-                                </div><br>
+                                </div>
 
                                 <h4>Sort Routes By:</h4>
 

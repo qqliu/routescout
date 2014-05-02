@@ -44,12 +44,7 @@ h2,h1 {
 }
 
 #two {
-    position: relative;
-    left: 2px;
-    width: 355px;
-    padding: 5px;
     margin: 0;
-    background-color: #fff;
     display: block;
 }
 
@@ -65,12 +60,11 @@ h2,h1 {
     font-family: 'Lily Script One', cursive;
 }
 
-/*
-.container-fluid {
+#containerfluid {
 	position: relative;
-	top: 20px;
+	top: -10px;
 }
-*/
+
 .logout-saved {
     position: relative;
     left: 20px;
@@ -248,6 +242,8 @@ a:hover {
     background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     width: 350px;
+    padding: 10px;
+    
 }
 
 #second {
@@ -255,19 +251,16 @@ a:hover {
     overflow: scroll;
     background: url(texture-noise-beige-blur-lt.gif);
     display: block;
-    height: 300px;
+    height: 350px;
     width: 350px;
-}
-
-#container {
-	border:1px solid black;
-	width: 400px;
-	margin:0px auto;
+    margin-bottom: 0px;
+    padding: 10px;
 }
 
 
 
 #routes {
+	margin-top: 0px;
 	margin-left: 15%;
   margin-right: 15%;
 }
@@ -276,9 +269,9 @@ a:hover {
 	font-size: 1.25em;
 	line-height:150%;
 	cursor: pointer;
-  margin-top: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  margin-top: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   vertical-align: baseline;
 }
 
@@ -288,8 +281,7 @@ a:hover {
 
 table.test td {
     /* background-color: lime; */
-    margin: 12px 12px 12px 12px;
-    padding: 12px 12px 12px 12px;
+    padding: 5px 5px 5px 5px;
 	white-space: nowrap;	/* prevent weird resizing after slider move*/
 }
 
