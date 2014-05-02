@@ -93,22 +93,10 @@
                             <div class="container-fluid" id="containerfluid">
                                 <br>
 
-                                <h2><span style=
-                                "text-decoration: underline">Possible</span>
-                                <span style=
-                                "text-decoration: underline">Routes</span></h2><br>
+                                <h2><span style="text-decoration: underline">Possible</span>
+                                <span style="text-decoration: underline">Routes</span></h2><br>
 
-
-                                <div id="routes">
-                                    <ol>
-                                        <li><button class="btn btn-large" id=
-                                        "route-1" type="button">Cambridge
-                                        St.</button></li>
-
-                                        <li><button class="btn btn-large" id=
-                                        "route-2" type="button">Newbury St.</button></li>
-                                    </ol>
-                                </div><br>
+                                <div id="routes"></div><br>
 
                                 <h4>Sort Routes By:</h4>
 
@@ -171,16 +159,7 @@
 				            "text-decoration: underline">Selected</span> <span style=
 				            "text-decoration: underline">Route</span></h2>
 				
-				            <div style=
-				            "padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;">
-				            <ol id="list">
-				                    <li class="item">Head north on Washington St</li>
-				
-				                    <li class="item">Turn left onto Temple Pl</li>
-				
-				                    <li class="item">Turn left onto Tremont St</li>
-				                </ol>
-				            </div>
+				            <div id="directions_list" style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;"></div>
 				
 				            <div class="row-fluid" id="bottom-buttons">
 				                <div class="span5 offset2">

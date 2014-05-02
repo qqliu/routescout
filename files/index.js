@@ -1,5 +1,6 @@
  var map, adding, message, feature, messageId = 0;
  var markers = {};
+ var curResult;
 
  function toggleActive(button) {
      var active = $(button).hasClass("active");
@@ -116,7 +117,6 @@
              navigator.geolocation.getCurrentPosition(function(position) {
                  start = start || new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                  end = end || new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                 map.setCenter(initialLocation);
              }, function() {
                  start = start || "Boston, MA";
              });
@@ -130,34 +130,48 @@
          };
          directionsService.route(request, function(result, status) {
              if (status == google.maps.DirectionsStatus.OK) {
-                 directionsDisplay.setDirections(result);
+		    curResult = result;
+		    var possibleRoutes, c;
+		    possibleRoutes = curResult.routes;
+		    c = 0;
+		    $("#routes").empty();
+		    if (possibleRoutes.length > 0) {
+			$("#routes").append("<ol></ol>");
+			for (i in possibleRoutes) {
+			    $($("#routes").find("ol")[0]).append('<li><button class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
+						possibleRoutes[i].summary + '</button></li>');
+			    c += 1;
+			}
+			$('.route-buttons').click(function(e) {
+			    e.preventDefault();
+			    $("#containerfluid").hide();
+			    $("#rate-route").hide();
+			    $("#saved-routes").hide();
+			    $("#navigation").show();
+			    var index = e.currentTarget.id.split("route-")[1];
+			    var steps = curResult.routes[index].legs[0].steps;
+			    $("#directions_list").empty();
+			    if (steps.length > 0) {
+				$("#directions_list").append("<ol id='list'></ol>");
+				for (i in steps) {
+				    $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
+				}
+			    }
+			    $("#directions_list").append();
+			    return false;
+			});
+		    }
+		    directionsDisplay.setDirections(result);
              } else {
-                 alert("couldn't get directions:" + status);
-             }
-         });
-     }
-
-     function AnotherRoute() {
-         var start = new google.maps.LatLng(42.3522, -71.0627);
-         var end = new google.maps.LatLng(42.354, -71.067);
-         var request = {
-             origin: start,
-             destination: end,
-             travelMode: google.maps.TravelMode.WALKING
-         };
-         directionsService.route(request, function(result, status) {
-             if (status == google.maps.DirectionsStatus.OK) {
-                 directionsDisplay2.setDirections(result);
-             } else {
-                 alert("couldn't get directions:" + status);
+		    //alert("couldn't get directions:" + status);
              }
          });
      }
 
      function showAllRoutes() {
          Route();
-         AnotherRoute();
      }
+     
      $("#report-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/caution.png) 16 30, default"
@@ -236,15 +250,6 @@
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
          $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
-     });
-     
-     $('#route-1').click(function(e) {
-         e.preventDefault();
-         $("#containerfluid").hide();
-         $("#rate-route").hide();
-         $("#saved-routes").hide();
-         $("#navigation").show();
-         return false;
      });
      
      $('#back-to-routes').click(function(e) {
