@@ -92,7 +92,6 @@
                         "display:none">
                             <div class="container-fluid" id="containerfluid">
                                 <br>
-
                                 <h2><span style="text-decoration: underline">Possible</span>
                                 <span style="text-decoration: underline">Routes</span></h2><br>
 
@@ -162,20 +161,17 @@
 				            <div id="directions_list" style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;"></div>
 				
 				            <div class="row-fluid" id="bottom-buttons">
-				                <div class="span5 offset2">
-				                    <div id="route-find" style="text-align:center">
+				                    <div id="route-find" style="text-align:center; float: left;">
 				                        <button class="btn btn-large" data-target="#saveModal"
 				                        data-toggle="modal" id="savedButton">Save
 				                        Route!</button>
+				                        <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
 				                    </div>
-				                </div>
 				
-				                <div class="span6 offset7">
 				                    <div id="route-find" style="text-align:center">
 				                        <button class="btn btn-large" id="route-rate" type="button">Rate this
 				                        Route</a></button>
 				                    </div>
-				                </div>
 				            </div>
 				        </div>
 				        
@@ -210,11 +206,10 @@
 								
 								
 								<div id="bottom-buttons" class="row-fluid">
-									<div class="span6 offset7">
-										<div id="route-find" style="text-align:center">
-											<button id="route-save" type="button" class="btn btn-large">
-											Rate!</button>
-										</div>
+									<div id="route-find" style="text-align:center">
+										<button id="route-save" type="button" class="btn btn-large">
+										Rate!</button>
+										<div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
 									</div>
 								</div>
 				        </div>
@@ -225,22 +220,10 @@
 								<h2><u>Saved</u> <u>Routes</u></h2>
 								<br /><br />
 								<ol id="selectable">
-								  <li class="ui-widget-content">Main St. To Br...</li>
-								  <li class="ui-widget-content">Memorial Dr. t...</li>
-								  <li class="ui-widget-content">Stevens Creek ...</li>
-								  <li class="ui-widget-content">Barnhart Ave t...</li>
-								  <li class="ui-widget-content">Homestead Ave ...</li>
-								  <li class="ui-widget-content">Massachusetts ...</li>
-								  <li class="ui-widget-content">First Ave to D...</li>
-								  <li class="ui-widget-content">Blaney Rd to B...</li>
-								  <li class="ui-widget-content">Miller Ave to ...</li>
-								  <li class="ui-widget-content">Broadway to Ma...</li>
-								  <li class="ui-widget-content">Kendall Square...</li>
-								  <li class="ui-widget-content">Akamai to Chil...</li>
-								  <li class="ui-widget-content">In-N-Out Sunnl...</li>
-								  <li class="ui-widget-content">Harvard Squaro...</li>
-								  <li class="ui-widget-content">Vassar St to A...</li>
-								  <li class="ui-widget-content">San Jose, CA t...</li>
+								  <li class="ui-widget-content">Main St. To Bridge St.</li>
+								  <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+								  <li class="ui-widget-content">Stevens Creek to First Ave</li>
+								  <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
 								</ol>
 							
 							</center>

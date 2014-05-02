@@ -190,8 +190,8 @@
      	 $("#rate-route").hide();
          $("#navigation").hide();
          $("#saved-routes").hide();
-         $("#containerfluid").show();
          $("#second").fadeIn();
+         $("#containerfluid").show();
          e.preventDefault();
          showAllRoutes();
      });
@@ -229,7 +229,6 @@
  }
  google.maps.event.addDomListener(window, 'load', initialize);
  $(document).ready(function() {
-     //re-add class to force CSS
      $(".criteria-slider").slider({
          value: 50,
          change: function(event, ui) {
@@ -249,7 +248,8 @@
      }).addClass("criteria-slider");
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
-         $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+        $("#save-route-alert").show();
+	    $('#save-route-alert').delay(500).fadeOut(400);
      });
      
      $('#back-to-routes').click(function(e) {
@@ -280,13 +280,17 @@
          $("#navigation").hide();
          $("#containerfluid").hide();
          $("#rate-route").hide();
+         $("#second").fadeIn();
          $("#saved-routes").show();
          return false;
      });
      
 	$("#route-save").click(function() {
-	    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+	    $("#save-rate-alert").show();
+	    $('#save-rate-alert').delay(500).fadeOut(400);
 	}); 
+	
+	$(".stars").raty(); 
 	
 	$("#selectable").selectable({ disabled: true });
 
@@ -305,5 +309,4 @@
         parent.remove();
       });
     });
-
  });
