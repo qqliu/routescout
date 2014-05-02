@@ -1,21 +1,45 @@
 For everything that doesn't return anything, return either success or failure.
 
-Saving Ratings
+users table (primary = email)
+  email char(1000)
+  first_name char(1000)
+  last_name char(1000)
+  password char(1000)
+  salt char(1000)
 
-op = save_rating
-route_key = route_key (VARCHAR)
-safety = 1-5 (INT)
-efficiency = 1-5 (INT)
-scenery = 1-5 (INT)
+ratings table (primary = user, route_key)
+  user char(1000)
+  route_key char(1000)
+  safety (INT)
+  efficiency (INT)
+  scenery (INT)
 
-Update Ratings (includes deleting ratings, if a rating becomes 0 delete the rating)
+routes table (primary = user, route_key)
+  user char(1000)
+  route_key char(1000)
+  name char(1000)
+  from char(1000)
+  to char(1000)
+  order (INT)
+
+tips_and_accidents table (primary = user, type, id)
+  user char(1000)
+  type = INT
+  id char(1000)
+  comment char(1000)
+  x char(1000)
+  y char(1000)
+
+------------------------------------------------
+Update Ratings (includes deleting ratings
+if all three ratings are 0, delete them)
 
 op = update_ratings
 route_key = route_key (VARCHAR)
 safety = 1-5 (INT)
 efficiency = 1-5 (INT)
 scenery = 1-5 (INT)
-
+------------------------------------------------
 Saving Routes
 
 op = save_routes
@@ -24,51 +48,41 @@ name = name (VARCHAR)
 from = from_add (VARCHAR)
 to = to_addr (VARCHAR)
 order = (INT)
-
+------------------------------------------------
 Delete Saved Routes
 
 op = delete_saved_route
 route_key = VARCHAR
 
 PHP differentiates Tip and Accident based on the method used
+------------------------------------------------
+Save Tip or Accident
 
-Save Tip
-
-op = save_tip
+op = save_ta
+type = 0 (for tip), 1 (for accident) INT
 id = INT (specific id for the tip)
 comment = VARCHAR
+x (VARCHAR)
+y (VARCHAR)
 
-Save Accident
+------------------------------------------------
+Delete Tip or Accident (can do this another way perhaps…)
 
-op = save_accident
+op = delete_ta
+type = 0 (for tip), 1 (for accident) INT
 id = INT
-comment = VARCHAR
+------------------------------------------------
+Edit Tip or Accident
 
-Delete Tip (can do this another way perhaps…)
-
-op = delete_tip
-id = INT
-
-Delete Accident
-
-op = delete_accident
-id = INT
-
-Edit Tip
-
-op = edit_tip
+op = edit_ta
+type = 0 (for tip), 1 (for accident) INT
 id = INT
 comment = VARCHAR (new tip)
+------------------------------------------------
+Get All Tips or Accidents
 
-Edit Accident
-
-op = edit_accident
-id = INT
-comment = VARCHAR (new accident description)
-
-Get All Tips
-
-op = get_all_tips
+op = get_all_tas
+type = 0 (for tip), 1 (for accident) INT
 
 return list of all tips as objects with attributes:
 
@@ -76,28 +90,13 @@ id: INT (id that I sent you with the tip)
 comment: VARCHAR (body of the tip)
 userid: INT (userid associated with the tip)
 flagged: BOOL 
+------------------------------------------------
+Flag Tip or Accident (we can decide whether to use this or not) 
 
-Get All Accidents
-
-op = get_all_accidents
-
-return list of all accidents as objects with attributes:
-
-id: INT (id that I sent you with the accident)
-comment: VARCHAR (body of the accident)
-userid: INT (userid associated with the accident)
-flagged: BOOL
-
-Flag Tip (we can decide whether to use this or not) 
-
-op = flag_tip
+op = flag_ta
+type = 0 (for tip), 1 (for accident) INT
 id = INT 
-
-Flag Accident:
-
-op = flag_accident
-id = INT
-
+------------------------------------------------
 Get Saved Routes:
 
 op = get_saved_routes
@@ -107,7 +106,7 @@ Returns a list of objects with attributes:
 name
 route_key
 order
-
+------------------------------------------------
 Get a particular saved route:
 
 op = get_saved_route
@@ -119,9 +118,11 @@ name
 from 
 to
 order
+------------------------------------------------
+Get average ratings for particular route:
 
-Get safety ratings:
+op = get_average_ratings
+route_key
 
-returns list of safety ratings
-
-Get efficiency ratings, scenery ratings (same as safety ratings)
+------------------------------------------------
+Get the 3 ratings for a user
