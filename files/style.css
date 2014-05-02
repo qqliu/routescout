@@ -1,3 +1,12 @@
+ a {
+  color: #000000;
+}
+
+a:hover {
+  color:#FFFFFF;
+  text-decoration: none;
+}
+
 h2, h1 {
 font-family: 'Lily Script One', cursive;
 }
@@ -136,4 +145,59 @@ margin-right: 15px;
 
 #googleMap img {
 	max-width: inherit;
+}
+
+.test {
+  padding: 0px;
+  margin: 0px;
+}
+
+h1{
+  margin-top: 30px;
+margin-bottom: 20px;
+
+}
+
+
+.item{
+ margin-top: 20px;
+ margin-bottom: 20px;
+ font-size: 18px;
+}
+#bottom-buttons{
+position: relative;
+top: -25px;
+margin-top: 0px;
+margin-left: 20px;
+margin-right: 20px;
+}
+
+body {
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+
+.go-back {
+  width:20px;
+  height: 20px;
+
+}
+
+a {
+  color: #000000;
+}
+a:hover {
+  color: #000000;
+  text-decoration: none;
+}
+
+
+#first
+{
+    overflow:hidden;
+    background: url(texture-noise-beige-blur-lt.gif);
+}
+#second {
+    overflow:hidden;
+    background:url(texture-noise-beige-blur-lt.gif);
 }
