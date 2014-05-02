@@ -176,8 +176,8 @@
      	 $("#rate-route").hide();
          $("#navigation").hide();
          $("#saved-routes").hide();
-         $("#containerfluid").show();
          $("#second").fadeIn();
+         $("#containerfluid").show();
          e.preventDefault();
          showAllRoutes();
      });
@@ -285,6 +285,7 @@
          $("#navigation").hide();
          $("#containerfluid").hide();
          $("#rate-route").hide();
+         $("#second").fadeIn();
          $("#saved-routes").show();
          return false;
      });

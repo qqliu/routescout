@@ -324,7 +324,7 @@ table.test {
 }
 
 .route:hover {
-	background: yellow;
+	background: #FFF8DC;
 }
 
 /*doesn't work*/
