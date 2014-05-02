@@ -48,7 +48,11 @@ function db_connect() {
 
 //ensures user is logged in and returns his email
 function ensure_logged_in() {
-  return "kobe@mit.edu";
+  if (session_id() !== '' && isset($_SESSION['email'])) {
+    return $_SESSION['email'];
+  } else {
+    on_error("not logged in");
+  }
 }
 
 //ensures params exist and escapes them
@@ -102,20 +106,29 @@ function dbtest() {
 function update_ratings() {
   global $resp, $db_link;
   
-  ensure_and_escape_params(array("route_key", "safety_key", "efficiency", "scenery"));
+  ensure_and_escape_params(array("route_key", "safety", "efficiency", "scenery"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
   if (has_error()) return;
   
-  //insert row
+  if ($_REQUEST["safety"] === "0" && $_REQUEST["efficiency"] === "0" && $_REQUEST["scenery"] === "0") {
+    //TODO: delete row
+  } else {
+    //TODO: insert row
+  }
 }
 
-function save_routes() {
+function save_route() {
   global $resp, $db_link;
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //TODO: insert row
 }
 
 function delete_saved_route() {
@@ -123,6 +136,11 @@ function delete_saved_route() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //TODO: delete row
 }
 
 function save_ta() {
@@ -130,6 +148,11 @@ function save_ta() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //TODO: add row
 }
 
 function delete_ta() {
@@ -137,6 +160,11 @@ function delete_ta() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //TODO: relete row
 }
 
 function edit_ta() {
@@ -144,6 +172,8 @@ function edit_ta() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  //TODO: relete row
 }
 
 function get_all_tas() {
@@ -158,6 +188,11 @@ function flag_ta() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //flag that thing
 }
 
 function get_saved_routes() {
@@ -165,6 +200,11 @@ function get_saved_routes() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //get rows for that user
 }
 
 function get_saved_route() {
@@ -179,6 +219,8 @@ function get_average_ratings() {
   
   ensure_and_escape_params(array());
   if (has_error()) return;
+  
+  //get average ratings for particular route
 }
 
 function main() {
@@ -193,7 +235,7 @@ function main() {
       $op = $_REQUEST["op"];
       switch ($op) {
         case "update_ratings": update_ratings(); break;
-        case "save_routes": save_routes(); break;
+        case "save_route": save_route(); break;
         case "delete_saved_route": delete_saved_route(); break;
         case "save_ta": save_ta(); break;
         case "delete_ta": delete_ta(); break;

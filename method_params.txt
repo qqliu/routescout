@@ -8,27 +8,28 @@ users table (primary = email)
   salt char(1000)
 
 ratings table (primary = user, route_key)
-  user char(1000)
-  route_key char(1000)
+  user varchar(255)
+  route_key varchar(255)
   safety (INT)
   efficiency (INT)
   scenery (INT)
 
 routes table (primary = user, route_key)
-  user char(1000)
-  route_key char(1000)
-  name char(1000)
-  from char(1000)
-  to char(1000)
+  user varchar(255)
+  route_key varchar(255)
+  name varchar(1000)
+  from varchar(1000)
+  to varchar(1000)
   order (INT)
 
-tips_and_accidents table (primary = user, type, id)
-  user char(1000)
-  type = INT
-  id char(1000)
-  comment char(1000)
-  x char(1000)
-  y char(1000)
+tips_and_accidents table (primary = user, kind, id)
+  user varchar(255)
+  kind = INT
+  id varchar(255)
+  comment varchar(1000)
+  x varchar(1000)
+  y varchar(1000)
+  flagged INT (too lazy to use bool)
 
 ------------------------------------------------
 Update Ratings (includes deleting ratings
@@ -42,7 +43,7 @@ scenery = 1-5 (INT)
 ------------------------------------------------
 Saving Routes
 
-op = save_routes
+op = save_route
 route_key = route_key (VARCHAR)
 name = name (VARCHAR)
 from = from_add (VARCHAR)
@@ -66,7 +67,7 @@ x (VARCHAR)
 y (VARCHAR)
 
 ------------------------------------------------
-Delete Tip or Accident (can do this another way perhaps…)
+Delete Tip or Accident (can do this another way perhaps)
 
 op = delete_ta
 type = 0 (for tip), 1 (for accident) INT
