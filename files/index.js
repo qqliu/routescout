@@ -215,7 +215,6 @@
  }
  google.maps.event.addDomListener(window, 'load', initialize);
  $(document).ready(function() {
-     //re-add class to force CSS
      $(".criteria-slider").slider({
          value: 50,
          change: function(event, ui) {
@@ -246,6 +245,16 @@
          $("#navigation").show();
          return false;
      });
+     
+     $('#route-2').click(function(e) {
+         e.preventDefault();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#saved-routes").hide();
+         $("#navigation").show();
+         return false;
+     });
+     
      
      $('#back-to-routes').click(function(e) {
          e.preventDefault();
