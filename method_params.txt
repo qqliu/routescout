@@ -8,7 +8,7 @@ safety = 1-5 (INT)
 efficiency = 1-5 (INT)
 scenery = 1-5 (INT)
 
-Update Ratings (includes deleting ratings, if a rating becomes -1 delete the rating)
+Update Ratings (includes deleting ratings, if a rating becomes 0 delete the rating)
 
 op = update_ratings
 route_key = route_key (VARCHAR)
