@@ -198,9 +198,7 @@ margin-bottom: 20px;
 	margin-left: 55px;
 	margin-right: 20px;
 }
-#stars{
 
-}
 body {
     overflow-x:hidden;
 }
@@ -241,7 +239,7 @@ a:hover {
     overflow: hidden;
     background: url(texture-noise-beige-blur-lt.gif);
     display: block;
-    width: 350px;
+    width: 380px;
     padding: 10px;
     
 }
@@ -252,9 +250,13 @@ a:hover {
     background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     height: 350px;
-    width: 350px;
+    width: 380px;
     margin-bottom: 0px;
     padding: 10px;
+}
+
+.save-alert {
+	color: green;
 }
 
 

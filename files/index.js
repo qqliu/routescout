@@ -234,7 +234,8 @@
      }).addClass("criteria-slider");
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
-         $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+        $("#save-route-alert").show();
+	    $('#save-route-alert').delay(500).fadeOut(400);
      });
      
      $('#route-1').click(function(e) {
@@ -289,8 +290,11 @@
      });
      
 	$("#route-save").click(function() {
-	    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+	    $("#save-rate-alert").show();
+	    $('#save-rate-alert').delay(500).fadeOut(400);
 	}); 
+	
+	$(".stars").raty(); 
 	
 	$("#selectable").selectable({ disabled: true });
 

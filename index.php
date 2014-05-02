@@ -181,15 +181,16 @@
 				            </div>
 				
 				            <div class="row-fluid" id="bottom-buttons">
-				                <div class="span5 offset2">
+				                <div class="span4 offset1">
 				                    <div id="route-find" style="text-align:center">
 				                        <button class="btn btn-large" data-target="#saveModal"
 				                        data-toggle="modal" id="savedButton">Save
 				                        Route!</button>
+				                        <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
 				                    </div>
 				                </div>
 				
-				                <div class="span6 offset7">
+				                <div class="span5 offset6">
 				                    <div id="route-find" style="text-align:center">
 				                        <button class="btn btn-large" id="route-rate" type="button">Rate this
 				                        Route</a></button>
@@ -233,6 +234,7 @@
 										<div id="route-find" style="text-align:center">
 											<button id="route-save" type="button" class="btn btn-large">
 											Rate!</button>
+											<div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
 										</div>
 									</div>
 								</div>
