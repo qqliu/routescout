@@ -1,0 +1,127 @@
+For everything that doesn't return anything, return either success or failure.
+
+Saving Ratings
+
+op = save_rating
+route_key = route_key (VARCHAR)
+safety = 1-5 (INT)
+efficiency = 1-5 (INT)
+scenery = 1-5 (INT)
+
+Update Ratings (includes deleting ratings, if a rating becomes -1 delete the rating)
+
+op = update_ratings
+route_key = route_key (VARCHAR)
+safety = 1-5 (INT)
+efficiency = 1-5 (INT)
+scenery = 1-5 (INT)
+
+Saving Routes
+
+op = save_routes
+route_key = route_key (VARCHAR)
+name = name (VARCHAR)
+from = from_add (VARCHAR)
+to = to_addr (VARCHAR)
+order = (INT)
+
+Delete Saved Routes
+
+op = delete_saved_route
+route_key = VARCHAR
+
+PHP differentiates Tip and Accident based on the method used
+
+Save Tip
+
+op = save_tip
+id = INT (specific id for the tip)
+comment = VARCHAR
+
+Save Accident
+
+op = save_accident
+id = INT
+comment = VARCHAR
+
+Delete Tip (can do this another way perhaps…)
+
+op = delete_tip
+id = INT
+
+Delete Accident
+
+op = delete_accident
+id = INT
+
+Edit Tip
+
+op = edit_tip
+id = INT
+comment = VARCHAR (new tip)
+
+Edit Accident
+
+op = edit_accident
+id = INT
+comment = VARCHAR (new accident description)
+
+Get All Tips
+
+op = get_all_tips
+
+return list of all tips as objects with attributes:
+
+id: INT (id that I sent you with the tip)
+comment: VARCHAR (body of the tip)
+userid: INT (userid associated with the tip)
+flagged: BOOL 
+
+Get All Accidents
+
+op = get_all_accidents
+
+return list of all accidents as objects with attributes:
+
+id: INT (id that I sent you with the accident)
+comment: VARCHAR (body of the accident)
+userid: INT (userid associated with the accident)
+flagged: BOOL
+
+Flag Tip (we can decide whether to use this or not) 
+
+op = flag_tip
+id = INT 
+
+Flag Accident:
+
+op = flag_accident
+id = INT
+
+Get Saved Routes:
+
+op = get_saved_routes
+
+Returns a list of objects with attributes:
+
+name
+route_key
+order
+
+Get a particular saved route:
+
+op = get_saved_route
+id = route_key
+
+Returns object with attributes:
+
+name
+from 
+to
+order
+
+Get safety ratings:
+
+returns list of safety ratings
+
+Get efficiency ratings, scenery ratings (same as safety ratings)
