@@ -160,7 +160,7 @@ h1 {
 
 #bottom-buttons {
     position: relative;
-    top: -25px;
+    top: 0px;
     margin-top: 0;
     margin-left: 20px;
     margin-right: 20px;
@@ -170,6 +170,61 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
 }
+
+
+a {
+	color: #000000;
+}
+a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
+h1{
+	margin-top: 30px;
+margin-bottom: 20px;
+
+}
+
+h3 {
+  margin-right: 25px;
+margin-left:25px;
+margin-right: 10px;
+margin-bottom: 20px;
+
+
+}
+.item{
+ margin-top: 20px;
+ margin-bottom: 20px;
+ font-size: 18px;
+}
+#bottom-buttons{
+	margin-top: -10px;
+	margin-left: 55px;
+	margin-right: 20px;
+}
+#stars{
+
+}
+body {
+    overflow-x:hidden;
+}
+
+.go-back {
+	width:20px;
+	height: 20px;
+
+}
+
+a {
+	color: #000000;
+}
+a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
 
 .go-back {
     width: 20px;

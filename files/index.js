@@ -176,6 +176,9 @@
          $("#second").attr("src", "myroutes.php").show();
      });
      $("#route").click(function(e) {
+     	 $("#rate-route").hide();
+         $("#navigation").hide();
+         $("#containerfluid").show();
          $("#second").fadeIn();
          if ($("#second").attr("src") == "myroutes.php") {
              $("#second").attr("src", "filter_routes.php");
@@ -236,17 +239,42 @@
          }
      }).addClass("criteria-slider");
      $("#routes button").width("100%");
-     //document.getElementById("containerfluid").style.visibility="visible";
-     //document.getElementById("navigation").style.visibility="hidden";
      $("#savedButton").click(function() {
          $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
      });
+     
      $('#route-1').click(function(e) {
-         //document.getElementById("navigation").style.visibility="visible";
-         //document.getElementById("containerfluid").style.visibility="hidden";
          e.preventDefault();
          $("#containerfluid").hide();
+         $("#rate-route").hide();
          $("#navigation").show();
          return false;
      });
+     
+     $('#back-to-routes').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").show();
+         return false;
+     });
+     
+     $('#back-to-nav').click(function(e) {
+         e.preventDefault();
+         $("#rate-route").hide();
+         $("#navigation").show();
+         return false;
+     });
+     
+     $('#route-rate').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").show();
+         return false;
+     });
+		
+	$("#route-save").click(function() {
+	    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
+	}); 
+
  });

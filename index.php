@@ -31,6 +31,7 @@
     <script src="files/bootstrap-collapse.js"></script>
     <script src="files/bootstrap-carousel.js"></script>
     <script src="files/bootstrap-typeahead.js"></script>
+    <script src="ratePlugin/jquery.raty.min.js"></script>
     <script src="files/jquery-ui-1.10.4/ui/jquery-ui.js" type=
     "text/javascript"></script>
     <script src=
@@ -86,7 +87,7 @@
                         </div>
                     </div>
 
-                    <div class="row-fluid">
+                    <div class="row-fluid" id="bottom-window">
                         <div class="container well span11" id="second" style=
                         "display:none">
                             <div class="container-fluid" id="containerfluid">
@@ -105,7 +106,7 @@
                                         St.</button></li>
 
                                         <li><button class="btn btn-large" id=
-                                        "route-2">Newbury St.</button></li>
+                                        "route-2" type="button">Newbury St.</button></li>
                                     </ol>
                                 </div><br>
 
@@ -159,55 +160,99 @@
                                 </table>
                             </div>
                         </div>
+                        
+                        
+				        <div id="navigation" style="display:none">
+				            <div class="go-back" style="padding: 10px;">
+				                <a id="back-to-routes"><img src="back-arrow.png"></a>
+				            </div>
+				
+				            <h2 style="text-align:center"><span style=
+				            "text-decoration: underline">Selected</span> <span style=
+				            "text-decoration: underline">Route</span></h2>
+				
+				            <div style=
+				            "padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;">
+				            <ol id="list">
+				                    <li class="item">Head north on Washington St toward Hayward
+				                    Pl</li>
+				
+				                    <li class="item">Turn left onto Temple Pl</li>
+				
+				                    <li class="item">Turn left onto Tremont St</li>
+				                </ol>
+				            </div>
+				
+				            <div class="row-fluid" id="bottom-buttons">
+				                <div class="span5 offset2">
+				                    <div id="route-find" style="text-align:center">
+				                        <button class="btn btn-large" data-target="#saveModal"
+				                        data-toggle="modal" id="savedButton">Save
+				                        Route!</button>
+				                    </div>
+				                </div>
+				
+				                <div class="span6 offset7">
+				                    <div id="route-find" style="text-align:center">
+				                        <button class="btn btn-large" id="route-rate" type="button">Rate this
+				                        Route</a></button>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+				        
+				        <div id="rate-route" style="display:none">
+				        	<div class = "go-back" style="padding: 10px;">
+								<a id="back-to-nav"><img src="back-arrow.png"></a>
+								</div>
+								
+								<h2 style="text-align:center"><u>Rate</u> <u>this</u> <u>Route!</u></h2>
+								
+								<div class="row-fluid">
+								<div class="span4"><h3>Safety:</h3></div>
+								  <div class="span4 offset3 ">
+								<div class="stars"></div>
+								  </div>
+								 </div>
+								
+								
+								 <div class="row-fluid">
+								<div class="span4"><h3>Efficiency</h3></div>
+								  <div class="span4 offset3">
+								<div class="stars"></div>
+								  </div>
+								 </div>
+								
+								<div class="row-fluid">
+								<div class="span4"><h3>Scenery</h3></div>
+								  <div class="span4 offset2">
+								<div class="stars"></div>
+								  </div>
+								 </div>
+								
+								
+								<div id="bottom-buttons" class="row-fluid">
+									<div class="span6 offset7">
+										<div id="route-find" style="text-align:center">
+											<button id="route-save" type="button" class="btn btn-large">
+											Rate!</button>
+										</div>
+									</div>
+								</div>
+				        </div>
+				        
+                        
+                        
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="navigation" style="display:none">
-            <div class="go-back" style="padding: 10px;">
-                <a href="filter_routes.php"><img src="back-arrow.png"></a>
-            </div>
-
-            <h2 style="text-align:center"><span style=
-            "text-decoration: underline">Selected</span> <span style=
-            "text-decoration: underline">Route</span></h2>
-
-            <div style=
-            "padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;">
-            <ol id="list">
-                    <li class="item">Head north on Washington St toward Hayward
-                    Pl</li>
-
-                    <li class="item">Turn left onto Temple Pl</li>
-
-                    <li class="item">Turn left onto Tremont St</li>
-                </ol>
-            </div>
-
-            <div class="row-fluid" id="bottom-buttons">
-                <div class="span5 offset2">
-                    <div id="route-find" style="text-align:center">
-                        <button class="btn btn-large" data-target="#saveModal"
-                        data-toggle="modal" id="savedButton">Save
-                        Route!</button>
-                    </div>
-                </div>
-
-                <div class="span6 offset7">
-                    <div id="route-find" style="text-align:center">
-                        <button class="btn btn-large" id="route"><a href=
-                        "rateRoute.php" style="text-decoration: none">Rate this
-                        Route</a></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+ 
 
         <div hidden="" id="popup">
             <p id="popup-title">Title</p>
-            <textarea cols="25" id="popup-textbox" rows="5">
-</textarea>
+            <textarea cols="25" id="popup-textbox" rows="5"></textarea>
 
             <p><a class="btn btn-success btn-large" id=
             "popup-submit">Submit</a></p><br>
