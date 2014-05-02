@@ -1,6 +1,7 @@
  var map, adding, message, feature, messageId = 0;
  var markers = {};
  var curResult;
+ var countryRestrict = { 'country': 'us' };
 
  function toggleActive(button) {
      var active = $(button).hasClass("active");
@@ -58,49 +59,60 @@
  };
 
  function initialize() {
-     var myCenter, directionsDisplay, directionsDisplay2, directionsService, mapProp;
-     myCenter = new google.maps.LatLng(42.3522, -71.0627);
-     directionsDisplay = new google.maps.DirectionsRenderer();
-     directionsDisplay2 = new google.maps.DirectionsRenderer();
-     directionsService = new google.maps.DirectionsService();
-     mapProp = {
-         center: myCenter,
-         zoom: 14,
-         mapTypeId: google.maps.MapTypeId.ROADMAP
-     };
-     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-     map.setOptions({
-         draggableCursor: 'default'
-     });
-     //show popup
-     $("#popup").dialog({
-         autoOpen: false
-     });
-     google.maps.event.addListener(map, 'click', function(event) {
-         if (adding == "star") {
-             feature = {
-                 position: event.latLng,
-                 type: "star",
-                 map: map
-             };
-             $("#popup-title").text("Add Tip");
-             $("#popup").dialog("option", {
-                 position: [485 + event.pixel.x, 180 + event.pixel.y]
-             });
-             $("#popup").dialog('open');
-         } else if (adding == "caution") {
-             feature = {
-                 position: event.latLng,
-                 type: "caution",
-                 map: map
-             };
-             $("#popup-title").text("Report Accident");
-             $("#popup").dialog("option", {
-                 position: [485 + event.pixel.x, 180 + event.pixel.y]
-             });
-             $("#popup").dialog('open');
-         }
-     });
+    var myCenter, directionsDisplay, directionsDisplay2, directionsService, mapProp, starting, ending;
+    starting = document.getElementById('starting_loc');
+    ending = document.getElementById('destination_loc');
+    autocomplete_starting = new google.maps.places.Autocomplete(starting);
+    autocomplete_ending = new google.maps.places.Autocomplete(ending);
+    
+    google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
+    //google.maps.event.addDomListener(document.getElementById('country'), 'change',
+      //setAutocompleteCountry);
+    //autocomplete_starting.bindTo('bounds', map);
+    //autocomplete_ending.bindTo('bounds', map);
+    
+    myCenter = new google.maps.LatLng(42.3522, -71.0627);
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay2 = new google.maps.DirectionsRenderer();
+    directionsService = new google.maps.DirectionsService();
+    mapProp = {
+	center: myCenter,
+	zoom: 14,
+	mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    map.setOptions({
+	draggableCursor: 'default'
+    });
+    //show popup
+    $("#popup").dialog({
+	autoOpen: false
+    });
+    google.maps.event.addListener(map, 'click', function(event) {
+	if (adding == "star") {
+	    feature = {
+		position: event.latLng,
+		type: "star",
+		map: map
+	    };
+	    $("#popup-title").text("Add Tip");
+	    $("#popup").dialog("option", {
+		position: [485 + event.pixel.x, 180 + event.pixel.y]
+	    });
+	    $("#popup").dialog('open');
+	} else if (adding == "caution") {
+	    feature = {
+		position: event.latLng,
+		type: "caution",
+		map: map
+	    };
+	    $("#popup-title").text("Report Accident");
+	    $("#popup").dialog("option", {
+		position: [485 + event.pixel.x, 180 + event.pixel.y]
+	    });
+	    $("#popup").dialog('open');
+	}
+    });
 
      function addStarCaution() {
          if (feature != undefined && feature != null) {
@@ -167,9 +179,22 @@
              }
          });
      }
+     
+     // When the user selects a city, get the place details for the city and
+    // zoom the map in on the city.
+    function onPlaceChanged() {
+      var place = autocomplete_starting.getPlace();
+      if (place.geometry) {
+	map.panTo(place.geometry.location);
+	map.setZoom(15);
+	search();
+      } else {
+	document.getElementById('starting_loc').placeholder = 'Enter an address';
+      }
+    }
 
      function showAllRoutes() {
-         Route();
+        Route();
      }
      
      $("#report-button").click(function() {
