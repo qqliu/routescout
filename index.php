@@ -42,8 +42,8 @@
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <a class="logout-saved" href="#" id="logout">Logout</a> <a class=
-            "logout-saved" href="#" id="savedroutes">Saved Routes</a>
+            <a class="logout-saved" id="logout">Logout</a>
+            <a class="logout-saved" id="savedroutes">Saved Routes</a>
 
             <div id="center-this-navbar">
                 <div id="header">
@@ -159,7 +159,7 @@
                                     </tr>
                                 </table>
                             </div>
-                        </div>
+                        
                         
                         
 				        <div id="navigation" style="display:none">
@@ -174,8 +174,7 @@
 				            <div style=
 				            "padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;">
 				            <ol id="list">
-				                    <li class="item">Head north on Washington St toward Hayward
-				                    Pl</li>
+				                    <li class="item">Head north on Washington St</li>
 				
 				                    <li class="item">Turn left onto Temple Pl</li>
 				
@@ -241,8 +240,34 @@
 								</div>
 				        </div>
 				        
+				        <div id="saved-routes" style="display:none">
+                    		<center>
+								<br /><br />
+								<h2><u>Saved</u> <u>Routes</u></h2>
+								<br /><br />
+								<ol id="selectable">
+								  <li class="ui-widget-content">Main St. To Br...</li>
+								  <li class="ui-widget-content">Memorial Dr. t...</li>
+								  <li class="ui-widget-content">Stevens Creek ...</li>
+								  <li class="ui-widget-content">Barnhart Ave t...</li>
+								  <li class="ui-widget-content">Homestead Ave ...</li>
+								  <li class="ui-widget-content">Massachusetts ...</li>
+								  <li class="ui-widget-content">First Ave to D...</li>
+								  <li class="ui-widget-content">Blaney Rd to B...</li>
+								  <li class="ui-widget-content">Miller Ave to ...</li>
+								  <li class="ui-widget-content">Broadway to Ma...</li>
+								  <li class="ui-widget-content">Kendall Square...</li>
+								  <li class="ui-widget-content">Akamai to Chil...</li>
+								  <li class="ui-widget-content">In-N-Out Sunnl...</li>
+								  <li class="ui-widget-content">Harvard Squaro...</li>
+								  <li class="ui-widget-content">Vassar St to A...</li>
+								  <li class="ui-widget-content">San Jose, CA t...</li>
+								</ol>
+							
+							</center>
+                        </div>
                         
-                        
+                       </div>
                     </div>
                 </div>
             </div>

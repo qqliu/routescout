@@ -241,11 +241,20 @@ a:hover {
 }
 
 #first {
+	position: relative;
+	left: -1px;
+	border: 2px solid #000000;
     overflow: hidden;
     background: url(texture-noise-beige-blur-lt.gif);
+    display: block;
+    width: 350px;
 }
 
 #second {
+	border: 2px solid #000000;
     overflow: hidden;
     background: url(texture-noise-beige-blur-lt.gif);
+    display: block;
+    height: 300px;
+    width: 350px;
 }

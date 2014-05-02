@@ -172,17 +172,12 @@
          adding = "star";
          toggleActive(this);
      });
-     $("#savedroutes").click(function() {
-         $("#second").attr("src", "myroutes.php").show();
-     });
      $("#route").click(function(e) {
      	 $("#rate-route").hide();
          $("#navigation").hide();
+         $("#saved-routes").hide();
          $("#containerfluid").show();
          $("#second").fadeIn();
-         if ($("#second").attr("src") == "myroutes.php") {
-             $("#second").attr("src", "filter_routes.php");
-         }
          e.preventDefault();
          showAllRoutes();
      });
@@ -247,6 +242,7 @@
          e.preventDefault();
          $("#containerfluid").hide();
          $("#rate-route").hide();
+         $("#saved-routes").hide();
          $("#navigation").show();
          return false;
      });
@@ -269,12 +265,40 @@
          e.preventDefault();
          $("#navigation").hide();
          $("#containerfluid").hide();
+         $("#saved-routes").hide();
          $("#rate-route").show();
          return false;
      });
-		
+     
+     $('#savedroutes').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#saved-routes").show();
+         return false;
+     });
+     
 	$("#route-save").click(function() {
 	    $(this).after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Succesfully Saved!</div>');
 	}); 
+	
+	$("#selectable").selectable({ disabled: true });
+
+    //add x button to each selectable
+    $("#selectable li").each(function() {
+      $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
+      $(this).addClass("route");
+    });
+    
+    //add x button handler
+    $(".delete-button").click(function() {
+      var parent = $(this).parent();
+      parent.removeClass("route");
+      parent.addClass("deleting");
+      parent.fadeOut(700, function() {
+        parent.remove();
+      });
+    });
 
  });
