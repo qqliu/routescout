@@ -14,9 +14,7 @@
     <link href="files/style.css" rel="stylesheet">
     <link href="files/bootstrap.css" rel="stylesheet">
     <link href="files/example-fluid-layout.css" rel="stylesheet">
-    <link href="popups/popups.css" rel="stylesheet">
-    <link href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css" rel=
-    "stylesheet"><!-- Load any supplemental Javascript libraries here -->
+    <link href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css" rel="stylesheet"><!-- Load any supplemental Javascript libraries here -->
 
     <script src="files/jquery.js"></script>
     <script src="files/bootstrap-transition.js"></script>
@@ -35,7 +33,7 @@
     <script src="files/jquery-ui-1.10.4/ui/jquery-ui.js" type=
     "text/javascript"></script>
     <script src=
-    "http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&amp;sensor=true&amp;libraries=drawing"></script>
+    "http://maps.googleapis.com/maps/api/js?key=AIzaSyDjX5a3zMFqvmcjySBDAbkf2fOfY1piELs&amp;sensor=true&libraries=places"></script>
     <script src="files/index.js"></script>
 </head>
 
