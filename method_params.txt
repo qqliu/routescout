@@ -1,11 +1,11 @@
 For everything that doesn't return anything, return either success or failure.
 
 users table (primary = email)
-  email char(1000)
-  first_name char(1000)
-  last_name char(1000)
-  password char(1000)
-  salt char(1000)
+  email char(255)
+  first_name char(255)
+  last_name char(255)
+  password char(255)
+  salt char(255)
 
 ratings table (primary = user, route_key)
   user varchar(255)
@@ -18,8 +18,8 @@ routes table (primary = user, route_key)
   user varchar(255)
   route_key varchar(255)
   name varchar(1000)
-  from varchar(1000)
-  to varchar(1000)
+  from_loc varchar(1000)
+  to_loc varchar(1000)
   order (INT)
 
 tips_and_accidents table (primary = user, kind, id)
@@ -46,8 +46,8 @@ Saving Routes
 op = save_route
 route_key = route_key (VARCHAR)
 name = name (VARCHAR)
-from = from_add (VARCHAR)
-to = to_addr (VARCHAR)
+from_loc = from_add (VARCHAR)
+to_loc = to_addr (VARCHAR)
 order = (INT)
 ------------------------------------------------
 Delete Saved Routes
@@ -60,7 +60,7 @@ PHP differentiates Tip and Accident based on the method used
 Save Tip or Accident
 
 op = save_ta
-type = 0 (for tip), 1 (for accident) INT
+kind = 0 (for tip), 1 (for accident) INT
 id = INT (specific id for the tip)
 comment = VARCHAR
 x (VARCHAR)
@@ -70,20 +70,20 @@ y (VARCHAR)
 Delete Tip or Accident (can do this another way perhaps)
 
 op = delete_ta
-type = 0 (for tip), 1 (for accident) INT
+kind = 0 (for tip), 1 (for accident) INT
 id = INT
 ------------------------------------------------
 Edit Tip or Accident
 
 op = edit_ta
-type = 0 (for tip), 1 (for accident) INT
+kind = 0 (for tip), 1 (for accident) INT
 id = INT
 comment = VARCHAR (new tip)
 ------------------------------------------------
 Get All Tips or Accidents
 
 op = get_all_tas
-type = 0 (for tip), 1 (for accident) INT
+kind = 0 (for tip), 1 (for accident) INT
 
 return list of all tips as objects with attributes:
 
@@ -95,7 +95,7 @@ flagged: BOOL
 Flag Tip or Accident (we can decide whether to use this or not) 
 
 op = flag_ta
-type = 0 (for tip), 1 (for accident) INT
+kind = 0 (for tip), 1 (for accident) INT
 id = INT 
 ------------------------------------------------
 Get Saved Routes:
@@ -116,8 +116,8 @@ id = route_key
 Returns object with attributes:
 
 name
-from 
-to
+from_loc 
+to_loc
 order
 ------------------------------------------------
 Get average ratings for particular route:
