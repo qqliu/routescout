@@ -40,15 +40,29 @@
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <a class="logout-saved" id="logout">Logout</a>
-            <a class="logout-saved" id="savedroutes">Saved Routes</a>
+            <!--<a class="logout-saved" id="logout">Logout</a>
+            <a class="logout-saved" id="savedroutes">Saved Routes</a>-->
+            <ul class="nav pull-right">
+              <li><a href="/users/sign_up">Register</a></li>
+              <li class="divider-vertical"></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Login <strong class="caret"></strong></a>
+                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                  <form action="index.php" method="post" accept-charset="UTF-8">
+                      Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" placeholder="Username" size="30" />
+                      Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" placeholder="Password" size="30" />
 
-            <div id="center-this-navbar">
-                <div id="header">
-                    RouteScout
-                </div>
+                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                  </form>
+                  </div>
+              </li>
+          </ul>
+          <div id="center-this-navbar">
+            <div id="header">
+                RouteScout
             </div>
         </div>
+    </div>
     </div>
 
     <div id="content">
