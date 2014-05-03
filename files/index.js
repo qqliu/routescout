@@ -52,14 +52,20 @@
      });
      adding = undefined;
  }
-
+ 
  function deleteMarker(id) {
      markers[id.split("message")[1]].setMap(null);
      delete markers[id];
  };
 
  function initialize() {
-    var myCenter, directionsDisplay, directionsDisplay2, directionsService, mapProp, starting, ending;
+    var myCenter, directionsDisplay, directionsService,
+	mapProp, starting, ending, rendererOptions;
+	
+    rendererOptions = {
+	draggable: true
+    };
+    
     starting = document.getElementById('starting_loc');
     ending = document.getElementById('destination_loc');
     autocomplete_starting = new google.maps.places.Autocomplete(starting);
@@ -72,8 +78,7 @@
     //autocomplete_ending.bindTo('bounds', map);
     
     myCenter = new google.maps.LatLng(42.3522, -71.0627);
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    directionsDisplay2 = new google.maps.DirectionsRenderer();
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsService = new google.maps.DirectionsService();
     mapProp = {
 	center: myCenter,
@@ -88,6 +93,7 @@
     $("#popup").dialog({
 	autoOpen: false
     });
+    
     google.maps.event.addListener(map, 'click', function(event) {
 	if (adding == "star") {
 	    feature = {
@@ -120,7 +126,32 @@
          }
      }
      directionsDisplay.setMap(map);
-     directionsDisplay2.setMap(map);
+     var bikeLayer = new google.maps.BicyclingLayer();
+     bikeLayer.setMap(map);
+     
+    var styles = [
+       {
+	 stylers: [
+	   { hue: "#00ffe6" },
+	   { saturation: -20 }
+	 ]
+       },{
+	 featureType: "road",
+	 elementType: "geometry",
+	 stylers: [
+	   { lightness: 100 },
+	   { visibility: "simplified" }
+	 ]
+       },{
+	 featureType: "road",
+	 elementType: "labels",
+	 stylers: [
+	   { visibility: "off" }
+	 ]
+       }
+    ];
+     
+    map.setOptions({styles: styles});
 
      function Route() {
          var start = $("#starting_loc").val();
@@ -169,16 +200,24 @@
 				    $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
 				}
 			    }
-			    $("#directions_list").append();
 			    return false;
 			});
 		    }
+		    result.Tb.travelMode = "TRANSIT";
 		    directionsDisplay.setDirections(result);
              } else {
 		    //alert("couldn't get directions:" + status);
              }
          });
      }
+     
+    function toggleLanes(value) {
+	if (value) {
+	    bikeLayer.setMap(map); 
+	} else {
+	    bikeLayer.setMap(null);
+	}
+    }
      
      // When the user selects a city, get the place details for the city and
     // zoom the map in on the city.
@@ -187,7 +226,6 @@
       if (place.geometry) {
 	map.panTo(place.geometry.location);
 	map.setZoom(15);
-	search();
       } else {
 	document.getElementById('starting_loc').placeholder = 'Enter an address';
       }
@@ -242,6 +280,9 @@
                      markers[i].setVisible(false);
                  }
              }
+	     if (id == "lanes") {
+		toggleLanes(false);
+	     }
          } else {
              var id = $(this).attr("value");
              for (var i in markers) {
@@ -249,6 +290,9 @@
                      markers[i].setVisible(true);
                  }
              }
+	     if (id == "lanes") {
+		toggleLanes(true);
+	     }
          }
      });
  }

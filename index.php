@@ -102,8 +102,7 @@
                                         <td>Overall Safety</td>
 
                                         <td>
-                                            <div class="criteria-slider" id=
-                                            "slider"></div>
+                                            <div class="criteria-slider" id="slider"></div>
                                         </td>
                                     </tr>
 
@@ -111,8 +110,7 @@
                                         <td>Fewest Accidents</td>
 
                                         <td>
-                                            <div class="criteria-slider" id=
-                                            "slider"></div>
+                                            <div class="criteria-slider" id="slider"></div>
                                         </td>
                                     </tr>
 
@@ -120,8 +118,7 @@
                                         <td>Bike Lanes</td>
 
                                         <td>
-                                            <div class="criteria-slider" id=
-                                            "slider"></div>
+                                            <div class="criteria-slider" id="slider"></div>
                                         </td>
                                     </tr>
 
@@ -129,8 +126,7 @@
                                         <td>Efficiency</td>
 
                                         <td>
-                                            <div class="criteria-slider" id=
-                                            "slider"></div>
+                                            <div class="criteria-slider" id="slider"></div>
                                         </td>
                                     </tr>
 
@@ -138,8 +134,7 @@
                                         <td>Scenery</td>
 
                                         <td>
-                                            <div class="criteria-slider" id=
-                                            "slider"></div>
+                                            <div class="criteria-slider" id="slider"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -251,21 +246,15 @@
                     </div>
 
                     <div class="toggle-button">
-                        <img class="toggle-img" src=
-                        "files/icon_biking.png">Bike Lanes <input checked
-                        class="filters" type="checkbox" value="lanes">
+                        <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
                     </div>
 
                     <div class="toggle-button">
-                        <img class="toggle-img" src="popups/star-32.png">Tips
-                        <input checked class="filters" type="checkbox" value=
-                        "star">
+                        <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
                     </div>
 
                     <div class="toggle-button">
-                        <img class="toggle-img" src=
-                        "popups/caution.png">Accidents <input checked class=
-                        "filters" type="checkbox" value="caution">
+                        <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
                     </div>
 
                     <div id="googleMap" style="width:700px;height:550px;">
