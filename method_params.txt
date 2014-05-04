@@ -1,4 +1,4 @@
-For everything that doesn't return anything, return either success or failure.
+*** Database tables ***
 
 users table (primary = email)
   email char(255)
@@ -20,7 +20,7 @@ routes table (primary = user, route_key)
   name varchar(1000)
   from_loc varchar(1000)
   to_loc varchar(1000)
-  order (INT)
+  route_index (INT)
 
 tips_and_accidents table (primary = user, kind, id)
   user varchar(255)
@@ -31,7 +31,21 @@ tips_and_accidents table (primary = user, kind, id)
   y varchar(1000)
   flagged INT (too lazy to use bool)
 
+************************************************
+
+*** Operations ***
+Reply is a json object with "err" field.
+The other fields are valid only if err is an empty string.
+If there is an error, err contains an explanation of the error.
+
+Use either POST or GET to db.php
+
+Debugging:
+Add a verbose=1 param to get debug printout of what's happening.
+e.g. http://leoliu.scripts.mit.edu/routescout/db.php?verbose=1&op=get_average_ratings
+
 ------------------------------------------------
+
 Update Ratings (includes deleting ratings
 if all three ratings are 0, delete them)
 
@@ -40,6 +54,11 @@ route_key = route_key (VARCHAR)
 safety = 1-5 (INT)
 efficiency = 1-5 (INT)
 scenery = 1-5 (INT)
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=update_ratings&route_key=key&safety=0&efficiency=0&scenery=1
+
+{"error":""}
+
 ------------------------------------------------
 Saving Routes
 
@@ -48,14 +67,22 @@ route_key = route_key (VARCHAR)
 name = name (VARCHAR)
 from_loc = from_add (VARCHAR)
 to_loc = to_addr (VARCHAR)
-order = (INT)
+route_index = (INT)
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=save_route&route_key=route_key&name=name&from_loc=from&to_loc=to&route_index=5
+
+{"error":""}
+
 ------------------------------------------------
 Delete Saved Routes
 
 op = delete_saved_route
 route_key = VARCHAR
 
-PHP differentiates Tip and Accident based on the method used
+{"error":""}
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_saved_route&route_key=route_key
+
 ------------------------------------------------
 Save Tip or Accident
 
@@ -65,6 +92,11 @@ id = INT (specific id for the tip)
 comment = VARCHAR
 x (VARCHAR)
 y (VARCHAR)
+flagged
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&kind=0&id=id&comment=comment&x=x&y=y&flagged=0
+
+{"error":""}
 
 ------------------------------------------------
 Delete Tip or Accident (can do this another way perhaps)
@@ -72,6 +104,11 @@ Delete Tip or Accident (can do this another way perhaps)
 op = delete_ta
 kind = 0 (for tip), 1 (for accident) INT
 id = INT
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_ta&kind=0&id=id
+
+{"error":""}
+
 ------------------------------------------------
 Edit Tip or Accident
 
@@ -79,57 +116,127 @@ op = edit_ta
 kind = 0 (for tip), 1 (for accident) INT
 id = INT
 comment = VARCHAR (new tip)
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&kind=0&id=id&comment=newcomment
+
+{"error":""}
+
 ------------------------------------------------
 Get All Tips or Accidents
 
 op = get_all_tas
 kind = 0 (for tip), 1 (for accident) INT
 
-return list of all tips as objects with attributes:
+return list of all tips as objects:
 
-list is resp.tas
+http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0
 
-id: INT (id that I sent you with the tip)
-comment: VARCHAR (body of the tip)
-userid: INT (userid associated with the tip)
-flagged: BOOL 
+{
+    "error": "",
+    "data": [
+        {
+            "user": "kobe@mit.edu",
+            "kind": "0",
+            "id": "id2",
+            "comment": "comment",
+            "x": "x",
+            "y": "y",
+            "flagged": "0"
+        },
+        {
+            "user": "kobe@mit.edu",
+            "kind": "0",
+            "id": "id",
+            "comment": "comment",
+            "x": "x",
+            "y": "y",
+            "flagged": "0"
+        }
+    ]
+}
+
 ------------------------------------------------
 Flag Tip or Accident (we can decide whether to use this or not) 
 
 op = flag_ta
+owner = userid that owns the tip/accident
 kind = 0 (for tip), 1 (for accident) INT
-id = INT 
+id = INT
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&owner=kobe@mit.edu&kind=0&id=id
+
+{"error":""}
+
 ------------------------------------------------
 Get Saved Routes:
 
 op = get_saved_routes
 
-Returns a list of objects with attributes:
+Returns a list of objects:
 
-name
-route_key
-order
+http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_routes
+
+{
+    "error": "",
+    "data": [
+        {
+            "user": "kobe@mit.edu",
+            "route_key": "route_key",
+            "name": "name3",
+            "from_loc": "from",
+            "to_loc": "to",
+            "route_index": "5"
+        },
+        {
+            "user": "kobe@mit.edu",
+            "route_key": "route_key1",
+            "name": "name",
+            "from_loc": "from",
+            "to_loc": "to",
+            "route_index": "5"
+        }
+    ]
+}
+
 ------------------------------------------------
 Get a particular saved route:
 
 op = get_saved_route
 route_key = route_key
 
-Returns object with attributes:
+http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_route&route_key=key
 
-name
-from_loc 
-to_loc
-order
+{
+    "error": "",
+    "data": {
+        "user": "kobe@mit.edu",
+        "route_key": "route_key",
+        "name": "name3",
+        "from_loc": "from",
+        "to_loc": "to",
+        "route_index": "5"
+    }
+}
+
 ------------------------------------------------
 Get average ratings for particular route:
 
 op = get_average_ratings
 route_key
 
-safety
-efficiency
-scenery
+http://leoliu.scripts.mit.edu/routescout/db.php?op=get_average_ratings&route_key=key
 
-------------------------------------------------
-Get the 3 ratings for a user
+{
+    "error": "",
+    "data": {
+        "safety": {
+            "AVG(safety)": null
+        },
+        "efficiency": {
+            "AVG(efficiency)": null
+        },
+        "scenery": {
+            "AVG(scenery)": "1.0000"
+        }
+    }
+}
