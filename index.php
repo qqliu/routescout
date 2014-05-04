@@ -188,10 +188,12 @@ else {return false;}
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
+                
+                <div id="inside">
+                
                 <div class="container-fluid" id="containerfluid">
                     <br>
-                    <h2><span style="text-decoration: underline">Possible</span>
-                        <span style="text-decoration: underline">Routes</span></h2><br>
+                    <h2>Possible Routes</h2><br>
 
                         <div id="routes"></div><br>
 
@@ -247,14 +249,12 @@ else {return false;}
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                         </div>
 
-                        <h2 style="text-align:center"><span style=
-                            "text-decoration: underline">Selected</span> <span style=
-                            "text-decoration: underline">Route</span></h2>
+                        <h2 style="text-align:center">Selected Route</h2>
 
-                            <div id="directions_list" style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;"></div>
+                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
 
                             <div class="row-fluid" id="bottom-buttons">
-                                <div id="route-find" style="text-align:center; float: left;">
+                                <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
                                     <button class="btn btn-large" data-target="#saveModal"
                                     data-toggle="modal" id="savedButton">Save
                                     Route!</button>
@@ -266,36 +266,41 @@ else {return false;}
                                         Route</a></button>
                                     </div>
                                 </div>
+                                
+                                <BR />
+                                <BR />
                             </div>
 
-                            <div id="rate-route" style="display:none">
+                       <div id="rate-route" style="display:none">
                              <div class = "go-back" style="padding: 10px;">
                                 <a id="back-to-nav"><img src="back-arrow.png"></a>
                             </div>
 
-                            <h2 style="text-align:center"><u>Rate</u> <u>this</u> <u>Route!</u></h2>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Safety:</h3></div>
-                                <div class="span4 offset3 ">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Efficiency</h3></div>
-                                <div class="span4 offset3">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Scenery</h3></div>
-                                <div class="span4 offset2">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
+                            <h2 style="text-align:center">Rate this Route!</h2>
+							
+							<div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Safety:</h3></div>
+	                                <div class="span4 offset3 ">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Efficiency</h3></div>
+	                                <div class="span4 offset3">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Scenery</h3></div>
+	                                <div class="span4 offset2">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+                           </div>
 
 
                             <div id="bottom-buttons" class="row-fluid">
@@ -310,7 +315,7 @@ else {return false;}
                       <div id="saved-routes" style="display:none">
                           <center>
                             <br /><br />
-                            <h2><u>Saved</u> <u>Routes</u></h2>
+                            <h2><u>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
                               <li class="ui-widget-content">Main St. To Bridge St.</li>
@@ -321,7 +326,7 @@ else {return false;}
 
                       </center>
                   </div>
-
+				</div>
               </div>
           </div>
       </div>
