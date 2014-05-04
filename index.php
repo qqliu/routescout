@@ -1,78 +1,78 @@
 
 <?php 
-   $path = $_SERVER['DOCUMENT_ROOT'];
-   $append = "/login/initconfig.php";
-   $path .= "/routescout/index.php";
-   include_once($path);
+$path = $_SERVER['DOCUMENT_ROOT'];
+$append = "/login/initconfig.php";
+$path .= "/routescout/index.php";
+include_once($path);
 
 
 ?>
 <?php 
 
-    
-    require("./login/initconfig.php"); 
-    
-    $submitted_username = ''; 
-    if(!empty($_POST)){ 
-        $query = " 
-            SELECT  
-                username, 
-                password, 
-                salt, 
-                email 
-            FROM registerUsers 
-            WHERE 
-                username = :username 
-        "; 
-        $query_params = array( 
-            ':username' => $_POST['username'] 
+
+require("./login/initconfig.php"); 
+
+$submitted_username = ''; 
+if(!empty($_POST)){ 
+    $query = " 
+    SELECT  
+    username, 
+    password, 
+    salt, 
+    email 
+    FROM registerUsers 
+    WHERE 
+    username = :username 
+    "; 
+    $query_params = array( 
+        ':username' => $_POST['username'] 
         ); 
-          
-        try{ 
-            $stmt = $db->prepare($query); 
-            $result = $stmt->execute($query_params); 
+
+    try{ 
+        $stmt = $db->prepare($query); 
+        $result = $stmt->execute($query_params); 
+    } 
+    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
+    $login_ok = false; 
+    $row = $stmt->fetch(); 
+    if($row){ 
+        $check_password = hash('sha256', $_POST['password'] . $row['salt']); 
+        for($round = 0; $round < 65536; $round++){
+            $check_password = hash('sha256', $check_password . $row['salt']);
         } 
-        catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
-        $login_ok = false; 
-        $row = $stmt->fetch(); 
-        if($row){ 
-            $check_password = hash('sha256', $_POST['password'] . $row['salt']); 
-            for($round = 0; $round < 65536; $round++){
-                $check_password = hash('sha256', $check_password . $row['salt']);
-            } 
-            if($check_password === $row['password']){
-                $login_ok = true;
-            } 
+        if($check_password === $row['password']){
+            $login_ok = true;
         } 
- 
-        if($login_ok){ 
-            unset($row['salt']); 
-            unset($row['password']); 
-            $_SESSION['user'] = $row;  
+    } 
+
+    if($login_ok){ 
+        unset($row['salt']); 
+        unset($row['password']); 
+        $_SESSION['user'] = $row;  
             //echo "Login succeeded!!!!"
             //header("Location: secret.php"); 
             //die("Redirecting to: secret.php"); 
-        } 
-        else{ 
-            echo'<div class="alert alert-danger alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  The username or password you entered is incorrect.
-</div>';
-            $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
-        } 
-    }
+    } 
+    else{ 
+        echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        The username or password you entered is incorrect.
+        </div>';
+        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
+    } 
+}
 
-    function ifCorrect() {
+function ifCorrect() {
   //print "logging in with email=$email pass=$password";
-  
+
   if(isset($_SESSION['user'])) 
-    {
-        return true;
-    }
+  {
+    return true;
+}
 else {return false;}
 }
-    
- 
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,31 +112,17 @@ else {return false;}
     <script src="files/index.js"></script>
 </head>
 
-<script>
-$('html').off('click.dropdown');
-/*$('.dropdown').click(function(e) {
-        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
-    });
-*/
-$('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
-        e.stopPropagation();
-    });
-    $('.dropdown').dropdown().on("hide.bs.dropdown", function(e) {
-            if ($.contains(dropdown, e.target)) {
-                e.preventDefault();
-            //or return false;
-            }
-        });
-</script>
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <!--<a class="logout-saved" id="logout">Logout</a>
-            <a class="logout-saved" id="savedroutes">Saved Routes</a>-->
+            
             <ul class="nav pull-right">
-              <li id="registerLogin"><a href="./login/signup.php">Register</a></li>
-              <li class="divider-vertical"></li>
+              
+
+              
               <?php if (!ifCorrect()){?>
+              <li class="divider-vertical"></li>
+              <li id="registerLogin"><a href="./login/signup.php">Register</a></li>
               <li class="dropdown">
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
@@ -147,20 +133,23 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
 
                       <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
                   </form>
-                  </div>
-              </li>
-              <?php }
-              else { ?>      
-                <li><a href="/routescout/login/logout.php">Logout</a></li>
-             <?php } ?>
-          </ul>
-          <div id="center-this-navbar">
-            <div id="header">
-                RouteScout
-            </div>
+              </div>
+          </li>
+          <?php }
+          else { ?>      
+          <li class="divider-vertical"></li>
+          <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
+        <li id="savedroutes"><a>My Activity</a></li>
+          <li id="registerLogin"><a href="/routescout/login/logout.php">Logout</a></li>
+          <?php } ?>
+      </ul>
+      <div id="center-this-navbar">
+        <div id="header">
+            RouteScout
         </div>
     </div>
-    </div>
+</div>
+</div>
 
 <div id="content">
     <div class="container-fluid span15">
@@ -199,10 +188,12 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
+                
+                <div id="inside">
+                
                 <div class="container-fluid" id="containerfluid">
                     <br>
-                    <h2><span style="text-decoration: underline">Possible</span>
-                        <span style="text-decoration: underline">Routes</span></h2><br>
+                    <h2>Possible Routes</h2><br>
 
                         <div id="routes"></div><br>
 
@@ -258,14 +249,12 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                         </div>
 
-                        <h2 style="text-align:center"><span style=
-                            "text-decoration: underline">Selected</span> <span style=
-                            "text-decoration: underline">Route</span></h2>
+                        <h2 style="text-align:center">Selected Route</h2>
 
-                            <div id="directions_list" style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;"></div>
+                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
 
                             <div class="row-fluid" id="bottom-buttons">
-                                <div id="route-find" style="text-align:center; float: left;">
+                                <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
                                     <button class="btn btn-large" data-target="#saveModal"
                                     data-toggle="modal" id="savedButton">Save
                                     Route!</button>
@@ -277,36 +266,41 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
                                         Route</a></button>
                                     </div>
                                 </div>
+                                
+                                <BR />
+                                <BR />
                             </div>
 
-                            <div id="rate-route" style="display:none">
+                       <div id="rate-route" style="display:none">
                              <div class = "go-back" style="padding: 10px;">
                                 <a id="back-to-nav"><img src="back-arrow.png"></a>
                             </div>
 
-                            <h2 style="text-align:center"><u>Rate</u> <u>this</u> <u>Route!</u></h2>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Safety:</h3></div>
-                                <div class="span4 offset3 ">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Efficiency</h3></div>
-                                <div class="span4 offset3">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Scenery</h3></div>
-                                <div class="span4 offset2">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
+                            <h2 style="text-align:center">Rate this Route!</h2>
+							
+							<div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Safety:</h3></div>
+	                                <div class="span4 offset3 ">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Efficiency</h3></div>
+	                                <div class="span4 offset3">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Scenery</h3></div>
+	                                <div class="span4 offset2">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+                           </div>
 
 
                             <div id="bottom-buttons" class="row-fluid">
@@ -321,7 +315,7 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
                       <div id="saved-routes" style="display:none">
                           <center>
                             <br /><br />
-                            <h2><u>Saved</u> <u>Routes</u></h2>
+                            <h2><u>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
                               <li class="ui-widget-content">Main St. To Bridge St.</li>
@@ -332,7 +326,7 @@ $('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
 
                       </center>
                   </div>
-
+				</div>
               </div>
           </div>
       </div>
