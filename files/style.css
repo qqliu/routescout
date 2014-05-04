@@ -87,6 +87,7 @@ h2,h1 {
     top: 12px;
     font-size: 40px;
     margin: 0;
+    margin-left:200px;
     font-weight: 700;
     text-rendering: optimizelegibility;
     color: #fff;
