@@ -3,6 +3,7 @@
  var curResult;
  var countryRestrict = { 'country': 'us' };
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
+ var displayRoutes = [];
  var c = 0;
 
  function toggleActive(button) {
@@ -171,7 +172,7 @@
          directionsService.route(request, function(result, status) {
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
-		    var possibleRoutes, c, displayRoutes;
+		    var possibleRoutes;
 		    possibleRoutes = curResult.routes;
 		    displayRoutes = [];
 		    c = 0;
@@ -191,6 +192,12 @@
 			    $("#saved-routes").hide();
 			    $("#navigation").show();
 			    var index = e.currentTarget.id.split("route-")[1];
+			    for (route in displayRoutes) {
+				if (route != index) {
+				    console.log(route);
+				    displayRoutes[route].setMap(null);
+				}
+			    }
 			    var steps = curResult.routes[index].legs[0].steps;
 			    $("#directions_list").empty();
 			    if (steps.length > 0) {
@@ -345,10 +352,13 @@
      });
      
      $('#back-to-routes').click(function(e) {
-         e.preventDefault();
-         $("#navigation").hide();
-         $("#containerfluid").show();
-         return false;
+	e.preventDefault();
+	$("#navigation").hide();
+	$("#containerfluid").show();
+	for (route in displayRoutes) {
+	    displayRoutes[route].setMap(map);
+	}
+        return false;
      });
      
      $('#back-to-nav').click(function(e) {
