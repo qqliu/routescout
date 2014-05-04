@@ -346,6 +346,13 @@ else {return false;}
     <div class="container-fluid">
         <div class="span8" id="map">
             <div id="togglefeatures">
+            	<div id="green-buttons">
+                    <a class="popup-button btn btn-success btn-large" id=
+                    "report-button">Report Accident</a> <a class=
+                    "popup-button btn btn-success btn-large" id=
+                    "tip-button">Add Tip</a>
+                </div>
+            	
                 <div class="toggle-button" id="toggle-label">
                     Toggle Visibility:
                 </div>
@@ -362,14 +369,7 @@ else {return false;}
                     <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
                 </div>
 
-                <div id="googleMap" style="width:700px;height:550px;">
-                </div>
-
-                <div id="green-buttons">
-                    <a class="popup-button btn btn-success btn-large" id=
-                    "report-button">Report Accident</a> <a class=
-                    "popup-button btn btn-success btn-large" id=
-                    "tip-button">Add Tip</a>
+                <div id="googleMap" style="width:700px;height:530px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>
