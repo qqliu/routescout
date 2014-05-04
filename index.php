@@ -61,6 +61,7 @@
             $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
         } 
     }
+
     function ifCorrect() {
   //print "logging in with email=$email pass=$password";
   
