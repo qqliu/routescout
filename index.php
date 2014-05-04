@@ -112,10 +112,19 @@ else {return false;}
 ?>
 <script>
 $('html').off('click.dropdown');
-$('.dropdown').click(function(e) {
+/*$('.dropdown').click(function(e) {
         e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
     });
-
+*/
+$('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
+        e.stopPropagation();
+    });
+    $('.dropdown').dropdown().on("hide.bs.dropdown", function(e) {
+            if ($.contains(dropdown, e.target)) {
+                e.preventDefault();
+            //or return false;
+            }
+        });
 </script>
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
@@ -128,7 +137,7 @@ $('.dropdown').click(function(e) {
               <?php if (!ifCorrect()){?>
               <li class="dropdown">
 
-                <a class="dropdown-toggle" bootstrap-collapses="logout-saved" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                   <form action="/routescout/index.php" method="post" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
