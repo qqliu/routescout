@@ -18,6 +18,9 @@ h2,h1 {
 
 #green-buttons {
     text-align: left;
+    display: inline;
+    padding: 0px;
+    margin: 0px;
 }
 
 #map {
@@ -141,6 +144,7 @@ h2,h1 {
 #togglefeatures {
     float: right;
     text-align: right;
+    padding-bottom: 5px;
 }
 
 #toggle-label {
@@ -150,7 +154,7 @@ h2,h1 {
 
 .toggle-button {
     display: inline;
-    margin-left: 45px;
+    margin-left: 13px;
 }
 
 .toggle-img {

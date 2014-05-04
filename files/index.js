@@ -52,7 +52,7 @@
      });
      adding = undefined;
  }
- 
+
  function deleteMarker(id) {
      markers[id.split("message")[1]].setMap(null);
      delete markers[id];
@@ -61,18 +61,18 @@
  function initialize() {
     var myCenter, directionsService,
 	mapProp, starting, ending, rendererOptions;
-    
+
     starting = document.getElementById('starting_loc');
     ending = document.getElementById('destination_loc');
     autocomplete_starting = new google.maps.places.Autocomplete(starting);
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
-    
+
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
       //setAutocompleteCountry);
     //autocomplete_starting.bindTo('bounds', map);
     //autocomplete_ending.bindTo('bounds', map);
-    
+
     myCenter = new google.maps.LatLng(42.3522, -71.0627);
     directionsService = new google.maps.DirectionsService();
     mapProp = {
@@ -88,7 +88,7 @@
     $("#popup").dialog({
 	autoOpen: false
     });
-    
+
     google.maps.event.addListener(map, 'click', function(event) {
 	if (adding == "star") {
 	    feature = {
@@ -120,18 +120,17 @@
              addMarker(feature);
          }
      }
-     
-     
+
      var bikeLayer = new google.maps.BicyclingLayer();
      bikeLayer.setMap(map);
-     
+
      function displayRoute(i, result) {
 	rendererOptions = {
-	    draggable: false, 
-	    suppressMarkers: true, 
-	    polylineOptions: { 
-		    strokeColor: '#00458E', 
-		    strokeWeight:  4, 
+	    draggable: false,
+	    suppressMarkers: true,
+	    polylineOptions: {
+		    strokeColor: '#00458E',
+		    strokeWeight:  4,
 		    strokeOpacity: 1.0
 	    }
 	};
@@ -140,7 +139,7 @@
 	directionsDisplay.setMap(map);
 	directionsDisplay.setRouteIndex(i);
      }
-     
+
     var styles = [
        {
 	 stylers: [
@@ -162,7 +161,7 @@
 	 ]
        }
     ];
-     
+
     map.setOptions({styles: styles});
 
      function Route() {
@@ -187,8 +186,9 @@
          directionsService.route(request, function(result, status) {
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
-		    var possibleRoutes, c;
+		    var possibleRoutes, c, displayRoutes;
 		    possibleRoutes = curResult.routes;
+		    displayRoutes = [];
 		    c = 0;
 		    $("#routes").empty();
 		    if (possibleRoutes.length > 0) {
@@ -196,7 +196,7 @@
 			for (i in possibleRoutes) {
 			    $($("#routes").find("ol")[0]).append('<li><button class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
-			    displayRoute(c, result);
+			    displayRoutes.push(displayRoute(c, result));
 			    c += 1;
 			}
 			$('.route-buttons').click(function(e) {
@@ -217,21 +217,41 @@
 			    return false;
 			});
 		    }
-		    result.Tb.travelMode = "TRANSIT";
+		    for (route in displayRoutes) {
+			    displayRoutes[route].setMap(map);
+		    }
              } else {
 		    //alert("couldn't get directions:" + status);
              }
          });
      }
-     
+
+     function displayRoute(i, result) {
+	debugger;
+	rendererOptions = {
+	    draggable: false,
+	    suppressMarkers: true,
+	    suppressBicyclingLayer: true,
+	    polylineOptions: {
+		    strokeColor: '#00458E',
+		    strokeWeight:  4,
+		    strokeOpacity: 1.0
+	    }
+	};
+	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+	directionsDisplay.setDirections(result);
+	directionsDisplay.setRouteIndex(i);
+	return directionsDisplay;
+     }
+
     function toggleLanes(value) {
 	if (value) {
-	    bikeLayer.setMap(map); 
+	    bikeLayer.setMap(map);
 	} else {
 	    bikeLayer.setMap(null);
 	}
     }
-     
+
      // When the user selects a city, get the place details for the city and
     // zoom the map in on the city.
     function onPlaceChanged() {
@@ -247,7 +267,7 @@
      function showAllRoutes() {
         Route();
      }
-     
+
      $("#report-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/caution.png) 16 30, default"
@@ -328,32 +348,32 @@
              }
          }
      }).addClass("criteria-slider");
-     
+
 
 		$('.dropdown-menu').click(function(e) {
 	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
 	    });
-     
+
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
         $("#save-route-alert").show();
 	    $('#save-route-alert').delay(500).fadeOut(400);
      });
-     
+
      $('#back-to-routes').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
          $("#containerfluid").show();
          return false;
      });
-     
+
      $('#back-to-nav').click(function(e) {
          e.preventDefault();
          $("#rate-route").hide();
          $("#navigation").show();
          return false;
      });
-     
+
      $('#route-rate').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -362,7 +382,7 @@
          $("#rate-route").show();
          return false;
      });
-     
+
      $('#savedroutes').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -372,14 +392,14 @@
          $("#saved-routes").show();
          return false;
      });
-     
+
 	$("#route-save").click(function() {
 	    $("#save-rate-alert").show();
 	    $('#save-rate-alert').delay(500).fadeOut(400);
-	}); 
-	
-	$(".stars").raty(); 
-	
+	});
+
+	$(".stars").raty();
+
 	$("#selectable").selectable({ disabled: true });
 
     //add x button to each selectable
@@ -387,7 +407,7 @@
       $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
       $(this).addClass("route");
     });
-    
+
     //add x button handler
     $(".delete-button").click(function() {
       var parent = $(this).parent();
