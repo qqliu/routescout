@@ -9,7 +9,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = False;
+$debug_pretend_single_logged_in_user = True;
 
 $resp = array(
   "error" => ""
@@ -77,7 +77,7 @@ function db_query($query) {
 function ensure_logged_in() {
   global $debug_pretend_single_logged_in_user;
   if ($debug_pretend_single_logged_in_user) {
-    return "kobe@mit.edu";
+    return "amy";
   }
 
   if (session_id() != '' && isset($_SESSION['email'])) {
