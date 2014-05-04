@@ -2,6 +2,43 @@
  var markers = {};
  var curResult;
  var countryRestrict = { 'country': 'us' };
+ 
+ 
+ function populate_tips() {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
+    	type : 'GET',
+    	success: function(res) {
+    		for (var i=0;i<res.data.length;i++) {
+	    		A = parseFloat(res.data[i].x),
+	    		k = parseFloat(res.data[i].y),
+	    		position = new google.maps.LatLng(k, A);
+	    		feature = {
+					position: position,
+					type: "star",
+				};
+				addMarker(feature);
+			}
+    	}
+  });
+ }
+
+ function populate_accidents(res) {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=1', {
+    	type : 'GET',
+    	success: function(res) {
+    		for (var i=0;i<res.data.length;i++) {
+	    		A = parseFloat(res.data[i].x),
+	    		k = parseFloat(res.data[i].y),
+	    		position = new google.maps.LatLng(k, A);
+	    		feature = {
+					position: position,
+					type: "caution",
+				};
+				addMarker(feature);
+			}
+    	}
+  });
+ }
 
  function toggleActive(button) {
      var active = $(button).hasClass("active");
@@ -37,7 +74,7 @@
      var marker = new google.maps.Marker({
          position: feature.position,
          icon: icons[feature.type].icon,
-         map: feature.map
+         map: map,
      });
      marker.info = new google.maps.InfoWindow({
          content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>" : "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>"
@@ -56,6 +93,29 @@
  function deleteMarker(id) {
      markers[id.split("message")[1]].setMap(null);
      delete markers[id];
+ };
+ 
+ function save_tip_accident(message, feature) {
+ 	if (feature.type.localeCompare("caution") == 0) {
+ 		kind = 1;
+ 	} else {
+ 		kind = 0;
+ 	}
+ 	data_obj = {
+ 		op: "save_ta",
+ 		kind: kind,
+ 		comment: message,
+ 		x: feature.position.A,
+ 		y: feature.position.k, 
+ 		flagged: 0,
+ 		};
+ 		
+ 	console.log(JSON.stringify(data_obj));
+ 	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+    	data : data_obj,
+    	type : 'POST',
+    	async: false
+  	}).responseText;
  };
 
  function initialize() {
@@ -280,6 +340,8 @@
          for (var i = 0; i < lines.length; i++) {
              message += "<span style='float:left;'>" + lines[i] + "</span><br />";
          }
+         result = save_tip_accident(message, feature);
+         console.log(result);
          $("#popup").dialog('close');
          addStarCaution();
          $("#popup-textbox").val("");
@@ -331,6 +393,8 @@
          }
      }).addClass("criteria-slider");
      
+     populate_tips();
+     populate_accidents();
 
 		$('.dropdown-menu').click(function(e) {
 	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
