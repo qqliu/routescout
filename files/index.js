@@ -15,6 +15,7 @@
 					position: position,
 					type: "star",
 				};
+				message = res.data[i].comment;
 				addMarker(feature);
 			}
     	}
@@ -33,6 +34,7 @@
 					position: position,
 					type: "caution",
 				};
+				message = res.data[i].comment;
 				addMarker(feature);
 			}
     	}
