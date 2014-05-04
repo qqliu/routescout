@@ -9,7 +9,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = False;
+$debug_pretend_single_logged_in_user = True;
 
 $resp = array(
   "error" => ""
@@ -26,7 +26,7 @@ function pp($obj) {
 
 //print only if verbose param = 1
 function pp_debug($obj) {
-  if (isset($_SESSION['verbose']) && $_SESSION['verbose'] == '1') {
+  if (isset($_REQUEST['verbose']) && $_REQUEST['verbose'] == '1') {
     pp($obj);
   }
 }
@@ -77,7 +77,7 @@ function db_query($query) {
 function ensure_logged_in() {
   global $debug_pretend_single_logged_in_user;
   if ($debug_pretend_single_logged_in_user) {
-    return "kobe@mit.edu";
+    return "amy";
   }
 
   if (session_id() != '' && isset($_SESSION['email'])) {
@@ -175,7 +175,7 @@ function delete_saved_route() {
 function save_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("kind", "id", "comment", "x", "y", "flagged"));
+  ensure_and_escape_params(array("kind", "comment", "x", "y", "flagged"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -184,36 +184,28 @@ function save_ta() {
   //add row
   db_query(
     "insert into tips_and_accidents
-    (user, kind, id, comment, x, y, flagged)
-    values ('$user', {$_REQUEST["kind"]}, '{$_REQUEST["id"]}', '{$_REQUEST["comment"]}', '{$_REQUEST["x"]}', '{$_REQUEST["y"]}', {$_REQUEST["flagged"]})
-    on duplicate key update
-    user='$user',
-    kind={$_REQUEST["kind"]},
-    id='{$_REQUEST["id"]}',
-    comment='{$_REQUEST["comment"]}',
-    x='{$_REQUEST["x"]}',
-    y='{$_REQUEST["y"]}',
-    flagged={$_REQUEST["flagged"]}
+    (user, kind, comment, x, y, flagged)
+    values ('$user', {$_REQUEST["kind"]}, '{$_REQUEST["comment"]}', '{$_REQUEST["x"]}', '{$_REQUEST["y"]}', {$_REQUEST["flagged"]})
   ");
 }
 
 function delete_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("kind", "id"));
+  ensure_and_escape_params(array("id"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
   if (has_error()) return;
   
   //delete row
-  db_query("delete from tips_and_accidents where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'");
+  db_query("delete from tips_and_accidents where user='$user' and id={$_REQUEST["id"]}");
 }
 
 function edit_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("kind", "id", "comment"));
+  ensure_and_escape_params(array("id", "comment"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -223,7 +215,7 @@ function edit_ta() {
   db_query("
     update tips_and_accidents
     set comment='{$_REQUEST["comment"]}'
-    where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
+    where user='$user' and id={$_REQUEST["id"]}
   ");
 }
 
@@ -248,11 +240,10 @@ function get_all_tas() {
   }
 }
 
-//TODO
 function flag_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("owner", "kind", "id"));
+  ensure_and_escape_params(array("owner", "id"));
   if (has_error()) return;
   
   ensure_logged_in();
@@ -262,7 +253,7 @@ function flag_ta() {
   db_query("
     update tips_and_accidents
     set flagged=1
-    where user='{$_REQUEST["owner"]}' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
+    where user='{$_REQUEST["owner"]}' and id={$_REQUEST["id"]}
   ");
 }
 

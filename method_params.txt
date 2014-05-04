@@ -22,10 +22,10 @@ routes table (primary = user, route_key)
   to_loc varchar(1000)
   route_index (INT)
 
-tips_and_accidents table (primary = user, kind, id)
+tips_and_accidents table (primary = id)
   user varchar(255)
   kind = INT
-  id varchar(255)
+  id INT - autoincrement
   comment varchar(1000)
   x varchar(1000)
   y varchar(1000)
@@ -54,6 +54,7 @@ route_key = route_key (VARCHAR)
 safety = 1-5 (INT)
 efficiency = 1-5 (INT)
 scenery = 1-5 (INT)
+*needs to be logged in
 
 http://leoliu.scripts.mit.edu/routescout/db.php?op=update_ratings&route_key=key&safety=0&efficiency=0&scenery=1
 
@@ -68,6 +69,7 @@ name = name (VARCHAR)
 from_loc = from_add (VARCHAR)
 to_loc = to_addr (VARCHAR)
 route_index = (INT)
+*needs to be logged in
 
 http://leoliu.scripts.mit.edu/routescout/db.php?op=save_route&route_key=route_key&name=name&from_loc=from&to_loc=to&route_index=5
 
@@ -78,6 +80,7 @@ Delete Saved Routes
 
 op = delete_saved_route
 route_key = VARCHAR
+*needs to be logged in
 
 {"error":""}
 
@@ -88,13 +91,13 @@ Save Tip or Accident
 
 op = save_ta
 kind = 0 (for tip), 1 (for accident) INT
-id = INT (specific id for the tip)
 comment = VARCHAR
 x (VARCHAR)
 y (VARCHAR)
 flagged
+*needs to be logged in
 
-http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&kind=0&id=id&comment=comment&x=x&y=y&flagged=0
+http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&kind=0&comment=comment&x=x&y=y&flagged=0
 
 {"error":""}
 
@@ -102,10 +105,10 @@ http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&kind=0&id=id&comment=
 Delete Tip or Accident (can do this another way perhaps)
 
 op = delete_ta
-kind = 0 (for tip), 1 (for accident) INT
 id = INT
+*needs to be logged in
 
-http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_ta&kind=0&id=id
+http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_ta&id=id
 
 {"error":""}
 
@@ -113,11 +116,11 @@ http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_ta&kind=0&id=id
 Edit Tip or Accident
 
 op = edit_ta
-kind = 0 (for tip), 1 (for accident) INT
 id = INT
 comment = VARCHAR (new tip)
+*needs to be logged in
 
-http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&kind=0&id=id&comment=newcomment
+http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&id=id&comment=newcomment
 
 {"error":""}
 
@@ -160,10 +163,10 @@ Flag Tip or Accident (we can decide whether to use this or not)
 
 op = flag_ta
 owner = userid that owns the tip/accident
-kind = 0 (for tip), 1 (for accident) INT
 id = INT
+*needs to be logged in
 
-http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&owner=kobe@mit.edu&kind=0&id=id
+http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&owner=kobe@mit.edu&id=id
 
 {"error":""}
 
@@ -171,6 +174,7 @@ http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&owner=kobe@mit.edu&ki
 Get Saved Routes:
 
 op = get_saved_routes
+*needs to be logged in
 
 Returns a list of objects:
 
@@ -203,6 +207,7 @@ Get a particular saved route:
 
 op = get_saved_route
 route_key = route_key
+*needs to be logged in
 
 http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_route&route_key=key
 

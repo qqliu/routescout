@@ -61,7 +61,7 @@
  function initialize() {
     var myCenter, directionsService,
 	mapProp, starting, ending, rendererOptions;
-    
+
     starting = document.getElementById('starting_loc');
     ending = document.getElementById('destination_loc');
     autocomplete_starting = new google.maps.places.Autocomplete(starting);
@@ -120,26 +120,8 @@
              addMarker(feature);
          }
      }
-     
-     
      var bikeLayer = new google.maps.BicyclingLayer();
      bikeLayer.setMap(map);
-     
-     function displayRoute(i, result) {
-	rendererOptions = {
-	    draggable: false, 
-	    suppressMarkers: true, 
-	    polylineOptions: { 
-		    strokeColor: '#00458E', 
-		    strokeWeight:  4, 
-		    strokeOpacity: 1.0
-	    }
-	};
-	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-	directionsDisplay.setDirections(result);
-	directionsDisplay.setMap(map);
-	directionsDisplay.setRouteIndex(i);
-     }
      
     var styles = [
        {
@@ -187,8 +169,9 @@
          directionsService.route(request, function(result, status) {
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
-		    var possibleRoutes, c;
+		    var possibleRoutes, c, displayRoutes;
 		    possibleRoutes = curResult.routes;
+		    displayRoutes = [];
 		    c = 0;
 		    $("#routes").empty();
 		    if (possibleRoutes.length > 0) {
@@ -196,7 +179,7 @@
 			for (i in possibleRoutes) {
 			    $($("#routes").find("ol")[0]).append('<li><button class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
-			    displayRoute(c, result);
+			    displayRoutes.push(displayRoute(c, result));
 			    c += 1;
 			}
 			$('.route-buttons').click(function(e) {
@@ -217,11 +200,30 @@
 			    return false;
 			});
 		    }
-		    result.Tb.travelMode = "TRANSIT";
+		    for (route in displayRoutes) {
+			displayRoutes[route].setMap(map);
+		    }
              } else {
 		    //alert("couldn't get directions:" + status);
              }
          });
+     }
+     
+     function displayRoute(i, result) {
+	rendererOptions = {
+	    draggable: false, 
+	    suppressMarkers: true,
+	    suppressBicyclingLayer: true,
+	    polylineOptions: { 
+		    strokeColor: '#00458E', 
+		    strokeWeight:  4, 
+		    strokeOpacity: 1.0
+	    }
+	};
+	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+	directionsDisplay.setDirections(result);
+	directionsDisplay.setRouteIndex(i);
+	return directionsDisplay;
      }
      
     function toggleLanes(value) {
