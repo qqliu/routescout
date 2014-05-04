@@ -115,8 +115,7 @@ else {return false;}
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <!--<a class="logout-saved" id="logout">Logout</a>
-            <a class="logout-saved" id="savedroutes">Saved Routes</a>-->
+            
             <ul class="nav pull-right">
               
 
