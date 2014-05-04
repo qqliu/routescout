@@ -65,7 +65,7 @@ h2,h1 {
 
 #containerfluid {
 	position: relative;
-	top: -10px;
+	width: 360px;
 }
 
 .logout-saved {
