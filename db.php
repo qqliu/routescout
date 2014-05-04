@@ -6,6 +6,9 @@ TODO (if time): to deal with malicious users/XSS:
   add cgi.escape to responses
 */
 
+//force verbose prints
+$_SESSION['verbose'] = 1;
+
 $resp = array(
   "error" => ""
 );
@@ -17,6 +20,13 @@ function pp($obj) {
   echo '<pre>';
   print_r($obj);
   echo '</pre>';
+}
+
+//print only if verbose param = 1
+function pp_debug($obj) {
+  if (isset($_SESSION['verbose']) && $_SESSION['verbose'] == '1') {
+    pp($obj);
+  }
 }
 
 //resp functions
@@ -47,7 +57,7 @@ function db_connect() {
 //retuns mysql result object on success
 //false on failure (and sets error in resp)
 function db_query($query) {
-  pp($query);
+  pp_debug($query);
   return True;
 /*
   global $db_link;
@@ -89,38 +99,10 @@ function ensure_and_escape_params($params) {
   }
 }
 
-function dbtest() {
-  $link = db_connect();
-  $query = "select * from users where email = 'leoliu@mit.edu'";
-  $result = $link->query($query);
-  $row = mysqli_fetch_array($result);
-  print_r($row);
-  print "connected";
-}
-
-//example row insert
-/*
-  //insert row
-  $first_name = mysql_escape_string($first_name);
-  
-  $link = db_connect();
-  $query = "insert into users (first_name, last_name, email, password, salt) "
-  . "VALUES ('$first_name','$last_name','$email','$hashed', '$salt')";
-  $result = $link->query($query);
-  
-  //TODO: fix this...
-  if (!$result) {
-    return mysqli_error($link);
-  }
-*/
-
-//example reading UID
-/*
-  $_SESSION['email'] = $email;
-  if (session_id() != '') {
-*/
-
-/* these methods are called by main() after db is connected (also by main()) */
+//
+//all operations below!!!
+//these methods are called by main() after db is connected
+//
 
 //http://leoliu.scripts.mit.edu/routescout/db.php?op=update_ratings&route_key=key&safety=0&efficiency=0&scenery=1
 function update_ratings() {
@@ -134,10 +116,10 @@ function update_ratings() {
   
   if ($_REQUEST["safety"] === "0" && $_REQUEST["efficiency"] === "0" && $_REQUEST["scenery"] === "0") {
     //delete row
-    return db_query("delete from ratings where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+    db_query("delete from ratings where user='$user' and route_key='{$_REQUEST["route_key"]}'");
   } else {
     //insert row
-    return db_query(
+    db_query(
       "insert into ratings
       (user, route_key, safety, efficiency, scenery)
       values ('$user', '{$_REQUEST["route_key"]}', {$_REQUEST["safety"]}, {$_REQUEST["efficiency"]}, {$_REQUEST["scenery"]})
@@ -162,7 +144,7 @@ function save_route() {
   if (has_error()) return;
   
     //insert row
-    return db_query(
+    db_query(
       "insert into routes
       (user, route_key, name, from_loc, to_loc, order)
       values ('$user', '{$_REQUEST["route_key"]}', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["order"]})
@@ -187,7 +169,7 @@ function delete_saved_route() {
   if (has_error()) return;
   
   //delete row
-  return db_query("delete from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+  db_query("delete from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
 }
 
 //http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&user=user&kind=0&id=id&comment=comment&x=x&y=y&flagged=0
@@ -201,7 +183,7 @@ function save_ta() {
   if (has_error()) return;
   
   //add row
-  return db_query(
+  db_query(
     "insert into tips_and_accidents
     (user, kind, id, comment, x, y, flagged)
     values ('$user', {$_REQUEST["kind"]}, '{$_REQUEST["id"]}', '{$_REQUEST["comment"]}', '{$_REQUEST["x"]}', '{$_REQUEST["y"]}', {$_REQUEST["flagged"]})
@@ -227,7 +209,7 @@ function delete_ta() {
   if (has_error()) return;
   
   //delete row
-  return db_query("delete from tips_and_accidents where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'");
+  db_query("delete from tips_and_accidents where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'");
 }
 
 //http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&user=user&kind=0&id=id&comment=comment
@@ -241,22 +223,36 @@ function edit_ta() {
   if (has_error()) return;
   
   //edit row
-  return db_query("
+  db_query("
     update tips_and_accidents
     set comment='{$_REQUEST["comment"]}';
     where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
   ");
 }
 
+//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_taskind=1
 function get_all_tas() {
   global $resp;
   
-  ensure_and_escape_params(array());
+  ensure_and_escape_params(array("kind"));
   if (has_error()) return;
   
+  $result = db_query("
+    select * from tips_and_accidents
+    where kind={$_REQUEST["kind"]}
+  ");
+  if (has_error()) return;
   
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = array();
+  while($row = mysqli_fetch_array($result)) {
+    array_push($resp["data"], $row);
+  }
 }
 
+//http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&kind=0&id=id
 function flag_ta() {
   global $resp;
   
@@ -267,13 +263,14 @@ function flag_ta() {
   if (has_error()) return;
   
   //flag that thing
-  return db_query("
+  db_query("
     update tips_and_accidents
     set flagged=1
     where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
   ");
 }
 
+//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_routes
 function get_saved_routes() {
   global $resp;
   
@@ -284,17 +281,35 @@ function get_saved_routes() {
   if (has_error()) return;
   
   //get rows for that user
+  $result = db_query("select * from routes where user='$user'");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = array();
+  while($row = mysqli_fetch_array($result)) {
+    array_push($resp["data"], $row);
+  }
 }
 
+//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_route&route_key=key
 function get_saved_route() {
   global $resp;
   
-  ensure_and_escape_params(array());
+  ensure_and_escape_params(array("route_key"));
   if (has_error()) return;
   
+  $result = db_query("select * from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+  if (has_error()) return;
   
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = mysqli_fetch_array($result);
 }
 
+//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_average_ratings
 function get_average_ratings() {
   global $resp;
   
@@ -302,10 +317,27 @@ function get_average_ratings() {
   if (has_error()) return;
   
   //get average ratings for particular route
+  
+  $resp["data"] = array();
+  
+  foreach (array("safety", "efficiency", "scenery") as $rating_type) {
+    $result = db_query("
+      select average($rating_type) from routes
+      where route_key='{$_REQUEST["route_key"]}'
+      and $rating_type != 0
+    ");
+    if (has_error()) return;
+    
+    if ($result === True) { //when testing, db_query() returns true
+      return;
+    }
+    $row = mysqli_fetch_array($result);
+    $resp["data"][$rating_type] = $row;
+  }
 }
 
 function main() {
-  pp($_REQUEST);
+  pp_debug($_REQUEST);
 
   if (!isset($_REQUEST["op"])) {
     on_error("missing op");
@@ -335,11 +367,11 @@ function main() {
   }
   
   global $resp;
-  pp($resp);
+  pp_debug($resp);
+  
+  print json_encode($resp);
 }
 
 main();
 
 ?>
-
-blah blah blah
