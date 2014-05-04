@@ -59,12 +59,8 @@
  };
 
  function initialize() {
-    var myCenter, directionsDisplay, directionsService,
+    var myCenter, directionsService,
 	mapProp, starting, ending, rendererOptions;
-	
-    rendererOptions = {
-	draggable: true
-    };
     
     starting = document.getElementById('starting_loc');
     ending = document.getElementById('destination_loc');
@@ -78,7 +74,6 @@
     //autocomplete_ending.bindTo('bounds', map);
     
     myCenter = new google.maps.LatLng(42.3522, -71.0627);
-    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsService = new google.maps.DirectionsService();
     mapProp = {
 	center: myCenter,
@@ -125,9 +120,26 @@
              addMarker(feature);
          }
      }
-     directionsDisplay.setMap(map);
+     
+     
      var bikeLayer = new google.maps.BicyclingLayer();
      bikeLayer.setMap(map);
+     
+     function displayRoute(i, result) {
+	rendererOptions = {
+	    draggable: false, 
+	    suppressMarkers: true, 
+	    polylineOptions: { 
+		    strokeColor: '#00458E', 
+		    strokeWeight:  4, 
+		    strokeOpacity: 1.0
+	    }
+	};
+	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+	directionsDisplay.setDirections(result);
+	directionsDisplay.setMap(map);
+	directionsDisplay.setRouteIndex(i);
+     }
      
     var styles = [
        {
@@ -173,7 +185,6 @@
 	     provideRouteAlternatives: true
          };
          directionsService.route(request, function(result, status) {
-	    console.log(result);
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
 		    var possibleRoutes, c;
@@ -185,6 +196,7 @@
 			for (i in possibleRoutes) {
 			    $($("#routes").find("ol")[0]).append('<li><button class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
+			    displayRoute(c, result);
 			    c += 1;
 			}
 			$('.route-buttons').click(function(e) {
@@ -206,7 +218,6 @@
 			});
 		    }
 		    result.Tb.travelMode = "TRANSIT";
-		    directionsDisplay.setDirections(result);
              } else {
 		    //alert("couldn't get directions:" + status);
              }

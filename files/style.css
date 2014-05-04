@@ -85,6 +85,7 @@ h2,h1 {
 #header {
     position: relative;
     top: 12px;
+    padding-top: 5px;
     font-size: 40px;
     margin: 0;
     margin-left:200px;
@@ -228,8 +229,14 @@ margin-bottom: 20px;
 }
 
 #navigation {
-	padding-left: 20px;
+	padding-left: 0px;
+	width: 360px;
 	
+}
+
+#saved-routes {
+	padding-left: 0px;
+	width: 360px;
 }
 
 body {
@@ -239,11 +246,12 @@ body {
 .go-back {
 	width:20px;
 	height: 20px;
-
+	cursor: pointer;
 }
 
 #rate-route {
-	padding-left: 20px;
+	padding-left: 0px;
+	width: 360px;
 }
 
 a {
@@ -254,42 +262,32 @@ a:hover {
 	text-decoration: none;
 }
 
-
-.go-back {
-    width: 20px;
-    height: 20px;
-}
-
-a {
-    color: #000;
-}
-
-a:hover {
-    color: #000;
-    text-decoration: none;
-}
-
 #first {
 	position: relative;
 	left: -1px;
 	border: 2px solid #000000;
     overflow: hidden;
-    background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     width: 380px;
     padding: 10px;
     
 }
 
+#inside {
+	height: 330px;
+    width: 390px;
+	display: block;
+	overflow: scroll;
+	margin: 10px;
+}
+
 #second {
 	border: 2px solid #000000;
-    overflow: scroll;
-    background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     height: 350px;
-    width: 380px;
+    width: 400px;
     margin-bottom: 0px;
-    padding: 10px;
+    padding: 0px;
 }
 
 .save-alert {
