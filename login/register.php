@@ -10,7 +10,14 @@
     { 
         // Ensure that the user fills out fields 
         if(empty($_POST['username'])) 
-        { die("Please enter a username."); } 
+
+        { 
+            echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        The username or password you entered is incorrect.
+        </div>';
+            die("Please enter a username."); 
+        } 
         if(empty($_POST['password'])) 
         { die("Please enter a password."); } 
         if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
@@ -64,7 +71,7 @@
                 :email 
             ) 
         "; 
-          
+        
         // Security measures
         $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
         $password = hash('sha256', $_POST['password'] . $salt); 
@@ -79,8 +86,13 @@
             $stmt = $db->prepare($query); 
             $result = $stmt->execute($query_params); 
         } 
-        catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
+        catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+        
         header("Location: ../index.php"); 
+        echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Worked!!!!.
+        </div>'; 
         die("Redirecting to index.php"); 
     } 
 ?>

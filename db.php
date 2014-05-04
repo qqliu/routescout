@@ -26,7 +26,7 @@ function pp($obj) {
 
 //print only if verbose param = 1
 function pp_debug($obj) {
-  if (isset($_SESSION['verbose']) && $_SESSION['verbose'] == '1') {
+  if (isset($_REQUEST['verbose']) && $_REQUEST['verbose'] == '1') {
     pp($obj);
   }
 }
@@ -248,7 +248,6 @@ function get_all_tas() {
   }
 }
 
-//TODO
 function flag_ta() {
   global $resp;
   

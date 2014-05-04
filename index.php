@@ -11,7 +11,7 @@ include_once($path);
 
 
 require("./login/initconfig.php"); 
-
+if (!empty($_POST['loginform'])){
 $submitted_username = ''; 
 if(!empty($_POST)){ 
     $query = " 
@@ -60,6 +60,7 @@ if(!empty($_POST)){
         </div>';
         $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
     } 
+}
 }
 
 function ifCorrect() {
@@ -122,12 +123,26 @@ else {return false;}
               
               <?php if (!ifCorrect()){?>
               <li class="divider-vertical"></li>
-              <li id="registerLogin"><a href="./login/signup.php">Register</a></li>
+              <li class="dropdown">
+
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
+                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                  <form name="registerform" action="/routescout/login/register.php" method="post" accept-charset="UTF-8">
+                      Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
+                      Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
+                      Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
+
+                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                  </form>
+              </div>
+          </li>
+
+
               <li class="dropdown">
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form action="/routescout/index.php" method="post" accept-charset="UTF-8">
+                  <form name="loginform" action="/routescout/index.php" method="post" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
 
