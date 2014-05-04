@@ -118,6 +118,17 @@ h2,h1 {
 }
 
 #savedroutes {
+    position: relative;
+    margin-left:30px;
+    margin-bottom:50px;
+    top: 12px;
+    font-size: 25px;
+    margin: 5;
+    margin-top: -10px;
+    font-weight: 700;
+    text-rendering: optimizelegibility;
+    color: #fff;
+    font-family: 'Lily Script One', cursive;
     cursor: pointer;
 }
 
