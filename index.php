@@ -123,12 +123,12 @@ $('.dropdown').click(function(e) {
             <!--<a class="logout-saved" id="logout">Logout</a>
             <a class="logout-saved" id="savedroutes">Saved Routes</a>-->
             <ul class="nav pull-right">
-              <li><a href="./login/signup.php">Register</a></li>
+              <li id="registerLogin"><a href="./login/signup.php">Register</a></li>
               <li class="divider-vertical"></li>
               <?php if (!ifCorrect()){?>
               <li class="dropdown">
 
-                <a class="dropdown-toggle" bootstrap-collapses="logout-saved" href="#" data-toggle="dropdown">Login <strong class="caret"></strong></a>
+                <a class="dropdown-toggle" bootstrap-collapses="logout-saved" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                   <form action="/routescout/index.php" method="post" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />

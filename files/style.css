@@ -93,6 +93,20 @@ h2,h1 {
     font-family: 'Lily Script One', cursive;
 }
 
+#registerLogin {
+    position: relative;
+    margin-left:30px;
+    margin-bottom:40px;
+    top: 12px;
+    font-size: 25px;
+    margin: 0;
+    margin-top: -10px;
+    font-weight: 700;
+    text-rendering: optimizelegibility;
+    color: #fff;
+    font-family: 'Lily Script One', cursive;
+}
+
 #center-this-navbar {
     height: 50px;
     display: table;
