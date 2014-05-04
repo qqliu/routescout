@@ -169,9 +169,11 @@
          var request = {
              origin: start,
              destination: end,
-             travelMode: google.maps.TravelMode.BICYCLING
+             travelMode: google.maps.TravelMode.BICYCLING,
+	     provideRouteAlternatives: true
          };
          directionsService.route(request, function(result, status) {
+	    console.log(result);
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
 		    var possibleRoutes, c;
