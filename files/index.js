@@ -3,7 +3,6 @@
  var curResult;
  var countryRestrict = { 'country': 'us' };
  
- 
  function populate_tips() {
  	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
     	type : 'GET',
@@ -39,6 +38,10 @@
     	}
   });
  }
+
+ var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
+ var displayRoutes = [];
+ var c = 0;
 
  function toggleActive(button) {
      var active = $(button).hasClass("active");
@@ -229,7 +232,7 @@
          directionsService.route(request, function(result, status) {
              if (status == google.maps.DirectionsStatus.OK) {
 		    curResult = result;
-		    var possibleRoutes, c, displayRoutes;
+		    var possibleRoutes;
 		    possibleRoutes = curResult.routes;
 		    displayRoutes = [];
 		    c = 0;
@@ -237,9 +240,9 @@
 		    if (possibleRoutes.length > 0) {
 			$("#routes").append("<ol></ol>");
 			for (i in possibleRoutes) {
-			    $($("#routes").find("ol")[0]).append('<li><button class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
+			    $($("#routes").find("ol")[0]).append('<li><button style="background-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
-			    displayRoutes.push(displayRoute(c, result));
+			    displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
 			    c += 1;
 			}
 			$('.route-buttons').click(function(e) {
@@ -249,6 +252,12 @@
 			    $("#saved-routes").hide();
 			    $("#navigation").show();
 			    var index = e.currentTarget.id.split("route-")[1];
+			    for (route in displayRoutes) {
+				if (route != index) {
+				    console.log(route);
+				    displayRoutes[route].setMap(null);
+				}
+			    }
 			    var steps = curResult.routes[index].legs[0].steps;
 			    $("#directions_list").empty();
 			    if (steps.length > 0) {
@@ -269,13 +278,13 @@
          });
      }
      
-     function displayRoute(i, result) {
+     function displayRoute(i, result, color) {
 	rendererOptions = {
 	    draggable: false, 
 	    suppressMarkers: true,
 	    suppressBicyclingLayer: true,
 	    polylineOptions: { 
-		    strokeColor: '#00458E', 
+		    strokeColor: color, 
 		    strokeWeight:  4, 
 		    strokeOpacity: 1.0
 	    }
@@ -407,10 +416,13 @@
      });
      
      $('#back-to-routes').click(function(e) {
-         e.preventDefault();
-         $("#navigation").hide();
-         $("#containerfluid").show();
-         return false;
+	e.preventDefault();
+	$("#navigation").hide();
+	$("#containerfluid").show();
+	for (route in displayRoutes) {
+	    displayRoutes[route].setMap(map);
+	}
+        return false;
      });
      
      $('#back-to-nav').click(function(e) {

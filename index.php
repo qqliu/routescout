@@ -11,9 +11,8 @@ include_once($path);
 
 
 require("./login/initconfig.php"); 
-if (!empty($_POST['loginform'])){
 $submitted_username = ''; 
-if(!empty($_POST)){ 
+if (isset($_POST['loginform'])) {
     $query = " 
     SELECT  
     username, 
@@ -61,7 +60,110 @@ if(!empty($_POST)){
         $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
     } 
 }
+else if (isset($_POST['registerform'])) {
+    // Ensure that the user fills out fields 
+    if(empty($_POST['username'])) 
+
+    { 
+        echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a username.
+        </div>';
+        
+    } 
+    if(empty($_POST['password'])) 
+        { echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a password.
+        </div>'; } 
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
+        { echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>'; } 
+
+        // Check if the username is already taken
+    $query = " 
+    SELECT 
+    1 
+    FROM registerUsers 
+    WHERE 
+    username = :username 
+    "; 
+    $query_params = array( ':username' => $_POST['username'] ); 
+    try { 
+        $stmt = $db->prepare($query); 
+        $result = $stmt->execute($query_params); 
+    } 
+    catch(PDOException $ex){ } 
+    $row = $stmt->fetch(); 
+    if($row){ echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This username is already in use.
+        </div>'; } 
+    $query = " 
+    SELECT 
+    1 
+    FROM registerUsers 
+    WHERE 
+    email = :email 
+    "; 
+    $query_params = array( 
+        ':email' => $_POST['email'] 
+        ); 
+    try { 
+        $stmt = $db->prepare($query); 
+        $result = $stmt->execute($query_params); 
+    } 
+    catch(PDOException $ex){ } 
+    $row = $stmt->fetch(); 
+    if($row){ echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This email address is already registered.
+        </div>'; } 
+    else{
+        echo'<div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more! 
+        </div>';
+    }
+
+        // Add row to database 
+    $query = " 
+    INSERT INTO registerUsers ( 
+        username, 
+        password, 
+        salt, 
+        email 
+        ) VALUES ( 
+        :username, 
+        :password, 
+        :salt, 
+        :email 
+        ) 
+"; 
+
+        // Security measures
+$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
+$password = hash('sha256', $_POST['password'] . $salt); 
+for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); } 
+    $query_params = array( 
+        ':username' => $_POST['username'], 
+        ':password' => $password, 
+        ':salt' => $salt, 
+        ':email' => $_POST['email'] 
+        ); 
+try {  
+    $stmt = $db->prepare($query); 
+    $result = $stmt->execute($query_params); 
+} 
+catch(PDOException $ex){  }
+
+
+
 }
+
+
 
 function ifCorrect() {
   //print "logging in with email=$email pass=$password";
@@ -116,21 +218,22 @@ else {return false;}
 <body>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            
-            <ul class="nav pull-right">
-              
 
-              
+            <ul class="nav pull-right">
+
+
+
               <?php if (!ifCorrect()){?>
               <li class="divider-vertical"></li>
               <li class="dropdown">
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form name="registerform" action="/routescout/login/register.php" method="post" accept-charset="UTF-8">
+                  <form id="registerform" name="registerform" method="post" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
+                      <input type="hidden" name="registerform" value="registerform">
 
                       <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
                   </form>
@@ -138,31 +241,31 @@ else {return false;}
           </li>
 
 
-              <li class="dropdown">
+          <li class="dropdown">
 
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
-                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form name="loginform" action="/routescout/index.php" method="post" accept-charset="UTF-8">
-                      Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
-                      Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
-
-                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                  </form>
-              </div>
-          </li>
-          <?php }
-          else { ?>      
-          <li class="divider-vertical"></li>
-          <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
-        <li id="savedroutes"><a>My Activity</a></li>
-          <li id="registerLogin"><a href="/routescout/login/logout.php">Logout</a></li>
-          <?php } ?>
-      </ul>
-      <div id="center-this-navbar">
-        <div id="header">
-            RouteScout
-        </div>
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
+            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8">
+                  Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
+                  Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
+                  <input type="hidden" name="loginform" value="loginform">
+                  <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+              </form>
+          </div>
+      </li>
+      <?php }
+      else { ?>      
+      <li class="divider-vertical"></li>
+      <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
+      <li id="savedroutes"><a>My Activity</a></li>
+      <li id="registerLogin"><a href="/routescout/login/logout.php">Logout</a></li>
+      <?php } ?>
+  </ul>
+  <div id="center-this-navbar">
+    <div id="header">
+        RouteScout
     </div>
+</div>
 </div>
 </div>
 
@@ -205,10 +308,10 @@ else {return false;}
                 "display:none">
                 
                 <div id="inside">
-                
-                <div class="container-fluid" id="containerfluid">
-                    <br>
-                    <h2>Possible Routes</h2><br>
+
+                    <div class="container-fluid" id="containerfluid">
+                        <br>
+                        <h2>Possible Routes</h2><br>
 
                         <div id="routes"></div><br>
 
@@ -266,86 +369,86 @@ else {return false;}
 
                         <h2 style="text-align:center">Selected Route</h2>
 
-                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
+                        <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
 
-                            <div class="row-fluid" id="bottom-buttons">
-                                <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
-                                    <button class="btn btn-large" data-target="#saveModal"
-                                    data-toggle="modal" id="savedButton">Save
-                                    Route!</button>
-                                    <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                                </div>
-
-                                <div id="route-find" style="text-align:center">
-                                    <button class="btn btn-large" id="route-rate" type="button">Rate this
-                                        Route</a></button>
-                                    </div>
-                                </div>
-                                
-                                <BR />
-                                <BR />
+                        <div class="row-fluid" id="bottom-buttons">
+                            <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
+                                <button class="btn btn-large" data-target="#saveModal"
+                                data-toggle="modal" id="savedButton">Save
+                                Route!</button>
+                                <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
                             </div>
 
-                       <div id="rate-route" style="display:none">
-                             <div class = "go-back" style="padding: 10px;">
-                                <a id="back-to-nav"><img src="back-arrow.png"></a>
+                            <div id="route-find" style="text-align:center">
+                                <button class="btn btn-large" id="route-rate" type="button">Rate this
+                                    Route</a></button>
+                                </div>
                             </div>
 
-                            <h2 style="text-align:center">Rate this Route!</h2>
-							
-							<div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
-	                            <div class="row-fluid">
-	                                <div class="span4"><h3>Safety:</h3></div>
-	                                <div class="span4 offset3 ">
-	                                    <div class="stars"></div>
-	                                </div>
-	                            </div>
-	
-	
-	                            <div class="row-fluid">
-	                                <div class="span4"><h3>Efficiency</h3></div>
-	                                <div class="span4 offset3">
-	                                    <div class="stars"></div>
-	                                </div>
-	                            </div>
-	
-	                            <div class="row-fluid">
-	                                <div class="span4"><h3>Scenery</h3></div>
-	                                <div class="span4 offset2">
-	                                    <div class="stars"></div>
-	                                </div>
-	                            </div>
-                           </div>
+                            <BR />
+                            <BR />
+                        </div>
+
+                        <div id="rate-route" style="display:none">
+                         <div class = "go-back" style="padding: 10px;">
+                            <a id="back-to-nav"><img src="back-arrow.png"></a>
+                        </div>
+
+                        <h2 style="text-align:center">Rate this Route!</h2>
+
+                        <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Safety:</h3></div>
+                             <div class="span4 offset3 ">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
 
 
-                            <div id="bottom-buttons" class="row-fluid">
-                             <div id="route-find" style="text-align:center">
-                              <button id="route-save" type="button" class="btn btn-large">
-                                  Rate!</button>
-                                  <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-                              </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Efficiency</h3></div>
+                             <div class="span4 offset3">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
+
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Scenery</h3></div>
+                             <div class="span4 offset2">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
+                     </div>
+
+
+                     <div id="bottom-buttons" class="row-fluid">
+                         <div id="route-find" style="text-align:center">
+                          <button id="route-save" type="button" class="btn btn-large">
+                              Rate!</button>
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
                           </div>
                       </div>
-
-                      <div id="saved-routes" style="display:none">
-                          <center>
-                            <br /><br />
-                            <h2><u>Saved Routes</h2>
-                            <br /><br />
-                            <ol id="selectable">
-                              <li class="ui-widget-content">Main St. To Bridge St.</li>
-                              <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
-                              <li class="ui-widget-content">Stevens Creek to First Ave</li>
-                              <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
-                          </ol>
-
-                      </center>
                   </div>
-				</div>
+
+                  <div id="saved-routes" style="display:none">
+                      <center>
+                        <br /><br />
+                        <h2><u>Saved Routes</h2>
+                        <br /><br />
+                        <ol id="selectable">
+                          <li class="ui-widget-content">Main St. To Bridge St.</li>
+                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
+                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
+                      </ol>
+
+                  </center>
               </div>
           </div>
       </div>
   </div>
+</div>
+</div>
 </div>
 
 
