@@ -112,7 +112,7 @@ else {return false;}
     <script src="files/index.js"></script>
 </head>
 
-<body background="parchment.jpg">
+<body>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             

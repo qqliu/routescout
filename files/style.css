@@ -267,7 +267,6 @@ a:hover {
 	left: -1px;
 	border: 2px solid #000000;
     overflow: hidden;
-    background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     width: 380px;
     padding: 10px;
@@ -284,7 +283,6 @@ a:hover {
 
 #second {
 	border: 2px solid #000000;
-    background: url(texture-noise-beige-blur-lt.gif);
     display: block;
     height: 350px;
     width: 400px;
