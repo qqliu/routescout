@@ -112,22 +112,6 @@ else {return false;}
     <script src="files/index.js"></script>
 </head>
 
-<script>
-$('html').off('click.dropdown');
-/*$('.dropdown').click(function(e) {
-        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
-    });
-*/
-$('.dropdown-menu input, .dropdown-menu label, .dropdown').click(function(e) {
-    e.stopPropagation();
-});
-$('.dropdown').dropdown().on("hide.bs.dropdown", function(e) {
-    if ($.contains(dropdown, e.target)) {
-        e.preventDefault();
-            //or return false;
-        }
-    });
-</script>
 <body background="parchment.jpg">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">

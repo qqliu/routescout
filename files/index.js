@@ -317,6 +317,12 @@
              }
          }
      }).addClass("criteria-slider");
+     
+
+		$('.dropdown-menu').click(function(e) {
+	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
+	    });
+     
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
         $("#save-route-alert").show();
