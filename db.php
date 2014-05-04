@@ -6,8 +6,10 @@ TODO (if time): to deal with malicious users/XSS:
   add cgi.escape to responses
 */
 
-//force verbose prints
-$_SESSION['verbose'] = 1;
+//global variables
+
+$debug_force_verbose = False;
+$debug_pretend_single_logged_in_user = False;
 
 $resp = array(
   "error" => ""
@@ -24,7 +26,7 @@ function pp($obj) {
 
 //print only if verbose param = 1
 function pp_debug($obj) {
-  if (isset($_SESSION['verbose']) && $_SESSION['verbose'] == '1') {
+  if (isset($_REQUEST['verbose']) && $_REQUEST['verbose'] == '1') {
     pp($obj);
   }
 }
@@ -58,26 +60,27 @@ function db_connect() {
 //false on failure (and sets error in resp)
 function db_query($query) {
   pp_debug($query);
-  return True;
-/*
+
   global $db_link;
   
-  $result = $db_link>query($query);
+  $result = $db_link->query($query);
   if (!$result) {
     on_error("db_query: $query " . mysqli_error($db_link));
     return False;
   }
   return $result;
-*/
 }
 
 //other stuff
 
 //ensures user is logged in and returns his email
 function ensure_logged_in() {
-  return "kobe@mit.edu";
+  global $debug_pretend_single_logged_in_user;
+  if ($debug_pretend_single_logged_in_user) {
+    return "kobe@mit.edu";
+  }
 
-  if (session_id() !== '' && isset($_SESSION['email'])) {
+  if (session_id() != '' && isset($_SESSION['email'])) {
     return $_SESSION['email'];
   } else {
     on_error("not logged in");
@@ -104,7 +107,6 @@ function ensure_and_escape_params($params) {
 //these methods are called by main() after db is connected
 //
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=update_ratings&route_key=key&safety=0&efficiency=0&scenery=1
 function update_ratings() {
   global $resp;
   
@@ -126,18 +128,17 @@ function update_ratings() {
       on duplicate key update
       user='$user',
       route_key='{$_REQUEST["route_key"]}',
-      safety={$_REQUEST["safety"]}'
+      safety={$_REQUEST["safety"]},
       efficiency={$_REQUEST["efficiency"]},
       scenery={$_REQUEST["scenery"]}
     ");
   }
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=save_route&user=user&route_key=route_key&name=name&from_loc=from&to_loc=to&order=5
 function save_route() {
   global $resp;
   
-  ensure_and_escape_params(array("user", "route_key", "name", "from_loc", "to_loc", "order"));
+  ensure_and_escape_params(array("route_key", "name", "from_loc", "to_loc", "route_index"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -146,23 +147,22 @@ function save_route() {
     //insert row
     db_query(
       "insert into routes
-      (user, route_key, name, from_loc, to_loc, order)
-      values ('$user', '{$_REQUEST["route_key"]}', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["order"]})
+      (user, route_key, name, from_loc, to_loc, route_index)
+      values ('$user', '{$_REQUEST["route_key"]}', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["route_index"]})
       on duplicate key update
       user='$user',
       route_key='{$_REQUEST["route_key"]}',
       name='{$_REQUEST["name"]}',
       from_loc='{$_REQUEST["from_loc"]}',
       to_loc='{$_REQUEST["to_loc"]}',
-      order={$_REQUEST["order"]}
+      route_index={$_REQUEST["route_index"]}
     ");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_saved_route&user=user&route_key=route
 function delete_saved_route() {
   global $resp;
   
-  ensure_and_escape_params(array("user", "route_key"));
+  ensure_and_escape_params(array("route_key"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -172,11 +172,10 @@ function delete_saved_route() {
   db_query("delete from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=save_ta&user=user&kind=0&id=id&comment=comment&x=x&y=y&flagged=0
 function save_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("user", "kind", "id", "comment", "x", "y", "flagged"));
+  ensure_and_escape_params(array("kind", "id", "comment", "x", "y", "flagged"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -194,15 +193,14 @@ function save_ta() {
     comment='{$_REQUEST["comment"]}',
     x='{$_REQUEST["x"]}',
     y='{$_REQUEST["y"]}',
-    flagged={$_REQUEST["flagged"]},
+    flagged={$_REQUEST["flagged"]}
   ");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=delete_ta&user=user&kind=0&id=id
 function delete_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("user", "kind", "id"));
+  ensure_and_escape_params(array("kind", "id"));
   if (has_error()) return;
   
   $user = ensure_logged_in();
@@ -212,7 +210,6 @@ function delete_ta() {
   db_query("delete from tips_and_accidents where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&user=user&kind=0&id=id&comment=comment
 function edit_ta() {
   global $resp;
   
@@ -225,12 +222,11 @@ function edit_ta() {
   //edit row
   db_query("
     update tips_and_accidents
-    set comment='{$_REQUEST["comment"]}';
+    set comment='{$_REQUEST["comment"]}'
     where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
   ");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_taskind=1
 function get_all_tas() {
   global $resp;
   
@@ -247,30 +243,28 @@ function get_all_tas() {
     return;
   }  
   $resp["data"] = array();
-  while($row = mysqli_fetch_array($result)) {
+  while($row = mysqli_fetch_assoc($result)) {
     array_push($resp["data"], $row);
   }
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&kind=0&id=id
 function flag_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("kind", "id"));
+  ensure_and_escape_params(array("owner", "kind", "id"));
   if (has_error()) return;
   
-  $user = ensure_logged_in();
+  ensure_logged_in();
   if (has_error()) return;
   
   //flag that thing
   db_query("
     update tips_and_accidents
     set flagged=1
-    where user='$user' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
+    where user='{$_REQUEST["owner"]}' and kind={$_REQUEST["kind"]} and id='{$_REQUEST["id"]}'
   ");
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_routes
 function get_saved_routes() {
   global $resp;
   
@@ -288,16 +282,18 @@ function get_saved_routes() {
     return;
   }  
   $resp["data"] = array();
-  while($row = mysqli_fetch_array($result)) {
+  while($row = mysqli_fetch_assoc($result)) {
     array_push($resp["data"], $row);
   }
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_saved_route&route_key=key
 function get_saved_route() {
   global $resp;
   
   ensure_and_escape_params(array("route_key"));
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
   if (has_error()) return;
   
   $result = db_query("select * from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
@@ -306,14 +302,13 @@ function get_saved_route() {
   if ($result === True) { //when testing, db_query() returns true
     return;
   }  
-  $resp["data"] = mysqli_fetch_array($result);
+  $resp["data"] = mysqli_fetch_assoc($result);
 }
 
-//http://leoliu.scripts.mit.edu/routescout/db.php?op=get_average_ratings
 function get_average_ratings() {
   global $resp;
   
-  ensure_and_escape_params(array());
+  ensure_and_escape_params(array("route_key", "route_key"));
   if (has_error()) return;
   
   //get average ratings for particular route
@@ -322,21 +317,25 @@ function get_average_ratings() {
   
   foreach (array("safety", "efficiency", "scenery") as $rating_type) {
     $result = db_query("
-      select average($rating_type) from routes
-      where route_key='{$_REQUEST["route_key"]}'
-      and $rating_type != 0
+      select AVG($rating_type) from ratings
+      where route_key='{$_REQUEST["route_key"]}' and $rating_type != 0
     ");
     if (has_error()) return;
     
     if ($result === True) { //when testing, db_query() returns true
       return;
     }
-    $row = mysqli_fetch_array($result);
+    $row = mysqli_fetch_assoc($result);
     $resp["data"][$rating_type] = $row;
   }
 }
 
 function main() {
+  global $debug_force_verbose;
+  if ($debug_force_verbose) {
+    $_SESSION['verbose'] = 1;
+  }
+
   pp_debug($_REQUEST);
 
   if (!isset($_REQUEST["op"])) {

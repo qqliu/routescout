@@ -11,7 +11,7 @@ include_once($path);
 
 
 require("./login/initconfig.php"); 
-
+if (!empty($_POST['loginform'])){
 $submitted_username = ''; 
 if(!empty($_POST)){ 
     $query = " 
@@ -60,6 +60,7 @@ if(!empty($_POST)){
         </div>';
         $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
     } 
+}
 }
 
 function ifCorrect() {
@@ -112,7 +113,7 @@ else {return false;}
     <script src="files/index.js"></script>
 </head>
 
-<body background="parchment.jpg">
+<body>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             
@@ -122,12 +123,26 @@ else {return false;}
               
               <?php if (!ifCorrect()){?>
               <li class="divider-vertical"></li>
-              <li id="registerLogin"><a href="./login/signup.php">Register</a></li>
+              <li class="dropdown">
+
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
+                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                  <form name="registerform" action="/routescout/login/register.php" method="post" accept-charset="UTF-8">
+                      Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
+                      Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
+                      Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
+
+                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                  </form>
+              </div>
+          </li>
+
+
               <li class="dropdown">
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form action="/routescout/index.php" method="post" accept-charset="UTF-8">
+                  <form name="loginform" action="/routescout/index.php" method="post" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
 
@@ -188,10 +203,12 @@ else {return false;}
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
+                
+                <div id="inside">
+                
                 <div class="container-fluid" id="containerfluid">
                     <br>
-                    <h2><span style="text-decoration: underline">Possible</span>
-                        <span style="text-decoration: underline">Routes</span></h2><br>
+                    <h2>Possible Routes</h2><br>
 
                         <div id="routes"></div><br>
 
@@ -247,14 +264,12 @@ else {return false;}
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                         </div>
 
-                        <h2 style="text-align:center"><span style=
-                            "text-decoration: underline">Selected</span> <span style=
-                            "text-decoration: underline">Route</span></h2>
+                        <h2 style="text-align:center">Selected Route</h2>
 
-                            <div id="directions_list" style="padding-top: 0px; padding-left: 10px; padding-bottom: 10px; padding-right: 10px;"></div>
+                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
 
                             <div class="row-fluid" id="bottom-buttons">
-                                <div id="route-find" style="text-align:center; float: left;">
+                                <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
                                     <button class="btn btn-large" data-target="#saveModal"
                                     data-toggle="modal" id="savedButton">Save
                                     Route!</button>
@@ -266,36 +281,41 @@ else {return false;}
                                         Route</a></button>
                                     </div>
                                 </div>
+                                
+                                <BR />
+                                <BR />
                             </div>
 
-                            <div id="rate-route" style="display:none">
+                       <div id="rate-route" style="display:none">
                              <div class = "go-back" style="padding: 10px;">
                                 <a id="back-to-nav"><img src="back-arrow.png"></a>
                             </div>
 
-                            <h2 style="text-align:center"><u>Rate</u> <u>this</u> <u>Route!</u></h2>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Safety:</h3></div>
-                                <div class="span4 offset3 ">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Efficiency</h3></div>
-                                <div class="span4 offset3">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="span4"><h3>Scenery</h3></div>
-                                <div class="span4 offset2">
-                                    <div class="stars"></div>
-                                </div>
-                            </div>
+                            <h2 style="text-align:center">Rate this Route!</h2>
+							
+							<div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Safety:</h3></div>
+	                                <div class="span4 offset3 ">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Efficiency</h3></div>
+	                                <div class="span4 offset3">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+	
+	                            <div class="row-fluid">
+	                                <div class="span4"><h3>Scenery</h3></div>
+	                                <div class="span4 offset2">
+	                                    <div class="stars"></div>
+	                                </div>
+	                            </div>
+                           </div>
 
 
                             <div id="bottom-buttons" class="row-fluid">
@@ -310,7 +330,7 @@ else {return false;}
                       <div id="saved-routes" style="display:none">
                           <center>
                             <br /><br />
-                            <h2><u>Saved</u> <u>Routes</u></h2>
+                            <h2><u>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
                               <li class="ui-widget-content">Main St. To Bridge St.</li>
@@ -321,7 +341,7 @@ else {return false;}
 
                       </center>
                   </div>
-
+				</div>
               </div>
           </div>
       </div>
@@ -341,6 +361,13 @@ else {return false;}
     <div class="container-fluid">
         <div class="span8" id="map">
             <div id="togglefeatures">
+            	<div id="green-buttons">
+                    <a class="popup-button btn btn-success btn-large" id=
+                    "report-button">Report Accident</a> <a class=
+                    "popup-button btn btn-success btn-large" id=
+                    "tip-button">Add Tip</a>
+                </div>
+            	
                 <div class="toggle-button" id="toggle-label">
                     Toggle Visibility:
                 </div>
@@ -357,14 +384,7 @@ else {return false;}
                     <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
                 </div>
 
-                <div id="googleMap" style="width:700px;height:550px;">
-                </div>
-
-                <div id="green-buttons">
-                    <a class="popup-button btn btn-success btn-large" id=
-                    "report-button">Report Accident</a> <a class=
-                    "popup-button btn btn-success btn-large" id=
-                    "tip-button">Add Tip</a>
+                <div id="googleMap" style="width:700px;height:530px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>
