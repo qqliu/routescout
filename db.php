@@ -248,7 +248,6 @@ function get_all_tas() {
   }
 }
 
-//TODO
 function flag_ta() {
   global $resp;
   
