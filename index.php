@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <?php 
    $path = $_SERVER['DOCUMENT_ROOT'];
    $append = "/login/initconfig.php";
@@ -73,6 +73,7 @@ else {return false;}
     
  
 ?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
