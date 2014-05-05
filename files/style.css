@@ -33,9 +33,15 @@ h2,h1 {
     left: 8px;
 }
 
+#overall{
+
+    margin-left: 9%;
+    margin-right: 9%;
+}
 #content {
     position: relative;
-    top: 20px;
+    top: 30px;
+    
 }
 
 #test {
@@ -90,8 +96,10 @@ h2,h1 {
     top: 12px;
     padding-top: 5px;
     font-size: 40px;
+    
     margin: 0;
-    margin-left:200px;
+    margin-left:310px;
+
     font-weight: 700;
     text-rendering: optimizelegibility;
     color: #fff;

@@ -1,4 +1,8 @@
-<?php header('Access-Control-Allow-Origin: *'); ?>
+<?php
+header('Access-Control-Allow-Origin: *'); 
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Content-Type: application/json');
+?>
 <?php
 
 /*
@@ -10,7 +14,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = True;
+$debug_pretend_single_logged_in_user = False;
 
 $resp = array(
   "error" => ""
