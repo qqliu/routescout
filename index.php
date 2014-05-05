@@ -1,12 +1,3 @@
-
-<?php
-$path = $_SERVER['DOCUMENT_ROOT'];
-$append = "/login/initconfig.php";
-$path .= "/routescout/index.php";
-include_once($path);
-
-
-?>
 <?php
 
 
@@ -47,7 +38,7 @@ if (isset($_POST['loginform'])) {
     if($login_ok){
         unset($row['salt']);
         unset($row['password']);
-        $_SESSION['user'] = $row;
+        $_SESSION['user'] = $row['username'];
             //echo "Login succeeded!!!!"
             //header("Location: secret.php");
             //die("Redirecting to: secret.php");
@@ -258,7 +249,7 @@ else {
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
-      <li id="registerLogin"><a href="/routescout/login/logout.php">Logout</a></li>
+      <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
   <div id="center-this-navbar">
@@ -269,7 +260,7 @@ else {
 </div>
 </div>
 
-<div id="user" style="display:none;"><?php echo $_SESSION['user']['username']; ?></div>
+<div id="user" style="display:none;"><?php echo $_SESSION['user']; ?></div>
 
 <div id="overall">
     <div id="content">
@@ -325,7 +316,7 @@ else {
                             <table class="test">
                                 <tr>
                                     <td>Overall Safety </td>
-
+                                    
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -485,17 +476,16 @@ else {
                     Toggle Visibility:
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-
+                <div id="lanes" class="toggle-button filters">
+                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                <div id="star" class="toggle-button filters">
+                    <img class="toggle-img" src="popups/star-32.png">Tips
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                <div id="caution" class="toggle-button filters">
+                    <img class="toggle-img" src="popups/caution.png">Accidents
                 </div>
 
                 <div id="googleMap" style="width:700px;height:530px;">

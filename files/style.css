@@ -339,6 +339,7 @@ table.test td {
     /* background-color: lime; */
     padding: 5px 5px 5px 5px;
 	white-space: nowrap;	/* prevent weird resizing after slider move*/
+    width: auto;
 }
 
 table.test {
@@ -347,6 +348,8 @@ table.test {
   *border-collapse: expression('separate', cellSpacing = '10px');
 	margin-left: auto;
 	margin-right: auto;
+    display: inline-block;
+    width: auto;
 }
 
 
@@ -401,4 +404,18 @@ table.test {
 
 #popup-submit {
 	color: #ffffff;
+}
+
+.grayscale {
+	filter: url(filters.svg#grayscale); /* Firefox 3.5+ */
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+
+.grayscale:hover {
+    /* TODO: put a cue here? */
+}
+
+.filters:hover {
+	cursor: pointer;
 }

@@ -76,15 +76,16 @@ function db_query($query) {
 
 //other stuff
 
-//ensures user is logged in and returns his email
+//ensures user is logged in and returns userid (or email? not sure)
 function ensure_logged_in() {
   global $debug_pretend_single_logged_in_user;
   if ($debug_pretend_single_logged_in_user) {
     return "amy";
   }
 
-  if (session_id() != '' && isset($_SESSION['email'])) {
-    return $_SESSION['email'];
+  session_start();
+  if (isset($_SESSION['user'])) {
+    return $_SESSION['user'];
   } else {
     on_error("not logged in");
   }
