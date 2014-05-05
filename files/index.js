@@ -564,7 +564,6 @@
 	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
 	    .done(function( data ) {
 		if (data != '{"error":""}') {
-		    console.log(data);
 		} else {
 		    $("#save-route-alert").show();
 		    $('#save-route-alert').delay(500).fadeOut(400);
@@ -597,16 +596,19 @@
 	$("#rate-route").show();
         $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
  	    .done(function( data ) {
- 		var json = JSON.parse(data);
- 		if (json.error == "") {
- 		    var rating = json.data;
+ 		if (data.error == "") {
+ 		    var rating = data.data;
 		    if (rating != null) {
 			$("#safety_rating").raty({score: parseInt(rating.safety)});
 			$("#efficiency_rating").raty({score: parseInt(rating.efficiency)});
 			$("#scenery_rating").raty({score: parseInt(rating.scenery)});
-		    }
+		    } else {
+                        $("#safety_rating").raty({score: 0});
+			$("#efficiency_rating").raty({score: 0});
+			$("#scenery_rating").raty({score: 0});
+                    }
  		} else {
- 		    console.log("ERROR: " + json.error);
+ 		    console.log("ERROR: " + data.error);
  		}
  	 });
      });
@@ -625,11 +627,13 @@
 	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
  	    .done(function( data ) {
 		if (data != '{"error":""}') {
-		    console.log(data);
 		} else {
 		    $("#save-rate-alert").show();
 		    $('#save-rate-alert').delay(500).fadeOut(400);
 		}
+                efficiency_rating = 0;
+                scenery_rating = 0;
+                safety_rating = 0;
 	   });
  	});
 	    
