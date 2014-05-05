@@ -62,26 +62,19 @@ if (isset($_POST['loginform'])) {
 }
 else if (isset($_POST['registerform'])) {
     // Ensure that the user fills out fields
-    if(empty($_POST['username']))
-
-    {
-        echo'<div class="alert alert-danger alert-dismissable">
+    if(empty($_POST['username']) or empty($_POST['password']) or empty($_POST['email']) ){
+     echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a username.
-        </div>';
-
+        Please fill in all the fields.
+        </div>';   
     }
-    if(empty($_POST['password']))
-        { echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a password.
-        </div>'; }
-    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+    else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
         { echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a valid email address.
         </div>'; }
-
+   
+    else {
         // Check if the username is already taken
     $query = "
     SELECT
@@ -90,43 +83,46 @@ else if (isset($_POST['registerform'])) {
     WHERE
     username = :username
     ";
-    $query_params = array( ':username' => $_POST['username'] );
-    try {
-        $stmt = $db->prepare($query);
-        $result = $stmt->execute($query_params);
-    }
-    catch(PDOException $ex){ }
-    $row = $stmt->fetch();
-    if($row){ echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This username is already in use.
-        </div>'; }
-    $query = "
+    $query2 = "
     SELECT
     1
     FROM registerUsers
     WHERE
     email = :email
     ";
-    $query_params = array(
+    $query_params2 = array(
         ':email' => $_POST['email']
         );
+    $query_params = array( ':username' => $_POST['username'] );
     try {
         $stmt = $db->prepare($query);
         $result = $stmt->execute($query_params);
     }
     catch(PDOException $ex){ }
+    try {
+        $stmt2 = $db->prepare($query2);
+        $result2 = $stmt->execute($query_params2);
+    }
+    catch(PDOException $ex){ }
     $row = $stmt->fetch();
-    if($row){ echo'<div class="alert alert-danger alert-dismissable">
+    $row2 = $stmt2->fetch();
+        if($row){ echo'<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This username is already in use.
+        </div>'; }
+    
+        else if($row2) {
+     echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         This email address is already registered.
         </div>'; }
+    
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         You have successfully registered! Please login now to access saved routes, tips, comments, and more!
         </div>';
-    }
+    
 
         // Add row to database
     $query = "
@@ -159,8 +155,8 @@ try {
 }
 catch(PDOException $ex){  }
 
-
-
+}
+}
 }
 
 function ifCorrect() {
@@ -233,9 +229,12 @@ else {
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
-
-                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                  </form>
+                     
+                     <input type="submit"<a class="popup-button btn btn-success btn-large" id=
+                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                    <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
+                      <input class="btn btn-success btn-large" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                 --> </form>
               </div>
           </li>
 
@@ -248,8 +247,10 @@ else {
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
-                  <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-              </form>
+                  <input type="submit" value="Sign In" <a class="popup-button btn btn-success btn-large" id=
+                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                  <!--<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+              --></form>
           </div>
       </li>
       <?php }
