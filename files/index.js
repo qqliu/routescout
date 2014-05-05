@@ -86,27 +86,13 @@
      }
  };
  
- function refreshMarker(messageId, message) {
-    marker = markers[messageId]; 
- 	content = "";
-     if (adding === "caution") {
-     	content += "<b style='font-size: 16px; float:left;'>Caution</b>";
-     } else {
-     	content += "<b style='font-size: 16px; float:left;'>Tip</b>";
-     }
-     content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
-     
-     username = $("#user").text();
-     if (username === feature.user && username != "") {
-     	content += "<button onclick='editMarker(\"message" + messageId + "\");' style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
-     	content += "<button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>";
-     } else {
-     	content += "<button onclick='flagMarker(\"message" + messageId + "\");' style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
-     }
-     
-     marker.info = new google.maps.InfoWindow({
-         content: content,
-     });
+ function refreshMarker(id) {
+ 	m_id = id.split("message")[1];
+    markers[m_id].setMap(null);
+     delete markers[id];
+ 	
+ 	addMarker(feature);
+ 	markers[m_id].info.open(map, markers[m_id]);
  }
 
  function addMarker(feature) {
@@ -239,11 +225,12 @@
  		comment: message,
  		};
  	console.log(data_obj);
- 	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false,
-  	}).responseText;
+  	});
+  	return message;
  };
 
  
@@ -532,11 +519,12 @@
 
      	title = $("#popup-title").text();
      	if (title.indexOf("Edit") > -1) {
-     		message = $('#popup-textbox').val();
+     		m = $('#popup-textbox').val();
+     		message = edit_tip_or_accident(m, messageId);
+     		str_id = 'message' + messageId;
+     		console.log(str_id);
+     		refreshMarker(str_id);
      		
-     		result = edit_tip_or_accident(message, messageId);
-     		console.log(result);
-     		refreshMarker(messageId, message);
      		$("#popup").dialog('close');
      		$("#popup-textbox").val("");
 	         $("#report-button").removeClass("active");
