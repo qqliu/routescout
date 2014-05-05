@@ -567,7 +567,11 @@
 			$("#safety_rating").raty({score: parseInt(rating.safety)});
 			$("#efficiency_rating").raty({score: parseInt(rating.efficiency)});
 			$("#scenery_rating").raty({score: parseInt(rating.scenery)});
-		    }
+		    } else {
+                        $("#safety_rating").raty({score: 0});
+			$("#efficiency_rating").raty({score: 0});
+			$("#scenery_rating").raty({score: 0});
+                    }
  		} else {
  		    console.log("ERROR: " + json.error);
  		}
@@ -587,12 +591,16 @@
 	$("#route-save").click(function() {
 	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
  	    .done(function( data ) {
+                console.log(data);
 		if (data != '{"error":""}') {
 		    console.log(data);
 		} else {
 		    $("#save-rate-alert").show();
 		    $('#save-rate-alert').delay(500).fadeOut(400);
 		}
+                efficiency_rating = 0;
+                scenery_rating = 0;
+                safety_rating = 0;
 	   });
  	});
 	    
