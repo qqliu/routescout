@@ -49,6 +49,7 @@
 
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
+ var last_route = "";
  var c = 0;
 
  function toggleActive(button) {
@@ -280,18 +281,20 @@
 			    var index = e.currentTarget.id.split("route-")[1];
 			    for (route in displayRoutes) {
 				if (route != index) {
-				    console.log(route);
 				    displayRoutes[route].setMap(null);
 				}
 			    }
 			    var steps = curResult.routes[index].legs[0].steps;
+			    var route_key = "";
 			    $("#directions_list").empty();
 			    if (steps.length > 0) {
 				$("#directions_list").append("<ol id='list'></ol>");
 				for (i in steps) {
 				    $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
+				    route_key += steps[i].instructions;
 				}
 			    }
+			    last_route = [route_key, curResult.routes[index].summary, request.origin, request.destination, index];
 			    return false;
 			});
 		    }
@@ -352,6 +355,7 @@
          adding = "caution";
          toggleActive(this);
      });
+     
      $("#tip-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/star-32.png) 16 30, default"
@@ -437,8 +441,15 @@
      
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
-        $("#save-route-alert").show();
-	    $('#save-route-alert').delay(500).fadeOut(400);
+	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
+	    .done(function( data ) {
+		if (data != '{"error":""}') {
+		    console.log(data);
+		} else {
+		    $("#save-route-alert").show();
+		    $('#save-route-alert').delay(500).fadeOut(400);
+		}
+	});
      });
      
      $('#back-to-routes').click(function(e) {

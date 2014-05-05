@@ -149,11 +149,12 @@ function save_route() {
   $user = ensure_logged_in();
   if (has_error()) return;
   
+    $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
     //insert row
     db_query(
       "insert into routes
       (user, route_key, name, from_loc, to_loc, route_index)
-      values ('$user', '{$_REQUEST["route_key"]}', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["route_index"]})
+      values ('$user', '$hashed_route_key', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["route_index"]})
       on duplicate key update
       user='$user',
       route_key='{$_REQUEST["route_key"]}',
