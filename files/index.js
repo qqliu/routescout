@@ -157,11 +157,13 @@
  		id: parseInt(m_id)
  		};
      
-      return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+     resp = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false
   	}).responseText;
+  	
+  	console.log(resp);
 
  };
  
@@ -192,10 +194,6 @@
   	m_id = id.split("message")[1];
     marker = markers[m_id];
     messageId = m_id;
-    
-    feature = {
-    
-    }
     
      if (marker.type === "star") {
      	$("#popup-title").text("Edit Tip");
