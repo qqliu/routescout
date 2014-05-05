@@ -373,15 +373,12 @@ else {return false;}
 
                         <div class="row-fluid" id="bottom-buttons">
                             <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
-                                <button class="btn btn-large" data-target="#saveModal"
-                                data-toggle="modal" id="savedButton">Save
-                                Route!</button>
+                                <button class="btn btn-large" data-target="#saveModal" data-toggle="modal" id="savedButton">Save Route</button>
                                 <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
                             </div>
 
                             <div id="route-find" style="text-align:center">
-                                <button class="btn btn-large" id="route-rate" type="button">Rate this
-                                    Route</a></button>
+                                <button class="btn btn-large" id="route-rate" type="button">Rate this Route</a></button>
                                 </div>
                             </div>
 
@@ -394,7 +391,7 @@ else {return false;}
                             <a id="back-to-nav"><img src="back-arrow.png"></a>
                         </div>
 
-                        <h2 style="text-align:center">Rate this Route!</h2>
+                        <h2 style="text-align:center">Rate this Route</h2>
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
                          <div class="row-fluid">
