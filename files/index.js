@@ -8,6 +8,7 @@
     	type : 'GET',
     	success: function(res) {
     		for (var i=0;i<res.data.length;i++) {
+    			console.log(res.data[i]);
 	    		A = parseFloat(res.data[i].x),
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
@@ -30,6 +31,7 @@
     	type : 'GET',
     	success: function(res) {
     		for (var i=0;i<res.data.length;i++) {
+    			console.log(res.data[i]);
 	    		A = parseFloat(res.data[i].x),
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
@@ -98,11 +100,14 @@
      
      username = $("#user").text();
      if (username === feature.user && username != "") {
-     	content += "<button style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
+     	content += "<button onclick='editMarker(\"message" + messageId + "\");' style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
      	content += "<button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>";
      } else {
-     	content += "<button style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
+     	content += "<button onclick='flagMarker(\"message" + messageId + "\");' style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
      }
+     
+     marker.message = message;
+     marker.messageId = messageId;
      
      marker.info = new google.maps.InfoWindow({
          content: content,
@@ -123,6 +128,49 @@
      delete markers[id];
  };
  
+ function editMarker(id) {
+  	m_id = id.split("message")[1];
+    marker = markers[m_id];
+    messageId = m_id;
+    
+     if (marker.type === "star") {
+     	$("#popup-title").text("Edit Tip");
+     	$("#popup-textbox").val(marker.message);
+	    $("#popup").dialog("option", {
+			position: [485 + 350, 180 + 150]
+	    });
+	    $("#popup").dialog('open');
+     } else {
+     	$("#popup-title").text("Edit Accident Report");
+     	$("#popup-textbox").val(marker.message);
+	    $("#popup").dialog("option", {
+			position: [485 + 350, 180 + 150]
+	    });
+	    $("#popup").dialog('open');
+     }
+ };
+ 
+  function flagMarker(id) {
+     markers[id.split("message")[1]].setMap(null);
+     delete markers[id];
+ };
+ 
+ 
+ function edit_tip_or_accident(message, messageId) {
+ 	console.log(messageId);
+ 	data_obj = {
+ 		op: "edit_ta",
+ 		id: parseInt(messageId),
+ 		comment: message,
+ 		};
+ 	console.log(data_obj);
+ 	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+    	data : data_obj,
+    	type : 'POST',
+  	}).responseText;
+ };
+
+ 
  function save_tip_accident(message, feature) {
  	if (feature.type.localeCompare("caution") == 0) {
  		kind = 1;
@@ -138,7 +186,6 @@
  		flagged: 0,
  		};
  		
- 	console.log(JSON.stringify(data_obj));
  	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
@@ -374,19 +421,28 @@
      });
      //install handler for submit button
      $('#popup-submit').click(function() {
-         lines = $('#popup-textbox').val().split('\n');
-         message = "";
-         for (var i = 0; i < lines.length; i++) {
-             message += "<span style='float:left;'>" + lines[i] + "</span><br />";
-         }
-         result = save_tip_accident(message, feature);
-         console.log(result);
-         $("#popup").dialog('close');
-         addStarCaution();
-         $("#popup-textbox").val("");
-         $("#report-button").removeClass("active");
-         $("#tip-button").removeClass("active");
-         messageId += 1;
+     	
+     	title = $("#popup-title").text();
+     	if (title.indexOf("Edit") > -1) {
+     		message = $('#popup-textbox').val();
+     		
+     		result = edit_tip_or_accident(message, messageId);
+     		console.log(result);
+     		$("#popup").dialog('close');
+     		$("#popup-textbox").val("");
+	         $("#report-button").removeClass("active");
+	         $("#tip-button").removeClass("active");
+     	} else {
+	         message = $('#popup-textbox').val();
+	         result = save_tip_accident(message, feature);
+
+	         $("#popup").dialog('close');
+	         addStarCaution();
+	         $("#popup-textbox").val("");
+	         $("#report-button").removeClass("active");
+	         $("#tip-button").removeClass("active");
+	         messageId += 1;
+        }
      });
      $('.filters:checkbox').click(function() {
          if (!$(this).is(':checked')) {
