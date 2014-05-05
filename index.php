@@ -271,93 +271,99 @@ else {return false;}
 </div>
 
 <div id="overall">
-<div id="content">
-    <div class="container-fluid span15">
-        <div class="row-fluid">
-            <div class="container-fluid span15">
-                <div class="row-fluid">
-                    <div class="container well well-small span11" id=
-                    "first">
-                    <div id="two">
-                        <div class="from-to" style="text-align:center">
-                            <form class="navbar-form">
-                                <div id="test">
-                                    <h3>From:</h3><input class=
-                                    "form-control" id="starting_loc"
-                                    name="srch-term" placeholder=
-                                    "Search" type="text">
-                                </div>
+    <div id="content">
+        <div class="container-fluid span15">
+            <div class="row-fluid">
+                <div class="container-fluid span15">
+                    <div class="row-fluid">
+                        <div class="container well well-small span11" id=
+                        "first">
+                        <div id="two">
+                            <div class="from-to" style="text-align:center">
+                                <form class="navbar-form">
+                                    <div id="test">
+                                        <h3>From:</h3><input class=
+                                        "form-control" id="starting_loc"
+                                        name="srch-term" placeholder=
+                                        "Search" type="text">
+                                    </div>
 
-                                <div id="test">
-                                    <h3>To:</h3><input class=
-                                    "form-control" id="destination_loc"
-                                    name="srch-term" placeholder=
-                                    "Search" type="text">
-                                </div>
-                            </form>
-                        </div>
+                                    <div id="test">
+                                        <h3>To:</h3><input class=
+                                        "form-control" id="destination_loc"
+                                        name="srch-term" placeholder=
+                                        "Search" type="text">
+                                    </div>
+                                </form>
+                            </div>
 
-                        <div id="route-find" style="text-align:center">
-                            <button class="btn btn-large" id=
-                            "route">Search For Routes!</button>
+                            <div id="route-find" style="text-align:center">
+                                <button class="btn btn-large" id=
+                                "route">Search For Routes!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row-fluid" id="bottom-window">
-                <div class="container well span11" id="second" style=
-                "display:none">
-                
-                <div id="inside">
+                <div class="row-fluid" id="bottom-window">
+                    <div class="container well span11" id="second" style=
+                    "display:none">
 
-                    <div class="container-fluid" id="containerfluid">
-                        <br>
-                        <h2>Possible Routes</h2><br>
+                    <div id="inside">
 
-                        <div id="routes"></div><br>
+                        <div class="container-fluid" id="containerfluid">
+                            <br>
+                            <h2>Possible Routes</h2><br>
 
-                        <h4>Sort Routes By:</h4>
+                            <div id="routes"></div><br>
 
-                        <table class="test">
-                            <tr>
-                                <td>Overall Safety</td>
+                            <h4>Sort Routes By:</h4>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                            <table class="test">
+                                <tr>
+                                    <td>Overall Safety </td>
 
-                            <tr>
-                                <td>Fewest Accidents</td>
+                                    <td>
+                                        <div class="criteria-slider" id="slider"></div>
+                                    </td>
+                                    <td><strong>+</strong></td>
+                                </tr>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>Fewest Accidents </td>
 
-                            <tr>
-                                <td>Bike Lanes</td>
+                                    <td>
+                                        <div class="criteria-slider" id="slider"></div>
+                                    </td>
+                                    <td><strong>+</strong></td>
+                                </tr>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>Bike Lanes</td>
 
-                            <tr>
+                                    <td>
+                                       <div class="criteria-slider" id="slider"></div>
+                                   </td>
+                                   <td><strong>+</strong></td>
+                               </tr>
+
+                               <tr>
                                 <td>Efficiency</td>
 
                                 <td>
-                                    <div class="criteria-slider" id="slider"></div>
+                                    <div class="criteria-slider" id="slider"></div></td>
                                 </td>
+                                <td><strong>+</strong></td>
+
                             </tr>
 
                             <tr>
-                                <td>Scenery</td>
+                                <td>Scenery </td>
 
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
+                                <td><strong>+</strong></td>
                             </tr>
                         </table>
                     </div>
@@ -365,91 +371,92 @@ else {return false;}
 
 
                     <div id="navigation" style="display:none">
-                        <div class="go-back" style="padding: 10px;">
-                            <a id="back-to-routes"><img src="back-arrow.png"></a>
-                        </div>
-
-                        <h2 style="text-align:center">Selected Route</h2>
-
-                        <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
-
+                        
                         <div class="row-fluid" id="bottom-buttons">
-                            <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
+                            <div class="span1" class="go-back" style="padding: 10px;">
+                            <a id="back-to-routes"><img src="back-arrow.png"></a>
+                            </div>
+                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
                                 Route!</button>
-                                <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                            <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
                             </div>
 
-                            <div id="route-find" style="text-align:center">
+                            <div class="span4 offset5" id="route-find" style="text-align:center">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
-                                </div>
                             </div>
+                        </div>
+                            <h2 id="selectedRoute">Selected Route</h2>
+
+                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
+
+
 
                             <BR />
                             <BR />
                         </div>
 
                         <div id="rate-route" style="display:none">
-                           <div class = "go-back" style="padding: 10px;">
+                         <div class = "go-back" style="padding: 10px;">
                             <a id="back-to-nav"><img src="back-arrow.png"></a>
                         </div>
 
                         <h2 style="text-align:center">Rate this Route!</h2>
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Safety:</h3></div>
-                               <div class="span4 offset3 ">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Safety:</h3></div>
+                             <div class="span4 offset3 ">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
 
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Efficiency</h3></div>
-                               <div class="span4 offset3">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Efficiency</h3></div>
+                             <div class="span4 offset3">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Scenery</h3></div>
-                               <div class="span4 offset2">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
-                       </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Scenery</h3></div>
+                             <div class="span4 offset2">
+                                 <div class="stars"></div>
+                             </div>
+                         </div>
+                     </div>
 
 
-                       <div id="bottom-buttons" class="row-fluid">
-                           <div id="route-find" style="text-align:center">
-                              <button id="route-save" type="button" class="btn btn-large">
-                                  Rate!</button>
-                                  <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-                              </div>
+                     <div id="bottom-buttons" class="row-fluid">
+                         <div id="route-find" style="text-align:center">
+                          <button id="route-save" type="button" class="btn btn-large">
+                              Rate!</button>
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
                           </div>
                       </div>
-
-                      <div id="saved-routes" style="display:none">
-                          <center>
-                            <br /><br />
-                            <h2><u>Saved Routes</h2>
-                            <br /><br />
-                            <ol id="selectable">
-                              <li class="ui-widget-content">Main St. To Bridge St.</li>
-                              <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
-                              <li class="ui-widget-content">Stevens Creek to First Ave</li>
-                              <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
-                          </ol>
-
-                      </center>
                   </div>
+
+                  <div id="saved-routes" style="display:none">
+                      <center>
+                        <br /><br />
+                        <h2><u>Saved Routes</h2>
+                        <br /><br />
+                        <ol id="selectable">
+                          <li class="ui-widget-content">Main St. To Bridge St.</li>
+                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
+                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
+                      </ol>
+
+                  </center>
               </div>
           </div>
       </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -479,26 +486,26 @@ else {return false;}
 
                 <div class="toggle-button">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-                  
-              </div>
 
-              <div class="toggle-button">
-                <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
-            </div>
+                </div>
 
-            <div class="toggle-button">
-                <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
-            </div>
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                </div>
 
-            <div id="googleMap" style="width:700px;height:530px;">
-            </div>
-        </div><!--/.fluid-container-->
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                </div>
+
+                <div id="googleMap" style="width:700px;height:530px;">
+                </div>
+            </div><!--/.fluid-container-->
+        </div>
     </div>
 </div>
 </div>
-</div>
 
 
- 
+
 </body>
 </html>
