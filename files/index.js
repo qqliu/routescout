@@ -579,8 +579,10 @@
          }
      });
  }
- google.maps.event.addDomListener(window, 'load', initialize);
+ 
  $(document).ready(function() {
+    initialize();
+   
      $(".criteria-slider").slider({
          value: 50,
          change: function(event, ui) {
