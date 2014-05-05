@@ -414,8 +414,6 @@ function main() {
   global $resp;
   pp_debug($resp);
   
-  $resp["cookie"] = $_COOKIE['PHPSESSID'];
-  
   print json_encode($resp);
 }
 
