@@ -73,14 +73,14 @@ else if (isset($_POST['registerform'])) {
     } 
     if(empty($_POST['password'])) 
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a password.
-    </div>'; } 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a password.
+        </div>'; } 
     if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a valid email address.
-    </div>'; } 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>'; } 
 
         // Check if the username is already taken
     $query = " 
@@ -99,8 +99,8 @@ else if (isset($_POST['registerform'])) {
     $row = $stmt->fetch(); 
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This username is already in use.
-    </div>'; } 
+        This username is already in use.
+        </div>'; } 
     $query = " 
     SELECT 
     1 
@@ -119,8 +119,8 @@ else if (isset($_POST['registerform'])) {
     $row = $stmt->fetch(); 
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This email address is already registered.
-    </div>'; } 
+        This email address is already registered.
+        </div>'; } 
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -196,7 +196,6 @@ else {return false;}
 
     <script src="files/jquery.js"></script>
     <script src="files/bootstrap-transition.js"></script>
-    <script src="files/bootstrap-transition.js"></script>
     <script src="files/bootstrap-alert.js"></script>
     <script src="files/bootstrap-modal.js"></script>
     <script src="files/bootstrap-dropdown.js"></script>
@@ -270,7 +269,6 @@ else {return false;}
 </div>
 </div>
 
-<div id="overall">
 <div id="content">
     <div class="container-fluid span15">
         <div class="row-fluid">
@@ -389,64 +387,64 @@ else {return false;}
                         </div>
 
                         <div id="rate-route" style="display:none">
-                           <div class = "go-back" style="padding: 10px;">
+                         <div class = "go-back" style="padding: 10px;">
                             <a id="back-to-nav"><img src="back-arrow.png"></a>
                         </div>
 
                         <h2 style="text-align:center">Rate this Route</h2>
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Safety:</h3></div>
-                               <div class="span4 offset3 ">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Safety:</h3></div>
+                             <div class="span4 offset3 ">
+                                 <div class="stars" id = "safety_rating"></div>
+                             </div>
+                         </div>
 
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Efficiency</h3></div>
-                               <div class="span4 offset3">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Efficiency</h3></div>
+                             <div class="span4 offset3">
+                                 <div class="stars" id = "efficiency_rating"></div>
+                             </div>
+                         </div>
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Scenery</h3></div>
-                               <div class="span4 offset2">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
-                       </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Scenery</h3></div>
+                             <div class="span4 offset2">
+                                 <div class="stars" id = "scenery_rating"></div>
+                             </div>
+                         </div>
+                     </div>
 
 
-                       <div id="bottom-buttons" class="row-fluid">
-                           <div id="route-find" style="text-align:center">
-                              <button id="route-save" type="button" class="btn btn-large">
-                                  Rate!</button>
-                                  <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-                              </div>
+                     <div id="bottom-buttons" class="row-fluid">
+                         <div id="route-find" style="text-align:center">
+                          <button id="route-save" type="button" class="btn btn-large">
+                              Rate!</button>
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
                           </div>
                       </div>
-
-                      <div id="saved-routes" style="display:none">
-                          <center>
-                            <br /><br />
-                            <h2><u>Saved Routes</h2>
-                            <br /><br />
-                            <ol id="selectable">
-                              <li class="ui-widget-content">Main St. To Bridge St.</li>
-                              <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
-                              <li class="ui-widget-content">Stevens Creek to First Ave</li>
-                              <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
-                          </ol>
-
-                      </center>
                   </div>
+
+                  <div id="saved-routes" style="display:none">
+                      <center>
+                        <br /><br />
+                        <h2><u>Saved Routes</h2>
+                        <br /><br />
+                        <ol id="selectable">
+                          <li class="ui-widget-content">Main St. To Bridge St.</li>
+                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
+                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
+                      </ol>
+
+                  </center>
               </div>
           </div>
       </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -469,33 +467,28 @@ else {return false;}
                     "popup-button btn btn-success btn-large" id=
                     "tip-button">Add Tip</a>
                 </div>
-
+            	
                 <div class="toggle-button" id="toggle-label">
                     Toggle Visibility:
                 </div>
 
                 <div class="toggle-button">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-                  
-              </div>
+                </div>
 
-              <div class="toggle-button">
-                <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
-            </div>
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                </div>
 
-            <div class="toggle-button">
-                <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
-            </div>
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                </div>
 
-            <div id="googleMap" style="width:700px;height:530px;">
-            </div>
-        </div><!--/.fluid-container-->
+                <div id="googleMap" style="width:700px;height:530px;">
+                </div>
+            </div><!--/.fluid-container-->
+        </div>
     </div>
 </div>
-</div>
-</div>
-
-
- 
 </body>
 </html>
