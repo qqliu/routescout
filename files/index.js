@@ -2,6 +2,51 @@
  var markers = {};
  var curResult;
  var countryRestrict = { 'country': 'us' };
+ 
+ function populate_tips() {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
+    	type : 'GET',
+    	success: function(res) {
+    		for (var i=0;i<res.data.length;i++) {
+	    		A = parseFloat(res.data[i].x),
+	    		k = parseFloat(res.data[i].y),
+	    		position = new google.maps.LatLng(k, A);
+	    		feature = {
+	    			user: res.data[i].user,
+					position: position,
+					type: "star",
+				};
+				adding = "star";
+				messageId = parseInt(res.data[i].id);
+				message = res.data[i].comment;
+				addMarker(feature);
+			}
+    	}
+  });
+ }
+
+ function populate_accidents(res) {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=1', {
+    	type : 'GET',
+    	success: function(res) {
+    		for (var i=0;i<res.data.length;i++) {
+	    		A = parseFloat(res.data[i].x),
+	    		k = parseFloat(res.data[i].y),
+	    		position = new google.maps.LatLng(k, A);
+	    		feature = {
+	    			user: res.data[i].user,
+					position: position,
+					type: "caution",
+				};
+				adding = "caution";
+				messageId = parseInt(res.data[i].id);
+				message = res.data[i].comment;
+				addMarker(feature);
+			}
+    	}
+  });
+ }
+ 
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
  var last_route = "";
