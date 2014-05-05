@@ -136,8 +136,9 @@
      } else {
      	content += "<b style='font-size: 16px; float:left;'>Tip</b>";
      }
-     content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
+     content += "<br /><div style='font-size:14px; text-align:left; min-width:50px; display: block;'>" + message + "</div>";
 
+	 content += "<div style='min-width:50px;padding:5px;margin:2px;padding-left:0px;margin-left:0px;'>";
      username = $("#user").text();
      if (username === feature.user && username != "") {
      	content += "<button onclick='editMarker(\"message" + messageId + "\");' style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
@@ -146,6 +147,7 @@
      	content += "<button onclick='flagMarker(\"message" + messageId + "\");' style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
      }
 
+	 content += "</div>";
      marker.message = message;
      marker.messageId = messageId;
      marker.user = feature.user;
@@ -421,6 +423,7 @@
 	    $("#popup").dialog("option", {
 		position: [485 + event.pixel.x, 180 + event.pixel.y]
 	    });
+	    $("#popup-textbox").val("");
 	    $("#popup").dialog('open');
 	} else if (adding == "caution") {
 	    feature = {
@@ -432,6 +435,7 @@
 	    $("#popup").dialog("option", {
 		position: [485 + event.pixel.x, 180 + event.pixel.y]
 	    });
+	    $("#popup-textbox").val("");
 	    $("#popup").dialog('open');
 	}
     });
