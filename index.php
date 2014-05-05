@@ -260,7 +260,7 @@ else {
 </div>
 </div>
 
-<div id="user" style="display:none;"><?php echo $_SESSION['user']['username']; ?></div>
+<div id="user" style="display:none;"><?php echo $_SESSION['user']; ?></div>
 
 <div id="overall">
     <div id="content">
