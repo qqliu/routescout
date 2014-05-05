@@ -1,5 +1,5 @@
 
-<?php 
+<?php
 $path = $_SERVER['DOCUMENT_ROOT'];
 $append = "/login/initconfig.php";
 $path .= "/routescout/index.php";
@@ -7,156 +7,156 @@ include_once($path);
 
 
 ?>
-<?php 
+<?php
 
 
-require("./login/initconfig.php"); 
-$submitted_username = ''; 
+require("./login/initconfig.php");
+$submitted_username = '';
 if (isset($_POST['loginform'])) {
-    $query = " 
-    SELECT  
-    username, 
-    password, 
-    salt, 
-    email 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( 
-        ':username' => $_POST['username'] 
-        ); 
+    $query = "
+    SELECT
+    username,
+    password,
+    salt,
+    email
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array(
+        ':username' => $_POST['username']
+        );
 
-    try{ 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
-    $login_ok = false; 
-    $row = $stmt->fetch(); 
-    if($row){ 
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']); 
+    try{
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+    $login_ok = false;
+    $row = $stmt->fetch();
+    if($row){
+        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
         for($round = 0; $round < 65536; $round++){
             $check_password = hash('sha256', $check_password . $row['salt']);
-        } 
+        }
         if($check_password === $row['password']){
             $login_ok = true;
-        } 
-    } 
+        }
+    }
 
-    if($login_ok){ 
-        unset($row['salt']); 
-        unset($row['password']); 
-        $_SESSION['user'] = $row;  
+    if($login_ok){
+        unset($row['salt']);
+        unset($row['password']);
+        $_SESSION['user'] = $row;
             //echo "Login succeeded!!!!"
-            //header("Location: secret.php"); 
-            //die("Redirecting to: secret.php"); 
-    } 
-    else{ 
+            //header("Location: secret.php");
+            //die("Redirecting to: secret.php");
+    }
+    else{
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         The username or password you entered is incorrect.
         </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
-    } 
+        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+    }
 }
 else if (isset($_POST['registerform'])) {
-    // Ensure that the user fills out fields 
-    if(empty($_POST['username'])) 
+    // Ensure that the user fills out fields
+    if(empty($_POST['username']))
 
-    { 
+    {
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a username.
         </div>';
-        
-    } 
-    if(empty($_POST['password'])) 
+
+    }
+    if(empty($_POST['password']))
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a password.
-    </div>'; } 
-    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a password.
+        </div>'; }
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a valid email address.
-    </div>'; } 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>'; }
 
         // Check if the username is already taken
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( ':username' => $_POST['username'] ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array( ':username' => $_POST['username'] );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This username is already in use.
-    </div>'; } 
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    email = :email 
-    "; 
-    $query_params = array( 
-        ':email' => $_POST['email'] 
-        ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+        This username is already in use.
+        </div>'; }
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    email = :email
+    ";
+    $query_params = array(
+        ':email' => $_POST['email']
+        );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This email address is already registered.
-    </div>'; } 
+        This email address is already registered.
+        </div>'; }
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more! 
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
         </div>';
     }
 
-        // Add row to database 
-    $query = " 
-    INSERT INTO registerUsers ( 
-        username, 
-        password, 
-        salt, 
-        email 
-        ) VALUES ( 
-        :username, 
-        :password, 
-        :salt, 
-        :email 
-        ) 
-"; 
+        // Add row to database
+    $query = "
+    INSERT INTO registerUsers (
+        username,
+        password,
+        salt,
+        email
+        ) VALUES (
+        :username,
+        :password,
+        :salt,
+        :email
+        )
+";
 
         // Security measures
-$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
-$password = hash('sha256', $_POST['password'] . $salt); 
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); } 
-    $query_params = array( 
-        ':username' => $_POST['username'], 
-        ':password' => $password, 
-        ':salt' => $salt, 
-        ':email' => $_POST['email'] 
-        ); 
-try {  
-    $stmt = $db->prepare($query); 
-    $result = $stmt->execute($query_params); 
-} 
+$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+$password = hash('sha256', $_POST['password'] . $salt);
+for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
+    $query_params = array(
+        ':username' => $_POST['username'],
+        ':password' => $password,
+        ':salt' => $salt,
+        ':email' => $_POST['email']
+        );
+try {
+    $stmt = $db->prepare($query);
+    $result = $stmt->execute($query_params);
+}
 catch(PDOException $ex){  }
 
 
@@ -166,7 +166,7 @@ catch(PDOException $ex){  }
 function ifCorrect() {
   //print "logging in with email=$email pass=$password";
 
-  if(isset($_SESSION['user'])) 
+  if(isset($_SESSION['user']))
   {
     return true;
 }
@@ -194,7 +194,6 @@ else {
     <link href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css" rel="stylesheet"><!-- Load any supplemental Javascript libraries here -->
 
     <script src="files/jquery.js"></script>
-    <script src="files/bootstrap-transition.js"></script>
     <script src="files/bootstrap-transition.js"></script>
     <script src="files/bootstrap-alert.js"></script>
     <script src="files/bootstrap-modal.js"></script>
@@ -254,7 +253,7 @@ else {
           </div>
       </li>
       <?php }
-      else { ?>      
+      else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
@@ -309,7 +308,7 @@ else {
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
-                
+
                 <div id="inside">
 
                     <div class="container-fluid" id="containerfluid">
@@ -390,14 +389,14 @@ else {
                         </div>
 
                         <div id="rate-route" style="display:none">
-                           <div class = "go-back" style="padding: 10px;">
+                         <div class = "go-back" style="padding: 10px;">
                             <a id="back-to-nav"><img src="back-arrow.png"></a>
                         </div>
 
                         <h2 style="text-align:center">Rate this Route</h2>
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
-                           <div class="row-fluid">
+                         <div class="row-fluid">
                              <div class="span4"><h3>Safety:</h3></div>
                              <div class="span4 offset3 ">
                                  <div class="stars" id = "safety_rating"></div>
@@ -425,7 +424,7 @@ else {
                          <div id="route-find" style="text-align:center">
                           <button id="route-save" type="button" class="btn btn-large">
                               Rate!</button>
-                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
                           </div>
                       </div>
                   </div>
@@ -444,10 +443,25 @@ else {
 
                       </center>
                   </div>
+
+                  <div id="saved-routes" style="display:none">
+                      <center>
+                        <br /><br />
+                        <h2><u>Saved Routes</h2>
+                        <br /><br />
+                        <ol id="selectable">
+                          <li class="ui-widget-content">Main St. To Bridge St.</li>
+                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
+                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
+                      </ol>
+
+                  </center>
               </div>
           </div>
       </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -477,26 +491,21 @@ else {
 
                 <div class="toggle-button">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-                  
-              </div>
+                </div>
 
-              <div class="toggle-button">
-                <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
-            </div>
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                </div>
 
-            <div class="toggle-button">
-                <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
-            </div>
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                </div>
 
-            <div id="googleMap" style="width:700px;height:530px;">
-            </div>
-        </div><!--/.fluid-container-->
+                <div id="googleMap" style="width:700px;height:530px;">
+                </div>
+            </div><!--/.fluid-container-->
+        </div>
     </div>
 </div>
-</div>
-</div>
-
-
- 
 </body>
 </html>
