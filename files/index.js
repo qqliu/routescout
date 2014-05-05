@@ -12,9 +12,12 @@
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
 	    		feature = {
+	    			user: res.data[i].user,
 					position: position,
 					type: "star",
 				};
+				adding = "star";
+				messageId = parseInt(res.data[i].id);
 				message = res.data[i].comment;
 				addMarker(feature);
 			}
@@ -31,9 +34,12 @@
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
 	    		feature = {
+	    			user: res.data[i].user,
 					position: position,
 					type: "caution",
 				};
+				adding = "caution";
+				messageId = parseInt(res.data[i].id);
 				message = res.data[i].comment;
 				addMarker(feature);
 			}
@@ -81,8 +87,24 @@
          icon: icons[feature.type].icon,
          map: map,
      });
+     content = "";
+     if (adding === "caution") {
+     	content += "<b style='font-size: 16px; float:left;'>Caution</b>";
+     } else {
+     	content += "<b style='font-size: 16px; float:left;'>Tip</b>";
+     }
+     content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
+     
+     username = $("#user").text();
+     if (username === feature.user && username != "") {
+     	content += "<button style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
+     	content += "<button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>";
+     } else {
+     	content += "<button style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
+     }
+     
      marker.info = new google.maps.InfoWindow({
-         content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>" : "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>"
+         content: content,
      });
      marker.type = feature.type;
      markers[messageId] = marker;
@@ -155,11 +177,13 @@
     });
     
     google.maps.event.addListener(map, 'click', function(event) {
+ 		username = $("#user").text();
+ 		map = map;
 	if (adding == "star") {
 	    feature = {
 		position: event.latLng,
 		type: "star",
-		map: map
+		user: username,
 	    };
 	    $("#popup-title").text("Add Tip");
 	    $("#popup").dialog("option", {
@@ -170,7 +194,7 @@
 	    feature = {
 		position: event.latLng,
 		type: "caution",
-		map: map
+		user: username,
 	    };
 	    $("#popup-title").text("Report Accident");
 	    $("#popup").dialog("option", {

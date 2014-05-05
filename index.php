@@ -163,8 +163,6 @@ catch(PDOException $ex){  }
 
 }
 
-
-
 function ifCorrect() {
   //print "logging in with email=$email pass=$password";
 
@@ -172,7 +170,8 @@ function ifCorrect() {
   {
     return true;
 }
-else {return false;}
+else {
+	return false;}
 }
 
 
@@ -268,6 +267,8 @@ else {return false;}
 </div>
 </div>
 </div>
+
+<div id="user" style="display:none;"><?php echo $_SESSION['user']['username']; ?></div>
 
 <div id="content">
     <div class="container-fluid span15">
