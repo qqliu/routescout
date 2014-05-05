@@ -390,8 +390,8 @@
 		    $("#routes").empty();
 		    if (possibleRoutes.length > 0) {
 			$("#routes").append("<ol></ol>");
-			for (i in possibleRoutes) {
-			    $($("#routes").find("ol")[0]).append('<li><button style="background-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
+			for (i in possibleRoutes) { 
+			    $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
 			    displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
 			    c += 1;
