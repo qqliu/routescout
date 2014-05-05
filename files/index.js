@@ -95,6 +95,14 @@
      }
      content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
      
+     username = $("#user").text();
+     if (username === feature.user && username != "") {
+     	content += "<button onclick='editMarker(\"message" + messageId + "\");' style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
+     	content += "<button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>";
+     } else {
+     	content += "<button onclick='flagMarker(\"message" + messageId + "\");' style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
+     }
+     
      marker.info = new google.maps.InfoWindow({
          content: content,
      });
