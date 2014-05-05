@@ -88,8 +88,18 @@
  
  function refreshMarker(id) {
  	m_id = id.split("message")[1];
-    markers[m_id].setMap(null);
-     delete markers[id];
+    marker = markers[m_id];
+    
+    adding = marker.type;
+    
+	feature = {
+		user: marker.user,
+		position: marker.position,
+		type: marker.type,
+	};
+	
+    marker.setMap(null);
+    delete markers[id];
  	
  	addMarker(feature);
  	markers[m_id].info.open(map, markers[m_id]);
@@ -121,6 +131,7 @@
      
      marker.message = message;
      marker.messageId = messageId;
+     marker.user = feature.user;
      
      marker.info = new google.maps.InfoWindow({
          content: content,
@@ -182,6 +193,10 @@
     marker = markers[m_id];
     messageId = m_id;
     
+    feature = {
+    
+    }
+    
      if (marker.type === "star") {
      	$("#popup-title").text("Edit Tip");
      	$("#popup-textbox").val(marker.message);
@@ -225,11 +240,12 @@
  		comment: message,
  		};
  	console.log(data_obj);
- 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ 	res = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false,
-  	});
+  	}).responseText;
+  	console.log(res);
   	return message;
  };
 
