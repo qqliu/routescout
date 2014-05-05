@@ -3,8 +3,9 @@
  var curResult;
  var countryRestrict = { 'country': 'us' };
  var efficiency_rating = 0, scenery_rating = 0, safety_rating = 0;
+ var savedRouteView = false;
 
-
+ 
  function populate_tips() {
  	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
     	type : 'GET',
@@ -50,15 +51,15 @@
     	}
   });
  }
-
+ 
  function displayRoute(i, result, color) {
 	rendererOptions = {
-	    draggable: false,
+	    draggable: false, 
 	    suppressMarkers: true,
 	    suppressBicyclingLayer: true,
-	    polylineOptions: {
-		    strokeColor: color,
-		    strokeWeight:  4,
+	    polylineOptions: { 
+		    strokeColor: color, 
+		    strokeWeight:  4, 
 		    strokeOpacity: 1.0
 	    }
 	};
@@ -70,6 +71,7 @@
 
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
+ var savedRoutes = [];
  var last_route = "";
  var c = 0;
 
@@ -102,22 +104,12 @@
          icon: iconBase + 'star-32.png'
      }
  };
-
+ 
  function refreshMarker(id) {
  	m_id = id.split("message")[1];
-    marker = markers[m_id];
-
-    adding = marker.type;
-
-	feature = {
-		user: marker.user,
-		position: marker.position,
-		type: marker.type,
-	};
-
-    marker.setMap(null);
-    delete markers[id];
-
+        markers[m_id].setMap(null);
+        delete markers[id];
+ 	
  	addMarker(feature);
  	markers[m_id].info.open(map, markers[m_id]);
  }
@@ -137,7 +129,7 @@
      	content += "<b style='font-size: 16px; float:left;'>Tip</b>";
      }
      content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
-
+     
      username = $("#user").text();
      if (username === feature.user && username != "") {
      	content += "<button onclick='editMarker(\"message" + messageId + "\");' style='float:left' class='message_edit' id= 'message" + messageId + "'>Edit</button>";
@@ -145,11 +137,10 @@
      } else {
      	content += "<button onclick='flagMarker(\"message" + messageId + "\");' style='float:left' class='message_flag' id= 'message" + messageId + "'>Flag</button>";
      }
-
+     
      marker.message = message;
      marker.messageId = messageId;
-     marker.user = feature.user;
-
+     
      marker.info = new google.maps.InfoWindow({
          content: content,
      });
@@ -163,27 +154,25 @@
      });
      adding = undefined;
  }
-
+ 
  function deleteMarker(id) {
  	m_id = id.split("message")[1];
      markers[m_id].setMap(null);
      delete markers[id];
-
+     
      data_obj = {
  		op: "delete_ta",
  		id: parseInt(m_id)
  		};
-
-     resp = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+     
+      return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false
   	}).responseText;
 
-  	console.log(resp);
-
  };
-
+ 
  function save_tip_accident(message, feature) {
  	if (feature.type.localeCompare("caution") == 0) {
  		kind = 1;
@@ -195,10 +184,10 @@
  		kind: kind,
  		comment: message,
  		x: feature.position.A,
- 		y: feature.position.k,
+ 		y: feature.position.k, 
  		flagged: 0,
  		};
-
+ 		
  	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
@@ -206,12 +195,12 @@
   	}).responseText;
  };
 
-
+ 
  function editMarker(id) {
        m_id = id.split("message")[1];
     marker = markers[m_id];
     messageId = m_id;
-
+    
      if (marker.type === "star") {
      	$("#popup-title").text("Edit Tip");
      	$("#popup-textbox").val(marker.message);
@@ -228,15 +217,15 @@
 	    $("#popup").dialog('open');
      }
  };
-
+ 
   function flagMarker(id) {
      m_id = id.split("message")[1];
-
+     
      data_obj = {
  		op: "flag_ta",
  		id: parseInt(m_id)
  		};
-
+     
      resp = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
@@ -245,8 +234,8 @@
 
 	alert("Thank you. Flagged for an admin's attention.");
  };
-
-
+ 
+ 
  function edit_tip_or_accident(message, messageId) {
  	console.log(messageId);
  	data_obj = {
@@ -255,38 +244,14 @@
  		comment: message,
  		};
  	console.log(data_obj);
- 	res = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false,
-  	}).responseText;
-  	console.log(res);
+  	});
   	return message;
  };
-
-
- function save_tip_accident(message, feature) {
- 	if (feature.type.localeCompare("caution") == 0) {
- 		kind = 1;
- 	} else {
- 		kind = 0;
- 	}
- 	data_obj = {
- 		op: "save_ta",
- 		kind: kind,
- 		comment: message,
- 		x: feature.position.A,
- 		y: feature.position.k,
- 		flagged: 0,
- 		};
-
- 	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
-    	data : data_obj,
-    	type : 'POST',
-    	async: false
-  	}).responseText;
- };
-
+ 
  function get_saved_routes() {
        $.post( "db.php", { op: "get_saved_routes" })
  	    .done(function(res) {
@@ -295,15 +260,15 @@
 		var saved_routes = res.data;
                 console.log(saved_routes);
                 for (i in saved_routes) {
-                     $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');
+                     $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');    
                 }
-
+            
                 //add x button to each selectable
                 $("#selectable li").each(function() {
                   $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
                   $(this).addClass("route");
                 });
-
+                
                $("#selectable").selectable({
                      selecting: function(event, ui) {
                             var request = {
@@ -329,7 +294,6 @@
                                                   $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
                                               }
                                           }
-                                          last_route = [ui.selecting.attributes.key.nodeValue, curRoute.summary, request.origin, request.destination, ui.selecting.attributes.index.nodeValue];
                                           $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
                                                  .done(function(res) {
                                                      var scores = [];
@@ -356,7 +320,7 @@
                                                                      efficiency_rating = score;
                                                                  } else {
                                                                      scenery_rating = score;
-                                                                 }
+                                                                 }  
                                                           };
                                                      } else {
                                                          console.log("ERROR: " + data.error);
@@ -365,9 +329,14 @@
                                           for (route in displayRoutes) {
                                                  displayRoutes[route].setMap(null);
                                           }
+                                          
+                                          for (route in savedRoutes) {
+                                                 savedRoutes[route].setMap(null);
+                                          }
                                           var newRoute = displayRoute(parseInt(ui.selecting.attributes.index.nodeValue), result, colors[c % colors.length]);
-                                          displayRoutes.push(newRoute);
+                                          savedRoutes.push(newRoute);
                                           newRoute.setMap(map);
+                                          savedRouteView = true;
                                    }
                             });
 			}
@@ -383,15 +352,15 @@
     ending = document.getElementById('destination_loc');
     autocomplete_starting = new google.maps.places.Autocomplete(starting);
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
-
+    
     get_saved_routes();
-
+    
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
       //setAutocompleteCountry);
     //autocomplete_starting.bindTo('bounds', map);
     //autocomplete_ending.bindTo('bounds', map);
-
+    
     myCenter = new google.maps.LatLng(42.3522, -71.0627);
     directionsService = new google.maps.DirectionsService();
     mapProp = {
@@ -407,7 +376,7 @@
     $("#popup").dialog({
 	autoOpen: false
     });
-
+    
     google.maps.event.addListener(map, 'click', function(event) {
  		username = $("#user").text();
  		map = map;
@@ -443,7 +412,7 @@
      }
      var bikeLayer = new google.maps.BicyclingLayer();
      bikeLayer.setMap(map);
-
+     
     var styles = [
        {
 	 stylers: [
@@ -465,7 +434,7 @@
 	 ]
        }
     ];
-
+     
     map.setOptions({styles: styles});
 
      function Route() {
@@ -492,13 +461,21 @@
 		    curResult = result;
 		    var possibleRoutes;
 		    possibleRoutes = curResult.routes;
+                    for (route in displayRoutes) {
+                            displayRoutes[route].setMap(null);
+                     }
+                        
+                     for (route in savedRoutes) {
+                            savedRoutes[route].setMap(null);
+                     }
 		    displayRoutes = [];
+                    savedRoutes = [];
 		    c = 0;
 		    $("#routes").empty();
 		    if (possibleRoutes.length > 0) {
 			$("#routes").append("<ol></ol>");
 			for (i in possibleRoutes) {
-			    $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
+			    $($("#routes").find("ol")[0]).append('<li><button style="background-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
 						possibleRoutes[i].summary + '</button></li>');
 			    displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
 			    c += 1;
@@ -515,6 +492,9 @@
 				    displayRoutes[route].setMap(null);
 				}
 			    }
+                            for (route in savedRoutes) {
+                                   savedRoutes[route].setMap(null);
+                            }
 			    var steps = curResult.routes[index].legs[0].steps;
 			    var route_key = "";
 			    $("#directions_list").empty();
@@ -552,7 +532,7 @@
                                                        efficiency_rating = score;
                                                    } else {
                                                        scenery_rating = score;
-                                                   }
+                                                   }  
                                             };
                                        } else {
                                            console.log("ERROR: " + data.error);
@@ -569,15 +549,15 @@
              }
          });
      }
-
+     
     function toggleLanes(value) {
 	if (value) {
-	    bikeLayer.setMap(map);
+	    bikeLayer.setMap(map); 
 	} else {
 	    bikeLayer.setMap(null);
 	}
     }
-
+     
      // When the user selects a city, get the place details for the city and
     // zoom the map in on the city.
     function onPlaceChanged() {
@@ -593,7 +573,7 @@
      function showAllRoutes() {
         Route();
      }
-
+     
      $("#report-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/caution.png) 16 30, default"
@@ -601,7 +581,7 @@
          adding = "caution";
          toggleActive(this);
      });
-
+     
      $("#tip-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/star-32.png) 16 30, default"
@@ -609,18 +589,6 @@
          adding = "star";
          toggleActive(this);
      });
-
-     $("#destination_loc").keypress(function(event) {
-    if (event.which == 13) {
-        $("#rate-route").hide();
-         $("#navigation").hide();
-         $("#saved-routes").hide();
-         $("#second").fadeIn();
-         $("#containerfluid").show();
-         event.preventDefault();
-         showAllRoutes();
-    }});
-
      $("#route").click(function(e) {
      	 $("#rate-route").hide();
          $("#navigation").hide();
@@ -639,7 +607,7 @@
      		message = edit_tip_or_accident(m, messageId);
      		str_id = 'message' + messageId;
      		refreshMarker(str_id);
-
+     		
      		$("#popup").dialog('close');
      		$("#popup-textbox").val("");
 	         $("#report-button").removeClass("active");
@@ -656,10 +624,9 @@
 	         messageId += 1;
         }
      });
-     $('.filters').click(function() {
-         if (!$(this).hasClass('grayscale')) {
-            $(this).addClass('grayscale');
-             var id = $(this).attr("id");
+     $('.filters:checkbox').click(function() {
+         if (!$(this).is(':checked')) {
+             var id = $(this).attr("value");
              for (var i in markers) {
                  if (markers[i].type == id) {
                      markers[i].setVisible(false);
@@ -669,8 +636,7 @@
 		toggleLanes(false);
 	     }
          } else {
-           $(this).removeClass('grayscale');
-             var id = $(this).attr("id");
+             var id = $(this).attr("value");
              for (var i in markers) {
                  if (markers[i].type == id) {
                      markers[i].setVisible(true);
@@ -682,10 +648,8 @@
          }
      });
  }
-
+ google.maps.event.addDomListener(window, 'load', initialize);
  $(document).ready(function() {
-    initialize();
-
      $(".criteria-slider").slider({
          value: 50,
          change: function(event, ui) {
@@ -703,14 +667,14 @@
              }
          }
      }).addClass("criteria-slider");
-
+     
      populate_tips();
      populate_accidents();
 
 		$('.dropdown-menu').click(function(e) {
 	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
 	    });
-
+     
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
 	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
@@ -722,24 +686,30 @@
 		}
 	});
      });
-
+     
      $('#back-to-routes').click(function(e) {
-	e.preventDefault();
-	$("#navigation").hide();
-	$("#containerfluid").show();
-	for (route in displayRoutes) {
-	    displayRoutes[route].setMap(map);
-	}
-        return false;
+       if (!savedRouteView) {
+              e.preventDefault();
+              $("#navigation").hide();
+              $("#containerfluid").show();
+              for (route in displayRoutes) {
+                  displayRoutes[route].setMap(map);
+              }
+              savedRouteView = false;
+       } else {
+              $("#navigation").hide();
+              $("#saved-routes").show();
+       }
+       return false;
      });
-
+     
      $('#back-to-nav').click(function(e) {
          e.preventDefault();
          $("#rate-route").hide();
          $("#navigation").show();
          return false;
      });
-
+     
      $('#route-rate').click(function(e) {
 	e.preventDefault();
 	$("#navigation").hide();
@@ -747,7 +717,7 @@
 	$("#saved-routes").hide();
 	$("#rate-route").show();
      });
-
+     
      $('#savedroutes').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -757,7 +727,7 @@
          $("#saved-routes").show();
          return false;
      });
-
+     
 	$("#route-save").click(function() {
 	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
  	    .done(function( data ) {
@@ -769,7 +739,7 @@
 		}
 	   });
  	});
-
+    
     //add x button handler
     $(".delete-button").click(function() {
       var parent = $(this).parent();
