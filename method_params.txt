@@ -162,11 +162,10 @@ http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0
 Flag Tip or Accident (we can decide whether to use this or not) 
 
 op = flag_ta
-owner = userid that owns the tip/accident
 id = INT
 *needs to be logged in
 
-http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&owner=kobe@mit.edu&id=id
+http://leoliu.scripts.mit.edu/routescout/db.php?op=flag_ta&id=id
 
 {"error":""}
 

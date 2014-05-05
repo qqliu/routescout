@@ -1,5 +1,7 @@
-<?php header('Access-Control-Allow-Origin: *'); ?>
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Content-Type: application/json');
 
 /*
 TODO (if time): to deal with malicious users/XSS:
@@ -10,7 +12,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = True;
+$debug_pretend_single_logged_in_user = False;
 
 $resp = array(
   "error" => ""
@@ -247,7 +249,7 @@ function get_all_tas() {
 function flag_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("owner", "id"));
+  ensure_and_escape_params(array("id"));
   if (has_error()) return;
   
   ensure_logged_in();
@@ -257,7 +259,7 @@ function flag_ta() {
   db_query("
     update tips_and_accidents
     set flagged=1
-    where user='{$_REQUEST["owner"]}' and id={$_REQUEST["id"]}
+    where id={$_REQUEST["id"]}
   ");
 }
 
