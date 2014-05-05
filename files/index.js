@@ -212,12 +212,13 @@
  		id: parseInt(m_id)
  		};
      
-      return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+     resp = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
     	async: false
   	}).responseText;
 
+	alert("Thank you. Flagged for an admin's attention.");
  };
  
  
