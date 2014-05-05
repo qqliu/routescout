@@ -316,7 +316,7 @@ else {
                             <table class="test">
                                 <tr>
                                     <td>Overall Safety </td>
-
+                                    
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>

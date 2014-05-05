@@ -519,6 +519,18 @@
          adding = "star";
          toggleActive(this);
      });
+
+     $("#destination_loc").keypress(function(event) {
+    if (event.which == 13) {
+        $("#rate-route").hide();
+         $("#navigation").hide();
+         $("#saved-routes").hide();
+         $("#second").fadeIn();
+         $("#containerfluid").show();
+         event.preventDefault();
+         showAllRoutes();
+    }});
+
      $("#route").click(function(e) {
      	 $("#rate-route").hide();
          $("#navigation").hide();
