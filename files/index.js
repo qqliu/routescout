@@ -2,6 +2,8 @@
  var markers = {};
  var curResult;
  var countryRestrict = { 'country': 'us' };
+ var efficiency_rating = 0, scenery_rating = 0, safety_rating = 0;
+
  
  function populate_tips() {
  	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
@@ -52,7 +54,6 @@
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
  var last_route = "";
- var efficiency_rating = 0, scenery_rating = 0, safety_rating = 0;
  var c = 0;
 
  function toggleActive(button) {
@@ -417,6 +418,38 @@
 				}
 			    }
 			    last_route = [route_key, curResult.routes[index].summary, request.origin, request.destination, index];
+                            $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
+                                   .done(function(res) {
+                                       var scores = [];
+                                       if (res.error == "") {
+                                           var rating = res.data;
+                                           if (rating != null) {
+                                               scores = [parseInt(rating.safety), parseInt(rating.efficiency), parseInt(rating.scenery)];
+                                           } else {
+                                               scores = [0, 0, 0];
+                                           }
+                                           $("#safety_rating").raty({score: scores[0], click: function(score, evt) {
+                                                   clickFnc(this, score, evt) }
+                                            });
+                                           $("#efficiency_rating").raty({score: scores[1], click: function(score, evt) {
+                                                   clickFnc(this, score, evt) }
+                                            });
+                                           $("#scenery_rating").raty({score: scores[2], click: function(score, evt) {
+                                                   clickFnc(this, score, evt) }
+                                            });
+                                           var clickFnc = function(obj, score, evt) {
+                                                   if ($(obj).attr('id') == "safety_rating") {
+                                                       safety_rating = score;
+                                                   } else if ($(obj).attr('id') == "efficiency_rating") {
+                                                       efficiency_rating = score;
+                                                   } else {
+                                                       scenery_rating = score;
+                                                   }  
+                                            };
+                                       } else {
+                                           console.log("ERROR: " + data.error);
+                                       }
+                                });
 			    return false;
 			});
 		    }
@@ -606,23 +639,6 @@
 	$("#containerfluid").hide();
 	$("#saved-routes").hide();
 	$("#rate-route").show();
-        $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
- 	    .done(function( data ) {
- 		if (data.error == "") {
- 		    var rating = data.data;
-		    if (rating != null) {
-			$("#safety_rating").raty({score: parseInt(rating.safety)});
-			$("#efficiency_rating").raty({score: parseInt(rating.efficiency)});
-			$("#scenery_rating").raty({score: parseInt(rating.scenery)});
-		    } else {
-                        $("#safety_rating").raty({score: 0});
-			$("#efficiency_rating").raty({score: 0});
-			$("#scenery_rating").raty({score: 0});
-                    }
- 		} else {
- 		    console.log("ERROR: " + data.error);
- 		}
- 	 });
      });
      
      $('#savedroutes').click(function(e) {
@@ -638,28 +654,13 @@
 	$("#route-save").click(function() {
 	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
  	    .done(function( data ) {
-		if (data != '{"error":""}') {
+		if (data.error != "") {
+                     console.log("ERROR: " + data.error);
 		} else {
 		    $("#save-rate-alert").show();
 		    $('#save-rate-alert').delay(500).fadeOut(400);
 		}
-                efficiency_rating = 0;
-                scenery_rating = 0;
-                safety_rating = 0;
 	   });
- 	});
-	    
-	$(".stars").raty({
- 	    click: function(score, evt) {
-		$(this).attr('data-score');
- 		if ($(this).attr('id') == "safety_rating") {
- 		    safety_rating = score;
- 		} else if ($(this).attr('id') == "efficiency_rating") {
- 		    efficiency_rating = score;
- 		} else {
- 		    scenery_rating = score;
- 		}
- 	    }
  	});
 	
 	$("#selectable").selectable({ disabled: true });
