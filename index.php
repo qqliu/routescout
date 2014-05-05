@@ -1,5 +1,5 @@
 
-<?php 
+<?php
 $path = $_SERVER['DOCUMENT_ROOT'];
 $append = "/login/initconfig.php";
 $path .= "/routescout/index.php";
@@ -7,156 +7,156 @@ include_once($path);
 
 
 ?>
-<?php 
+<?php
 
 
-require("./login/initconfig.php"); 
-$submitted_username = ''; 
+require("./login/initconfig.php");
+$submitted_username = '';
 if (isset($_POST['loginform'])) {
-    $query = " 
-    SELECT  
-    username, 
-    password, 
-    salt, 
-    email 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( 
-        ':username' => $_POST['username'] 
-        ); 
+    $query = "
+    SELECT
+    username,
+    password,
+    salt,
+    email
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array(
+        ':username' => $_POST['username']
+        );
 
-    try{ 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
-    $login_ok = false; 
-    $row = $stmt->fetch(); 
-    if($row){ 
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']); 
+    try{
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+    $login_ok = false;
+    $row = $stmt->fetch();
+    if($row){
+        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
         for($round = 0; $round < 65536; $round++){
             $check_password = hash('sha256', $check_password . $row['salt']);
-        } 
+        }
         if($check_password === $row['password']){
             $login_ok = true;
-        } 
-    } 
+        }
+    }
 
-    if($login_ok){ 
-        unset($row['salt']); 
-        unset($row['password']); 
-        $_SESSION['user'] = $row;  
+    if($login_ok){
+        unset($row['salt']);
+        unset($row['password']);
+        $_SESSION['user'] = $row;
             //echo "Login succeeded!!!!"
-            //header("Location: secret.php"); 
-            //die("Redirecting to: secret.php"); 
-    } 
-    else{ 
+            //header("Location: secret.php");
+            //die("Redirecting to: secret.php");
+    }
+    else{
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         The username or password you entered is incorrect.
         </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
-    } 
+        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+    }
 }
 else if (isset($_POST['registerform'])) {
-    // Ensure that the user fills out fields 
-    if(empty($_POST['username'])) 
+    // Ensure that the user fills out fields
+    if(empty($_POST['username']))
 
-    { 
+    {
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a username.
         </div>';
-        
-    } 
-    if(empty($_POST['password'])) 
+
+    }
+    if(empty($_POST['password']))
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a password.
-    </div>'; } 
-    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a password.
+        </div>'; }
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
         { echo'<div class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Please enter a valid email address.
-    </div>'; } 
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>'; }
 
         // Check if the username is already taken
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( ':username' => $_POST['username'] ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array( ':username' => $_POST['username'] );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This username is already in use.
-    </div>'; } 
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    email = :email 
-    "; 
-    $query_params = array( 
-        ':email' => $_POST['email'] 
-        ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+        This username is already in use.
+        </div>'; }
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    email = :email
+    ";
+    $query_params = array(
+        ':email' => $_POST['email']
+        );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    This email address is already registered.
-    </div>'; } 
+        This email address is already registered.
+        </div>'; }
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more! 
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
         </div>';
     }
 
-        // Add row to database 
-    $query = " 
-    INSERT INTO registerUsers ( 
-        username, 
-        password, 
-        salt, 
-        email 
-        ) VALUES ( 
-        :username, 
-        :password, 
-        :salt, 
-        :email 
-        ) 
-"; 
+        // Add row to database
+    $query = "
+    INSERT INTO registerUsers (
+        username,
+        password,
+        salt,
+        email
+        ) VALUES (
+        :username,
+        :password,
+        :salt,
+        :email
+        )
+";
 
         // Security measures
-$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
-$password = hash('sha256', $_POST['password'] . $salt); 
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); } 
-    $query_params = array( 
-        ':username' => $_POST['username'], 
-        ':password' => $password, 
-        ':salt' => $salt, 
-        ':email' => $_POST['email'] 
-        ); 
-try {  
-    $stmt = $db->prepare($query); 
-    $result = $stmt->execute($query_params); 
-} 
+$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+$password = hash('sha256', $_POST['password'] . $salt);
+for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
+    $query_params = array(
+        ':username' => $_POST['username'],
+        ':password' => $password,
+        ':salt' => $salt,
+        ':email' => $_POST['email']
+        );
+try {
+    $stmt = $db->prepare($query);
+    $result = $stmt->execute($query_params);
+}
 catch(PDOException $ex){  }
 
 
@@ -166,7 +166,7 @@ catch(PDOException $ex){  }
 function ifCorrect() {
   //print "logging in with email=$email pass=$password";
 
-  if(isset($_SESSION['user'])) 
+  if(isset($_SESSION['user']))
   {
     return true;
 }
@@ -194,7 +194,6 @@ else {
     <link href="files/jquery-ui-1.10.4/themes/base/jquery-ui.css" rel="stylesheet"><!-- Load any supplemental Javascript libraries here -->
 
     <script src="files/jquery.js"></script>
-    <script src="files/bootstrap-transition.js"></script>
     <script src="files/bootstrap-transition.js"></script>
     <script src="files/bootstrap-alert.js"></script>
     <script src="files/bootstrap-modal.js"></script>
@@ -254,7 +253,7 @@ else {
           </div>
       </li>
       <?php }
-      else { ?>      
+      else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
@@ -272,93 +271,107 @@ else {
 <div id="user" style="display:none;"><?php echo $_SESSION['user']['username']; ?></div>
 
 <div id="overall">
-<div id="content">
-    <div class="container-fluid span15">
-        <div class="row-fluid">
-            <div class="container-fluid span15">
-                <div class="row-fluid">
-                    <div class="container well well-small span11" id=
-                    "first">
-                    <div id="two">
-                        <div class="from-to" style="text-align:center">
-                            <form class="navbar-form">
-                                <div id="test">
-                                    <h3>From:</h3><input class=
-                                    "form-control" id="starting_loc"
-                                    name="srch-term" placeholder=
-                                    "Search" type="text">
-                                </div>
+    <div id="content">
+        <div class="container-fluid span15">
+            <div class="row-fluid">
+                <div class="container-fluid span15">
+                    <div class="row-fluid">
+                        <div class="container well well-small span11" id=
+                        "first">
+                        <div id="two">
+                            <div class="from-to" style="text-align:center">
+                                <form class="navbar-form">
+                                    <div id="test">
+                                        <h3>From:</h3><input class=
+                                        "form-control" id="starting_loc"
+                                        name="srch-term" placeholder=
+                                        "Search" type="text">
+                                    </div>
 
-                                <div id="test">
-                                    <h3>To:</h3><input class=
-                                    "form-control" id="destination_loc"
-                                    name="srch-term" placeholder=
-                                    "Search" type="text">
-                                </div>
-                            </form>
-                        </div>
+                                    <div id="test">
+                                        <h3>To:</h3><input class=
+                                        "form-control" id="destination_loc"
+                                        name="srch-term" placeholder=
+                                        "Search" type="text">
+                                    </div>
+                                </form>
+                            </div>
 
-                        <div id="route-find" style="text-align:center">
-                            <button class="btn btn-large" id=
-                            "route">Search For Routes!</button>
+                            <div id="route-find" style="text-align:center">
+                                <button class="btn btn-large" id=
+                                "route">Search For Routes!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+<<<<<<< HEAD
+                <div class="row-fluid" id="bottom-window">
+                    <div class="container well span11" id="second" style=
+                    "display:none">
+=======
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
-                
+
                 <div id="inside">
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
 
-                    <div class="container-fluid" id="containerfluid">
-                        <br>
-                        <h2>Possible Routes</h2><br>
+                    <div id="inside">
 
-                        <div id="routes"></div><br>
+                        <div class="container-fluid" id="containerfluid">
+                            <br>
+                            <h2>Possible Routes</h2><br>
 
-                        <h4>Sort Routes By:</h4>
+                            <div id="routes"></div><br>
 
-                        <table class="test">
-                            <tr>
-                                <td>Overall Safety</td>
+                            <h4>Sort Routes By:</h4>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                            <table class="test">
+                                <tr>
+                                    <td>Overall Safety </td>
 
-                            <tr>
-                                <td>Fewest Accidents</td>
+                                    <td>
+                                        <div class="criteria-slider" id="slider"></div>
+                                    </td>
+                                    <td><strong>+</strong></td>
+                                </tr>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>Fewest Accidents </td>
 
-                            <tr>
-                                <td>Bike Lanes</td>
+                                    <td>
+                                        <div class="criteria-slider" id="slider"></div>
+                                    </td>
+                                    <td><strong>+</strong></td>
+                                </tr>
 
-                                <td>
-                                    <div class="criteria-slider" id="slider"></div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>Bike Lanes</td>
 
-                            <tr>
+                                    <td>
+                                       <div class="criteria-slider" id="slider"></div>
+                                   </td>
+                                   <td><strong>+</strong></td>
+                               </tr>
+
+                               <tr>
                                 <td>Efficiency</td>
 
                                 <td>
-                                    <div class="criteria-slider" id="slider"></div>
+                                    <div class="criteria-slider" id="slider"></div></td>
                                 </td>
+                                <td><strong>+</strong></td>
+
                             </tr>
 
                             <tr>
-                                <td>Scenery</td>
+                                <td>Scenery </td>
 
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
+                                <td><strong>+</strong></td>
                             </tr>
                         </table>
                     </div>
@@ -366,15 +379,23 @@ else {
 
 
                     <div id="navigation" style="display:none">
-                        <div class="go-back" style="padding: 10px;">
-                            <a id="back-to-routes"><img src="back-arrow.png"></a>
-                        </div>
-
-                        <h2 style="text-align:center">Selected Route</h2>
-
-                        <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
-
+                        
                         <div class="row-fluid" id="bottom-buttons">
+<<<<<<< HEAD
+                            <div class="span1" class="go-back" style="padding: 10px;">
+                            <a id="back-to-routes"><img src="back-arrow.png"></a>
+                            </div>
+                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
+                                <button class="btn btn-large" data-target="#saveModal"
+                                data-toggle="modal" id="savedButton">Save
+                                Route!</button>
+                            <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                            </div>
+
+                            <div class="span4 offset5" id="route-find" style="text-align:center">
+                                <button class="btn btn-large" id="route-rate" type="button">Rate this
+                                    Route</a></button>
+=======
                             <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal" data-toggle="modal" id="savedButton">Save Route</button>
                                 <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
@@ -383,52 +404,75 @@ else {
                             <div id="route-find" style="text-align:center">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this Route</a></button>
                                 </div>
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                             </div>
+                        </div>
+                            <h2 id="selectedRoute">Selected Route</h2>
+
+                            <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
+
+
 
                             <BR />
                             <BR />
                         </div>
 
                         <div id="rate-route" style="display:none">
-                           <div class = "go-back" style="padding: 10px;">
+                         <div class = "go-back" style="padding: 10px;">
                             <a id="back-to-nav"><img src="back-arrow.png"></a>
                         </div>
 
                         <h2 style="text-align:center">Rate this Route</h2>
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Safety:</h3></div>
-                               <div class="span4 offset3 ">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Safety:</h3></div>
+                             <div class="span4 offset3 ">
+<<<<<<< HEAD
+                                 <div class="stars"></div>
+=======
+                                 <div class="stars" id = "safety_rating"></div>
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
+                             </div>
+                         </div>
 
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Efficiency</h3></div>
-                               <div class="span4 offset3">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Efficiency</h3></div>
+                             <div class="span4 offset3">
+<<<<<<< HEAD
+                                 <div class="stars"></div>
+=======
+                                 <div class="stars" id = "efficiency_rating"></div>
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
+                             </div>
+                         </div>
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Scenery</h3></div>
-                               <div class="span4 offset2">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
-                       </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Scenery</h3></div>
+                             <div class="span4 offset2">
+<<<<<<< HEAD
+                                 <div class="stars"></div>
+=======
+                                 <div class="stars" id = "scenery_rating"></div>
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
+                             </div>
+                         </div>
+                     </div>
 
 
-                       <div id="bottom-buttons" class="row-fluid">
-                           <div id="route-find" style="text-align:center">
-                              <button id="route-save" type="button" class="btn btn-large">
-                                  Rate!</button>
-                                  <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-                              </div>
+                     <div id="bottom-buttons" class="row-fluid">
+                         <div id="route-find" style="text-align:center">
+                          <button id="route-save" type="button" class="btn btn-large">
+                              Rate!</button>
+<<<<<<< HEAD
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
+=======
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                           </div>
                       </div>
+                  </div>
 
                       <div id="saved-routes" style="display:none">
                           <center>
@@ -444,10 +488,25 @@ else {
 
                       </center>
                   </div>
+
+                  <div id="saved-routes" style="display:none">
+                      <center>
+                        <br /><br />
+                        <h2><u>Saved Routes</h2>
+                        <br /><br />
+                        <ol id="selectable">
+                          <li class="ui-widget-content">Main St. To Bridge St.</li>
+                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
+                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
+                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
+                      </ol>
+
+                  </center>
               </div>
           </div>
       </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -477,26 +536,34 @@ else {
 
                 <div class="toggle-button">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-                  
-              </div>
+<<<<<<< HEAD
 
-              <div class="toggle-button">
-                <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
-            </div>
+                </div>
 
-            <div class="toggle-button">
-                <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
-            </div>
+=======
+                </div>
 
-            <div id="googleMap" style="width:700px;height:530px;">
-            </div>
-        </div><!--/.fluid-container-->
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                </div>
+
+                <div class="toggle-button">
+                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                </div>
+
+                <div id="googleMap" style="width:700px;height:530px;">
+                </div>
+            </div><!--/.fluid-container-->
+        </div>
     </div>
 </div>
-</div>
+<<<<<<< HEAD
 </div>
 
 
- 
+
+=======
+>>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
 </body>
 </html>

@@ -23,6 +23,12 @@ h2,h1 {
     margin: 0px;
 }
 
+#selectedRoute {
+font-family: 'Lily Script One', cursive;
+margin-top: 15px;
+text-align:center;
+
+}
 #map {
     position: relative;
     left: 80px;
@@ -196,7 +202,7 @@ h1 {
     top: 0px;
     margin-top: 0;
     margin-left: 0px;
-    margin-right: 20px;
+    margin-right: 0px;
 }
 
 body {
@@ -234,7 +240,7 @@ margin-bottom: 20px;
 }
 #bottom-buttons{
 	display: block;
-	width: 380px;
+	width: 390px;
 	margin-left: auto;
 	margin-right: auto;
 	
@@ -243,6 +249,7 @@ margin-bottom: 20px;
 #navigation {
 	padding-left: 0px;
 	width: 360px;
+    overflow-x: hidden;
 	
 }
 
@@ -341,6 +348,8 @@ table.test {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+
 
 .criteria-slider {
 	width: 75px; !important;
