@@ -1,5 +1,5 @@
 
-<?php 
+<?php
 $path = $_SERVER['DOCUMENT_ROOT'];
 $append = "/login/initconfig.php";
 $path .= "/routescout/index.php";
@@ -7,172 +7,171 @@ include_once($path);
 
 
 ?>
-<?php 
+<?php
 
 
-require("./login/initconfig.php"); 
-$submitted_username = ''; 
+require("./login/initconfig.php");
+$submitted_username = '';
 if (isset($_POST['loginform'])) {
-    $query = " 
-    SELECT  
-    username, 
-    password, 
-    salt, 
-    email 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( 
-        ':username' => $_POST['username'] 
-        ); 
+    $query = "
+    SELECT
+    username,
+    password,
+    salt,
+    email
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array(
+        ':username' => $_POST['username']
+        );
 
-    try{ 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
-    $login_ok = false; 
-    $row = $stmt->fetch(); 
-    if($row){ 
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']); 
+    try{
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+    $login_ok = false;
+    $row = $stmt->fetch();
+    if($row){
+        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
         for($round = 0; $round < 65536; $round++){
             $check_password = hash('sha256', $check_password . $row['salt']);
-        } 
+        }
         if($check_password === $row['password']){
             $login_ok = true;
-        } 
-    } 
+        }
+    }
 
-    if($login_ok){ 
-        unset($row['salt']); 
-        unset($row['password']); 
-        $_SESSION['user'] = $row;  
+    if($login_ok){
+        unset($row['salt']);
+        unset($row['password']);
+        $_SESSION['user'] = $row;
             //echo "Login succeeded!!!!"
-            //header("Location: secret.php"); 
-            //die("Redirecting to: secret.php"); 
-    } 
-    else{ 
+            //header("Location: secret.php");
+            //die("Redirecting to: secret.php");
+    }
+    else{
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         The username or password you entered is incorrect.
         </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8'); 
-    } 
+        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+    }
 }
 else if (isset($_POST['registerform'])) {
-    // Ensure that the user fills out fields 
-    if(empty($_POST['username'])) 
+    // Ensure that the user fills out fields
+    if(empty($_POST['username']))
 
-    { 
+    {
         echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a username.
         </div>';
-        
-    } 
-    if(empty($_POST['password'])) 
+
+    }
+    if(empty($_POST['password']))
         { echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a password.
-        </div>'; } 
-    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
+        </div>'; }
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
         { echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a valid email address.
-        </div>'; } 
+        </div>'; }
 
         // Check if the username is already taken
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    username = :username 
-    "; 
-    $query_params = array( ':username' => $_POST['username'] ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    username = :username
+    ";
+    $query_params = array( ':username' => $_POST['username'] );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         This username is already in use.
-        </div>'; } 
-    $query = " 
-    SELECT 
-    1 
-    FROM registerUsers 
-    WHERE 
-    email = :email 
-    "; 
-    $query_params = array( 
-        ':email' => $_POST['email'] 
-        ); 
-    try { 
-        $stmt = $db->prepare($query); 
-        $result = $stmt->execute($query_params); 
-    } 
-    catch(PDOException $ex){ } 
-    $row = $stmt->fetch(); 
+        </div>'; }
+    $query = "
+    SELECT
+    1
+    FROM registerUsers
+    WHERE
+    email = :email
+    ";
+    $query_params = array(
+        ':email' => $_POST['email']
+        );
+    try {
+        $stmt = $db->prepare($query);
+        $result = $stmt->execute($query_params);
+    }
+    catch(PDOException $ex){ }
+    $row = $stmt->fetch();
     if($row){ echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         This email address is already registered.
-        </div>'; } 
+        </div>'; }
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more! 
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
         </div>';
     }
 
-        // Add row to database 
-    $query = " 
-    INSERT INTO registerUsers ( 
-        username, 
-        password, 
-        salt, 
-        email 
-        ) VALUES ( 
-        :username, 
-        :password, 
-        :salt, 
-        :email 
-        ) 
-"; 
+        // Add row to database
+    $query = "
+    INSERT INTO registerUsers (
+        username,
+        password,
+        salt,
+        email
+        ) VALUES (
+        :username,
+        :password,
+        :salt,
+        :email
+        )
+";
 
         // Security measures
-$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
-$password = hash('sha256', $_POST['password'] . $salt); 
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); } 
-    $query_params = array( 
-        ':username' => $_POST['username'], 
-        ':password' => $password, 
-        ':salt' => $salt, 
-        ':email' => $_POST['email'] 
-        ); 
-try {  
-    $stmt = $db->prepare($query); 
-    $result = $stmt->execute($query_params); 
-} 
+$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+$password = hash('sha256', $_POST['password'] . $salt);
+for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
+    $query_params = array(
+        ':username' => $_POST['username'],
+        ':password' => $password,
+        ':salt' => $salt,
+        ':email' => $_POST['email']
+        );
+try {
+    $stmt = $db->prepare($query);
+    $result = $stmt->execute($query_params);
+}
 catch(PDOException $ex){  }
 
 
 
 }
 
-
-
 function ifCorrect() {
   //print "logging in with email=$email pass=$password";
 
-  if(isset($_SESSION['user'])) 
+  if(isset($_SESSION['user']))
   {
     return true;
 }
-else {return false;}
+else {
+	return false;}
 }
 
 
@@ -254,7 +253,7 @@ else {return false;}
           </div>
       </li>
       <?php }
-      else { ?>      
+      else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
@@ -269,6 +268,9 @@ else {return false;}
 </div>
 </div>
 
+<div id="user" style="display:none;"><?php echo $_SESSION['user']['username']; ?></div>
+
+<div id="overall">
 <div id="content">
     <div class="container-fluid span15">
         <div class="row-fluid">
@@ -306,7 +308,7 @@ else {return false;}
             <div class="row-fluid" id="bottom-window">
                 <div class="container well span11" id="second" style=
                 "display:none">
-                
+
                 <div id="inside">
 
                     <div class="container-fluid" id="containerfluid">
@@ -422,7 +424,7 @@ else {return false;}
                          <div id="route-find" style="text-align:center">
                           <button id="route-save" type="button" class="btn btn-large">
                               Rate!</button>
-                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
                           </div>
                       </div>
                   </div>
@@ -467,7 +469,7 @@ else {return false;}
                     "popup-button btn btn-success btn-large" id=
                     "tip-button">Add Tip</a>
                 </div>
-            	
+
                 <div class="toggle-button" id="toggle-label">
                     Toggle Visibility:
                 </div>
