@@ -12,9 +12,12 @@
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
 	    		feature = {
+	    			user: res.data[i].user,
 					position: position,
 					type: "star",
 				};
+				adding = "star";
+				messageId = parseInt(res.data[i].id);
 				message = res.data[i].comment;
 				addMarker(feature);
 			}
@@ -31,18 +34,23 @@
 	    		k = parseFloat(res.data[i].y),
 	    		position = new google.maps.LatLng(k, A);
 	    		feature = {
+	    			user: res.data[i].user,
 					position: position,
 					type: "caution",
 				};
+				adding = "caution";
+				messageId = parseInt(res.data[i].id);
 				message = res.data[i].comment;
 				addMarker(feature);
 			}
     	}
   });
  }
-
+ 
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
+ var last_route = "";
+ var efficiency_rating = 0, scenery_rating = 0, safety_rating = 0;
  var c = 0;
 
  function toggleActive(button) {
@@ -79,7 +87,7 @@
      var marker = new google.maps.Marker({
          position: feature.position,
          icon: icons[feature.type].icon,
-         map: map,
+         map: feature.map
      });
      marker.info = new google.maps.InfoWindow({
          content: adding == "caution" ? "<b style='font-size: 16px; float:left;'>Caution</b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>" : "<b style='font-size: 16px; float:left;'>Tip </b><br /><div style='font-size:14px;'>" + message + "</div><br /><button onclick='deleteMarker(\"message" + messageId + "\");' style='float:left' class='message_delete' id= 'message" + messageId + "'>Delete</button>"
@@ -98,29 +106,6 @@
  function deleteMarker(id) {
      markers[id.split("message")[1]].setMap(null);
      delete markers[id];
- };
- 
- function save_tip_accident(message, feature) {
- 	if (feature.type.localeCompare("caution") == 0) {
- 		kind = 1;
- 	} else {
- 		kind = 0;
- 	}
- 	data_obj = {
- 		op: "save_ta",
- 		kind: kind,
- 		comment: message,
- 		x: feature.position.A,
- 		y: feature.position.k, 
- 		flagged: 0,
- 		};
- 		
- 	console.log(JSON.stringify(data_obj));
- 	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
-    	data : data_obj,
-    	type : 'POST',
-    	async: false
-  	}).responseText;
  };
 
  function initialize() {
@@ -256,18 +241,20 @@
 			    var index = e.currentTarget.id.split("route-")[1];
 			    for (route in displayRoutes) {
 				if (route != index) {
-				    console.log(route);
 				    displayRoutes[route].setMap(null);
 				}
 			    }
 			    var steps = curResult.routes[index].legs[0].steps;
+			    var route_key = "";
 			    $("#directions_list").empty();
 			    if (steps.length > 0) {
 				$("#directions_list").append("<ol id='list'></ol>");
 				for (i in steps) {
 				    $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
+				    route_key += steps[i].instructions;
 				}
 			    }
+			    last_route = [route_key, curResult.routes[index].summary, request.origin, request.destination, index];
 			    return false;
 			});
 		    }
@@ -328,6 +315,7 @@
          adding = "caution";
          toggleActive(this);
      });
+     
      $("#tip-button").click(function() {
          map.setOptions({
              draggableCursor: "url(popups/star-32.png) 16 30, default"
@@ -351,8 +339,6 @@
          for (var i = 0; i < lines.length; i++) {
              message += "<span style='float:left;'>" + lines[i] + "</span><br />";
          }
-         result = save_tip_accident(message, feature);
-         console.log(result);
          $("#popup").dialog('close');
          addStarCaution();
          $("#popup-textbox").val("");
@@ -404,8 +390,6 @@
          }
      }).addClass("criteria-slider");
      
-     populate_tips();
-     populate_accidents();
 
 		$('.dropdown-menu').click(function(e) {
 	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
@@ -413,8 +397,15 @@
      
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
-        $("#save-route-alert").show();
-	    $('#save-route-alert').delay(500).fadeOut(400);
+	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
+	    .done(function( data ) {
+		if (data != '{"error":""}') {
+		    console.log(data);
+		} else {
+		    $("#save-route-alert").show();
+		    $('#save-route-alert').delay(500).fadeOut(400);
+		}
+	});
      });
      
      $('#back-to-routes').click(function(e) {
@@ -440,6 +431,18 @@
          $("#containerfluid").hide();
          $("#saved-routes").hide();
          $("#rate-route").show();
+	 $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
+	    .done(function( data ) {
+		var json = JSON.parse(data);
+		if (json.error == "") {
+		    var rating = json.data;
+		    $("#safety_rating").raty({score: parseInt(rating.safety)});
+		    $("#efficiency_rating").raty({score: parseInt(rating.efficiency)});
+		    $("#scenery_rating").raty({score: parseInt(rating.scenery)});
+		} else {
+		    console.log("ERROR: " + json.error);
+		}
+	 });
          return false;
      });
      
@@ -454,11 +457,29 @@
      });
      
 	$("#route-save").click(function() {
-	    $("#save-rate-alert").show();
-	    $('#save-rate-alert').delay(500).fadeOut(400);
+	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+	    .done(function( data ) {
+		if (data != '{"error":""}') {
+		    console.log(data);
+		} else {
+		    $("#save-rate-alert").show();
+		    $('#save-rate-alert').delay(500).fadeOut(400);
+		}
+	    });
 	}); 
 	
-	$(".stars").raty(); 
+	$(".stars").raty({
+	    click: function(score, evt) {
+		$(this).attr('data-score');
+		if ($(this).attr('id') == "safety_rating") {
+		    safety_rating = score;
+		} else if ($(this).attr('id') == "efficiency_rating") {
+		    efficiency_rating = score;
+		} else {
+		    scenery_rating = score;
+		}
+	    }
+	}); 
 	
 	$("#selectable").selectable({ disabled: true });
 
