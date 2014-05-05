@@ -84,6 +84,21 @@
          icon: iconBase + 'star-32.png'
      }
  };
+ 
+ function refreshMarker(messageId, message) {
+    marker = markers[messageId]; 
+ 	content = "";
+     if (adding === "caution") {
+     	content += "<b style='font-size: 16px; float:left;'>Caution</b>";
+     } else {
+     	content += "<b style='font-size: 16px; float:left;'>Tip</b>";
+     }
+     content += "<br /><div style='font-size:14px;'>" + message + "</div><br />";
+     
+     marker.info = new google.maps.InfoWindow({
+         content: content,
+     });
+ }
 
  function addMarker(feature) {
      var marker = new google.maps.Marker({
@@ -127,8 +142,21 @@
  }
  
  function deleteMarker(id) {
-     markers[id.split("message")[1]].setMap(null);
+ 	m_id = id.split("message")[1];
+     markers[m_id].setMap(null);
      delete markers[id];
+     
+     data_obj = {
+ 		op: "delete_ta",
+ 		id: parseInt(m_id)
+ 		};
+     
+      return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+    	data : data_obj,
+    	type : 'POST',
+    	async: false
+  	}).responseText;
+
  };
  
  function save_tip_accident(message, feature) {
@@ -146,7 +174,6 @@
  		flagged: 0,
  		};
  		
- 	console.log(JSON.stringify(data_obj));
  	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
@@ -178,8 +205,19 @@
  };
  
   function flagMarker(id) {
-     markers[id.split("message")[1]].setMap(null);
-     delete markers[id];
+     m_id = id.split("message")[1];
+     
+     data_obj = {
+ 		op: "flag_ta",
+ 		id: parseInt(m_id)
+ 		};
+     
+      return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+    	data : data_obj,
+    	type : 'POST',
+    	async: false
+  	}).responseText;
+
  };
  
  
@@ -194,6 +232,7 @@
  	return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
     	data : data_obj,
     	type : 'POST',
+    	async: false,
   	}).responseText;
  };
 
@@ -455,6 +494,7 @@
      		
      		result = edit_tip_or_accident(message, messageId);
      		console.log(result);
+     		refreshMarker(messageId, message);
      		$("#popup").dialog('close');
      		$("#popup-textbox").val("");
 	         $("#report-button").removeClass("active");
