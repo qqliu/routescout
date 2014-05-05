@@ -247,7 +247,7 @@ function get_all_tas() {
 function flag_ta() {
   global $resp;
   
-  ensure_and_escape_params(array("owner", "id"));
+  ensure_and_escape_params(array("id"));
   if (has_error()) return;
   
   ensure_logged_in();
@@ -257,7 +257,7 @@ function flag_ta() {
   db_query("
     update tips_and_accidents
     set flagged=1
-    where user='{$_REQUEST["owner"]}' and id={$_REQUEST["id"]}
+    where id={$_REQUEST["id"]}
   ");
 }
 
