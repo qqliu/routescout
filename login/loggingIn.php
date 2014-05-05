@@ -44,7 +44,7 @@
         if($login_ok){ 
             unset($row['salt']); 
             unset($row['password']); 
-            $_SESSION['user'] = $row;  
+            $_SESSION['user'] = $row['username'];  
             print("Login Failed.");
             //echo "Login succeeded!!!!"
             //header("Location: secret.php"); 

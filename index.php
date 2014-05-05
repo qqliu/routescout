@@ -1,12 +1,3 @@
-
-<?php
-$path = $_SERVER['DOCUMENT_ROOT'];
-$append = "/login/initconfig.php";
-$path .= "/routescout/index.php";
-include_once($path);
-
-
-?>
 <?php
 
 
@@ -47,7 +38,7 @@ if (isset($_POST['loginform'])) {
     if($login_ok){
         unset($row['salt']);
         unset($row['password']);
-        $_SESSION['user'] = $row;
+        $_SESSION['user'] = $row['username'];
             //echo "Login succeeded!!!!"
             //header("Location: secret.php");
             //die("Redirecting to: secret.php");
@@ -258,7 +249,7 @@ else {
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
-      <li id="registerLogin"><a href="/routescout/login/logout.php">Logout</a></li>
+      <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
   <div id="center-this-navbar">
