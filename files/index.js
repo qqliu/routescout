@@ -555,9 +555,10 @@
 	         messageId += 1;
         }
      });
-     $('.filters:checkbox').click(function() {
-         if (!$(this).is(':checked')) {
-             var id = $(this).attr("value");
+     $('.filters').click(function() {
+         if (!$(this).hasClass('grayscale')) {
+            $(this).addClass('grayscale');
+             var id = $(this).attr("id");
              for (var i in markers) {
                  if (markers[i].type == id) {
                      markers[i].setVisible(false);
@@ -567,7 +568,8 @@
 		toggleLanes(false);
 	     }
          } else {
-             var id = $(this).attr("value");
+           $(this).removeClass('grayscale');
+             var id = $(this).attr("id");
              for (var i in markers) {
                  if (markers[i].type == id) {
                      markers[i].setVisible(true);

@@ -495,17 +495,16 @@ else {
                     Toggle Visibility:
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-
+                <div id="lanes" class="toggle-button filters">
+                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
+                <div id="star" class="toggle-button filters">
+                    <img class="toggle-img" src="popups/star-32.png">Tips
                 </div>
 
-                <div class="toggle-button">
-                    <img class="toggle-img" src="popups/caution.png">Accidents <input checked class="filters" type="checkbox" value="caution">
+                <div id="caution" class="toggle-button filters">
+                    <img class="toggle-img" src="popups/caution.png">Accidents
                 </div>
 
                 <div id="googleMap" style="width:700px;height:530px;">
