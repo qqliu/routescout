@@ -50,6 +50,7 @@
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
  var last_route = "";
+ var efficiency_rating = 0, scenery_rating = 0, safety_rating = 0;
  var c = 0;
 
  function toggleActive(button) {
@@ -470,12 +471,25 @@
      });
      
      $('#route-rate').click(function(e) {
-         e.preventDefault();
-         $("#navigation").hide();
-         $("#containerfluid").hide();
-         $("#saved-routes").hide();
-         $("#rate-route").show();
-         return false;
+	e.preventDefault();
+	$("#navigation").hide();
+	$("#containerfluid").hide();
+	$("#saved-routes").hide();
+	$("#rate-route").show();
+        $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
+ 	    .done(function( data ) {
+ 		var json = JSON.parse(data);
+ 		if (json.error == "") {
+ 		    var rating = json.data;
+		    if (rating != null) {
+			$("#safety_rating").raty({score: parseInt(rating.safety)});
+			$("#efficiency_rating").raty({score: parseInt(rating.efficiency)});
+			$("#scenery_rating").raty({score: parseInt(rating.scenery)});
+		    }
+ 		} else {
+ 		    console.log("ERROR: " + json.error);
+ 		}
+ 	 });
      });
      
      $('#savedroutes').click(function(e) {
@@ -489,11 +503,29 @@
      });
      
 	$("#route-save").click(function() {
-	    $("#save-rate-alert").show();
-	    $('#save-rate-alert').delay(500).fadeOut(400);
-	}); 
-	
-	$(".stars").raty(); 
+	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+ 	    .done(function( data ) {
+		if (data != '{"error":""}') {
+		    console.log(data);
+		} else {
+		    $("#save-rate-alert").show();
+		    $('#save-rate-alert').delay(500).fadeOut(400);
+		}
+	    })
+ 	});
+	    
+	$(".stars").raty({
+ 	    click: function(score, evt) {
+		$(this).attr('data-score');
+ 		if ($(this).attr('id') == "safety_rating") {
+ 		    safety_rating = score;
+ 		} else if ($(this).attr('id') == "efficiency_rating") {
+ 		    efficiency_rating = score;
+ 		} else {
+ 		    scenery_rating = score;
+ 		}
+ 	    }
+ 	});
 	
 	$("#selectable").selectable({ disabled: true });
 

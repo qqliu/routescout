@@ -1,8 +1,4 @@
-<?php
-header('Access-Control-Allow-Origin: *'); 
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Content-Type: application/json');
-?>
+<?php header('Access-Control-Allow-Origin: *'); ?>
 <?php
 
 /*
@@ -14,7 +10,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = False;
+$debug_pretend_single_logged_in_user = True;
 
 $resp = array(
   "error" => ""
@@ -121,18 +117,20 @@ function update_ratings() {
   $user = ensure_logged_in();
   if (has_error()) return;
   
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
+  
   if ($_REQUEST["safety"] === "0" && $_REQUEST["efficiency"] === "0" && $_REQUEST["scenery"] === "0") {
     //delete row
-    db_query("delete from ratings where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+    db_query("delete from ratings where user='$user' and route_key='{$hashed_route_key}'");
   } else {
     //insert row
     db_query(
       "insert into ratings
       (user, route_key, safety, efficiency, scenery)
-      values ('$user', '{$_REQUEST["route_key"]}', {$_REQUEST["safety"]}, {$_REQUEST["efficiency"]}, {$_REQUEST["scenery"]})
+      values ('$user', '{$hashed_route_key}', {$_REQUEST["safety"]}, {$_REQUEST["efficiency"]}, {$_REQUEST["scenery"]})
       on duplicate key update
       user='$user',
-      route_key='{$_REQUEST["route_key"]}',
+      route_key='{$hashed_route_key}',
       safety={$_REQUEST["safety"]},
       efficiency={$_REQUEST["efficiency"]},
       scenery={$_REQUEST["scenery"]}
@@ -157,7 +155,7 @@ function save_route() {
       values ('$user', '$hashed_route_key', '{$_REQUEST["name"]}', '{$_REQUEST["from_loc"]}', '{$_REQUEST["to_loc"]}', {$_REQUEST["route_index"]})
       on duplicate key update
       user='$user',
-      route_key='{$_REQUEST["route_key"]}',
+      route_key='{$hashed_route_key}',
       name='{$_REQUEST["name"]}',
       from_loc='{$_REQUEST["from_loc"]}',
       to_loc='{$_REQUEST["to_loc"]}',
@@ -173,9 +171,9 @@ function delete_saved_route() {
   
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
   //delete row
-  db_query("delete from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+  db_query("delete from routes where user='$user' and route_key='{$hashed_route_key}'");
 }
 
 function save_ta() {
@@ -294,7 +292,9 @@ function get_saved_route() {
   $user = ensure_logged_in();
   if (has_error()) return;
   
-  $result = db_query("select * from routes where user='$user' and route_key='{$_REQUEST["route_key"]}'");
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
+  
+  $result = db_query("select * from routes where user='$user' and route_key='{$hashed_route_key}'");
   if (has_error()) return;
   
   if ($result === True) { //when testing, db_query() returns true
@@ -312,11 +312,12 @@ function get_average_ratings() {
   //get average ratings for particular route
   
   $resp["data"] = array();
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
   
   foreach (array("safety", "efficiency", "scenery") as $rating_type) {
     $result = db_query("
       select AVG($rating_type) from ratings
-      where route_key='{$_REQUEST["route_key"]}' and $rating_type != 0
+      where route_key='{$hashed_route_key}' and $rating_type != 0
     ");
     if (has_error()) return;
     
@@ -326,6 +327,48 @@ function get_average_ratings() {
     $row = mysqli_fetch_assoc($result);
     $resp["data"][$rating_type] = $row;
   }
+}
+
+function get_all_ratings_user() {
+  global $resp;
+  
+  ensure_and_escape_params(array());
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //get rows for that user
+  $result = db_query("select * from ratings where user='$user'");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = array();
+  while($row = mysqli_fetch_assoc($result)) {
+    array_push($resp["data"], $row);
+  }
+}
+
+function get_ratings_route() {
+  global $resp;
+  
+  ensure_and_escape_params(array("route_key"));
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
+  
+  $result = db_query("select * from ratings where user='$user' and route_key='{$hashed_route_key}'");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = mysqli_fetch_assoc($result);
 }
 
 function main() {
@@ -355,6 +398,8 @@ function main() {
         case "get_saved_routes": get_saved_routes(); break;
         case "get_saved_route": get_saved_route(); break;
         case "get_average_ratings": get_average_ratings(); break;
+        case "get_all_ratings_user": get_all_ratings_user(); break;
+        case "get_ratings_route": get_ratings_route(); break;
         //get 3 ratings for user
         //case "": break;
         default:

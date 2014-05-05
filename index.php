@@ -398,37 +398,37 @@ else {
 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
                            <div class="row-fluid">
-                               <div class="span4"><h3>Safety:</h3></div>
-                               <div class="span4 offset3 ">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                             <div class="span4"><h3>Safety:</h3></div>
+                             <div class="span4 offset3 ">
+                                 <div class="stars" id = "safety_rating"></div>
+                             </div>
+                         </div>
 
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Efficiency</h3></div>
-                               <div class="span4 offset3">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Efficiency</h3></div>
+                             <div class="span4 offset3">
+                                 <div class="stars" id = "efficiency_rating"></div>
+                             </div>
+                         </div>
 
-                           <div class="row-fluid">
-                               <div class="span4"><h3>Scenery</h3></div>
-                               <div class="span4 offset2">
-                                   <div class="stars"></div>
-                               </div>
-                           </div>
-                       </div>
+                         <div class="row-fluid">
+                             <div class="span4"><h3>Scenery</h3></div>
+                             <div class="span4 offset2">
+                                 <div class="stars" id = "scenery_rating"></div>
+                             </div>
+                         </div>
+                     </div>
 
 
-                       <div id="bottom-buttons" class="row-fluid">
-                           <div id="route-find" style="text-align:center">
-                              <button id="route-save" type="button" class="btn btn-large">
-                                  Rate!</button>
-                                  <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-                              </div>
+                     <div id="bottom-buttons" class="row-fluid">
+                         <div id="route-find" style="text-align:center">
+                          <button id="route-save" type="button" class="btn btn-large">
+                              Rate!</button>
+                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
                           </div>
                       </div>
+                  </div>
 
                       <div id="saved-routes" style="display:none">
                           <center>
