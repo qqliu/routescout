@@ -305,17 +305,11 @@ else {
                     </div>
                 </div>
 
-<<<<<<< HEAD
+
                 <div class="row-fluid" id="bottom-window">
                     <div class="container well span11" id="second" style=
                     "display:none">
-=======
-            <div class="row-fluid" id="bottom-window">
-                <div class="container well span11" id="second" style=
-                "display:none">
 
-                <div id="inside">
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
 
                     <div id="inside">
 
@@ -381,7 +375,6 @@ else {
                     <div id="navigation" style="display:none">
                         
                         <div class="row-fluid" id="bottom-buttons">
-<<<<<<< HEAD
                             <div class="span1" class="go-back" style="padding: 10px;">
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
@@ -395,16 +388,6 @@ else {
                             <div class="span4 offset5" id="route-find" style="text-align:center">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
-=======
-                            <div id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
-                                <button class="btn btn-large" data-target="#saveModal" data-toggle="modal" id="savedButton">Save Route</button>
-                                <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                            </div>
-
-                            <div id="route-find" style="text-align:center">
-                                <button class="btn btn-large" id="route-rate" type="button">Rate this Route</a></button>
-                                </div>
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                             </div>
                         </div>
                             <h2 id="selectedRoute">Selected Route</h2>
@@ -428,11 +411,7 @@ else {
                          <div class="row-fluid">
                              <div class="span4"><h3>Safety:</h3></div>
                              <div class="span4 offset3 ">
-<<<<<<< HEAD
-                                 <div class="stars"></div>
-=======
                                  <div class="stars" id = "safety_rating"></div>
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                              </div>
                          </div>
 
@@ -440,22 +419,15 @@ else {
                          <div class="row-fluid">
                              <div class="span4"><h3>Efficiency</h3></div>
                              <div class="span4 offset3">
-<<<<<<< HEAD
-                                 <div class="stars"></div>
-=======
                                  <div class="stars" id = "efficiency_rating"></div>
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                              </div>
                          </div>
 
                          <div class="row-fluid">
                              <div class="span4"><h3>Scenery</h3></div>
                              <div class="span4 offset2">
-<<<<<<< HEAD
-                                 <div class="stars"></div>
-=======
+
                                  <div class="stars" id = "scenery_rating"></div>
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                              </div>
                          </div>
                      </div>
@@ -465,11 +437,8 @@ else {
                          <div id="route-find" style="text-align:center">
                           <button id="route-save" type="button" class="btn btn-large">
                               Rate!</button>
-<<<<<<< HEAD
-                              <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div> 
-=======
+
                               <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                           </div>
                       </div>
                   </div>
@@ -536,14 +505,9 @@ else {
 
                 <div class="toggle-button">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes <input checked class="filters" type="checkbox" value="lanes">
-<<<<<<< HEAD
 
                 </div>
 
-=======
-                </div>
-
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
                 <div class="toggle-button">
                     <img class="toggle-img" src="popups/star-32.png">Tips<input checked class="filters" type="checkbox" value="star">
                 </div>
@@ -558,12 +522,6 @@ else {
         </div>
     </div>
 </div>
-<<<<<<< HEAD
 </div>
-
-
-
-=======
->>>>>>> 7b73f76769744b7fc15490b6ab2e602635043e54
 </body>
 </html>
