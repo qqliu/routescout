@@ -450,28 +450,9 @@ else {
                             <h2><u>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
-                              <li class="ui-widget-content">Main St. To Bridge St.</li>
-                              <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
-                              <li class="ui-widget-content">Stevens Creek to First Ave</li>
-                              <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
                           </ol>
-
                       </center>
                   </div>
-
-                  <div id="saved-routes" style="display:none">
-                      <center>
-                        <br /><br />
-                        <h2><u>Saved Routes</h2>
-                        <br /><br />
-                        <ol id="selectable">
-                          <li class="ui-widget-content">Main St. To Bridge St.</li>
-                          <li class="ui-widget-content">Memorial Dr. to Stevens Creek</li>
-                          <li class="ui-widget-content">Stevens Creek to First Ave</li>
-                          <li class="ui-widget-content">Barnhart Ave to First Stevens Creek</li>
-                      </ol>
-
-                  </center>
               </div>
           </div>
       </div>

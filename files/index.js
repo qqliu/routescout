@@ -50,6 +50,23 @@
     	}
   });
  }
+ 
+ function displayRoute(i, result, color) {
+	rendererOptions = {
+	    draggable: false, 
+	    suppressMarkers: true,
+	    suppressBicyclingLayer: true,
+	    polylineOptions: { 
+		    strokeColor: color, 
+		    strokeWeight:  4, 
+		    strokeOpacity: 1.0
+	    }
+	};
+	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+	directionsDisplay.setDirections(result);
+	directionsDisplay.setRouteIndex(i);
+	return directionsDisplay;
+     }
 
  var colors = ["#D9853B", "#DF3D82", "#00FF00", "#003366", "#FF9900", "#993333", "#FFCC33", "#FFFF7A", "#CC6699", "#7D1935"];
  var displayRoutes = [];
@@ -88,8 +105,8 @@
  
  function refreshMarker(id) {
  	m_id = id.split("message")[1];
-    markers[m_id].setMap(null);
-     delete markers[id];
+        markers[m_id].setMap(null);
+        delete markers[id];
  	
  	addMarker(feature);
  	markers[m_id].info.open(map, markers[m_id]);
@@ -178,7 +195,7 @@
 
  
  function editMarker(id) {
-  	m_id = id.split("message")[1];
+       m_id = id.split("message")[1];
     marker = markers[m_id];
     messageId = m_id;
     
@@ -255,6 +272,94 @@
     	async: false
   	}).responseText;
  };
+ 
+ function get_saved_routes() {
+       $.post( "db.php", { op: "get_saved_routes" })
+ 	    .done(function(res) {
+                console.log(res);
+                $("#selectable").empty();
+		var saved_routes = res.data;
+                console.log(saved_routes);
+                for (i in saved_routes) {
+                     $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');    
+                }
+            
+                //add x button to each selectable
+                $("#selectable li").each(function() {
+                  $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
+                  $(this).addClass("route");
+                });
+                
+               $("#selectable").selectable({
+                     selecting: function(event, ui) {
+                            var request = {
+                                   origin: ui.selecting.attributes.from.nodeValue,
+                                   destination: ui.selecting.attributes.to.nodeValue,
+                                   travelMode: google.maps.TravelMode.BICYCLING,
+                                   provideRouteAlternatives: true
+                               };
+                               var directionsService = new google.maps.DirectionsService();
+                               directionsService.route(request, function(result, status) {
+                                   if (status == google.maps.DirectionsStatus.OK) {
+                                          $("#rate-route").hide();
+                                          $("#navigation").show();
+                                          $("#saved-routes").hide();
+                                          $("#containerfluid").hide();
+                                          $("#directions_list").empty();
+                                          var possibleRoutes = result.routes;
+                                          var curRoute = possibleRoutes[parseInt(ui.selecting.attributes.index.nodeValue)];
+                                          var steps = curRoute.legs[0].steps;
+                                          if (steps.length > 0) {
+                                              $("#directions_list").append("<ol id='list'></ol>");
+                                              for (i in steps) {
+                                                  $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
+                                              }
+                                          }
+                                          last_route = [ui.selecting.attributes.key.nodeValue, curRoute.summary, request.origin, request.destination, ui.selecting.attributes.index.nodeValue];
+                                          $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
+                                                 .done(function(res) {
+                                                     var scores = [];
+                                                     if (res.error == "") {
+                                                         var rating = res.data;
+                                                         if (rating != null) {
+                                                             scores = [parseInt(rating.safety), parseInt(rating.efficiency), parseInt(rating.scenery)];
+                                                         } else {
+                                                             scores = [0, 0, 0];
+                                                         }
+                                                         $("#safety_rating").raty({score: scores[0], click: function(score, evt) {
+                                                                 clickFnc(this, score, evt) }
+                                                          });
+                                                         $("#efficiency_rating").raty({score: scores[1], click: function(score, evt) {
+                                                                 clickFnc(this, score, evt) }
+                                                          });
+                                                         $("#scenery_rating").raty({score: scores[2], click: function(score, evt) {
+                                                                 clickFnc(this, score, evt) }
+                                                          });
+                                                         var clickFnc = function(obj, score, evt) {
+                                                                 if ($(obj).attr('id') == "safety_rating") {
+                                                                     safety_rating = score;
+                                                                 } else if ($(obj).attr('id') == "efficiency_rating") {
+                                                                     efficiency_rating = score;
+                                                                 } else {
+                                                                     scenery_rating = score;
+                                                                 }  
+                                                          };
+                                                     } else {
+                                                         console.log("ERROR: " + data.error);
+                                                     }
+                                              });
+                                          for (route in displayRoutes) {
+                                                 displayRoutes[route].setMap(null);
+                                          }
+                                          var newRoute = displayRoute(parseInt(ui.selecting.attributes.index.nodeValue), result, colors[c % colors.length]);
+                                          displayRoutes.push(newRoute);
+                                          newRoute.setMap(map);
+                                   }
+                            });
+			}
+               });
+	   });
+ }
 
  function initialize() {
     var myCenter, directionsService,
@@ -264,6 +369,8 @@
     ending = document.getElementById('destination_loc');
     autocomplete_starting = new google.maps.places.Autocomplete(starting);
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
+    
+    get_saved_routes();
     
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
@@ -449,23 +556,6 @@
          });
      }
      
-     function displayRoute(i, result, color) {
-	rendererOptions = {
-	    draggable: false, 
-	    suppressMarkers: true,
-	    suppressBicyclingLayer: true,
-	    polylineOptions: { 
-		    strokeColor: color, 
-		    strokeWeight:  4, 
-		    strokeOpacity: 1.0
-	    }
-	};
-	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-	directionsDisplay.setDirections(result);
-	directionsDisplay.setRouteIndex(i);
-	return directionsDisplay;
-     }
-     
     function toggleLanes(value) {
 	if (value) {
 	    bikeLayer.setMap(map); 
@@ -522,7 +612,6 @@
      		m = $('#popup-textbox').val();
      		message = edit_tip_or_accident(m, messageId);
      		str_id = 'message' + messageId;
-     		console.log(str_id);
      		refreshMarker(str_id);
      		
      		$("#popup").dialog('close');
@@ -650,14 +739,6 @@
 		}
 	   });
  	});
-	
-	$("#selectable").selectable({ disabled: true });
-
-    //add x button to each selectable
-    $("#selectable li").each(function() {
-      $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
-      $(this).addClass("route");
-    });
     
     //add x button handler
     $(".delete-button").click(function() {
