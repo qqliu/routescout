@@ -329,6 +329,48 @@ function get_average_ratings() {
   }
 }
 
+function get_all_ratings_user() {
+  global $resp;
+  
+  ensure_and_escape_params(array());
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  //get rows for that user
+  $result = db_query("select * from ratings where user='$user'");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = array();
+  while($row = mysqli_fetch_assoc($result)) {
+    array_push($resp["data"], $row);
+  }
+}
+
+function get_ratings_route() {
+  global $resp;
+  
+  ensure_and_escape_params(array("route_key"));
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
+  
+  $result = db_query("select * from ratings where user='$user' and route_key='{$hashed_route_key}'");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = mysqli_fetch_assoc($result);
+}
+
 function main() {
   global $debug_force_verbose;
   if ($debug_force_verbose) {
@@ -356,6 +398,8 @@ function main() {
         case "get_saved_routes": get_saved_routes(); break;
         case "get_saved_route": get_saved_route(); break;
         case "get_average_ratings": get_average_ratings(); break;
+        case "get_all_ratings_user": get_all_ratings_user(); break;
+        case "get_ratings_route": get_ratings_route(); break;
         //get 3 ratings for user
         //case "": break;
         default:
