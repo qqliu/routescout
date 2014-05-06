@@ -309,8 +309,8 @@ else {
                             <br>
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
-                           <div id="noRouteFound" style="width:320px" class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                           <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
+        
         Sorry! No routes were found. Please try again.
         </div>
 
