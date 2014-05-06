@@ -490,17 +490,31 @@ function ifCorrect() {
                   </div>
 
                       <div id="saved-routes" style="display:none">
-                         <div class = "go-back" style="padding: 10px;">
-                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
-                         </div>
-                            <center>
-                            <br /><br />
-                            <h2>Saved Routes</h2>
-                            <br /><br />
-                            <ol id="selectable">
-                          </ol>
-                      </center>
-                  </div>
+                       <div class="row-fluid" id="bottom-buttons">
+                            
+                            <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 140px;margin-top:10px;">
+                                <button class="btn btn-large" id="route-rate" type="button">Saved Routes </a></button>
+                                </div>
+            
+
+                            <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 100px;margin-top:10px;">
+                                <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
+                                </div>
+                            <div class="span3 offset3" id="route-rate-button" style="text-align:center; width: 120px;margin-top:10px;">
+                                <button class="btn btn-large" id="route-rate" type="button">
+                                    Comments</a></button>
+                                </div>
+
+                        </div>
+                    <center>
+                        <br /><br />
+                        <!--<h2>Saved Routes</h2>-->
+                        
+                      <br /><br />
+                      <ol id="selectable">
+                      </ol>
+                  </center>
+              </div>
               </div>
           </div>
       </div>
