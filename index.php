@@ -427,12 +427,13 @@ function ifCorrect() {
                                 data-toggle="modal" id="savedButton">Save
                                 Route</button>
                             <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                            <div class='save-error' id="save-route-error" style="display:none;">Error While Saving</div>
+                            <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save Route</div>
                             </div>
 
                             <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
+                                    <div class='save-error' id="save-newrate-error" style="display:none;">Please Login to Rate Route</div>
                             </div>
                         </div>
                             <h2 id="selectedRoute">Selected Route</h2>
@@ -451,7 +452,7 @@ function ifCorrect() {
                         </div>
 
                         <h2 style="text-align:center">Rate this Route</h2>
-
+ 
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
                          <div class="row-fluid">
                              <div class="span4"><h3>Safety:</h3></div>

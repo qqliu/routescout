@@ -773,11 +773,21 @@ $("#route").click(function(e) {
      });
 
      $('#route-rate').click(function(e) {
-	e.preventDefault();
-	$("#navigation").hide();
-	$("#containerfluid").hide();
-	$("#saved-routes").hide();
-	$("#rate-route").show();
+    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+        .done(function( data ) {
+        if (data.error != "") {
+            $("#save-newrate-error").show();
+            $('#save-newrate-error').delay(500).fadeOut(400);
+        }
+        else {
+    e.preventDefault();
+    $("#navigation").hide();
+    $("#containerfluid").hide();
+    $("#saved-routes").hide();
+    $("#rate-route").show();        
+        } 
+       });
+	
      });
 
      $('#savedroutes').click(function(e) {
@@ -802,6 +812,19 @@ $("#route").click(function(e) {
 		}
 	   });
  	});
+
+    $("#route-save").click(function() {
+        $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+        .done(function( data ) {
+        if (data.error != "") {
+            $("#save-rate-error").show();
+            $('#save-rate-error').delay(500).fadeOut(400);
+        } else {
+            $("#save-rate-alert").show();
+            $('#save-rate-alert').delay(500).fadeOut(400);
+        }
+       });
+    });
 
     //add x button handler
     $(".delete-button").click(function() {
