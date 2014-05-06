@@ -719,7 +719,9 @@
      $("#savedButton").click(function() {
 	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
 	    .done(function( data ) {
-		if (data != '{"error":""}') {
+		if (data.error != "") {
+			$("#save-route-error").show();
+		    $('#save-route-error').delay(500).fadeOut(400);
 		} else {
 		    $("#save-route-alert").show();
 		    $('#save-route-alert').delay(500).fadeOut(400);
@@ -766,7 +768,8 @@
 	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
  	    .done(function( data ) {
 		if (data.error != "") {
-                     console.log("ERROR: " + data.error);
+            $("#save-rate-error").show();
+		    $('#save-rate-error').delay(500).fadeOut(400);
 		} else {
 		    $("#save-rate-alert").show();
 		    $('#save-rate-alert').delay(500).fadeOut(400);

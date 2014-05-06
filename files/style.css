@@ -77,7 +77,7 @@ text-align:center;
 
 #containerfluid {
 	position: relative;
-	width: 360px;
+	width: 340px;
 }
 
 .logout-saved {
@@ -203,6 +203,7 @@ h1 {
     margin-top: 0;
     margin-left: 0px;
     margin-right: 0px;
+    min-height: 70px;
 }
 
 body {
@@ -313,7 +314,9 @@ a:hover {
 	color: green;
 }
 
-
+.save-error {
+	color: red;
+}
 
 #routes {
 	margin-top: 0px;

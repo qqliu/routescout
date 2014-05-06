@@ -370,14 +370,15 @@ else {
                             <div class="span1" class="go-back" style="padding: 10px;">
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
-                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
+                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
                                 Route!</button>
                             <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                            <div class='save-error' id="save-route-error" style="display:none;">Error While Saving</div>
                             </div>
 
-                            <div class="span4 offset5" id="route-find" style="text-align:center">
+                            <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
                             </div>
@@ -431,6 +432,7 @@ else {
                               Rate!</button>
 
                               <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
+                              <div class='save-error' id="save-rate-error" style="display:none;">Error While Saving</div>
                           </div>
                       </div>
                   </div>
