@@ -1,9 +1,70 @@
 <?php
 
+function reloadWithMsg($type) {
+  header('HTTP/1.1 303 See Other');
+  header("Location: ?msgtype=$type");
+}
 
-require("./login/initconfig.php");
-$submitted_username = '';
-if (isset($_POST['loginform'])) {
+function printMsg($type) {
+  switch ($type) {
+    case 1:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        The username or password you entered is incorrect.
+        </div>';
+      break;
+    case 2:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please fill in all the fields.
+        </div>';   
+      break;
+    case 3:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>';
+      break;
+    case 4:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This username is already in use.
+        </div>';
+      break;
+    case 5:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This email address is already registered.
+        </div>';
+      break;
+    case 6:
+      echo '<div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
+        </div>';
+      break;
+    case 7:
+      break;
+    case 8:
+      break;
+    case 9:
+      break;
+    default:
+      break;
+  }
+}
+
+if (isset($_GET['msgtype'])) {
+
+  printMsg($_GET['msgtype']);
+  
+} else {
+
+  require("./login/initconfig.php");
+
+  $submitted_username = '';
+
+  if (isset($_POST['loginform'])) {
     $query = "
     SELECT
     username,
@@ -14,155 +75,129 @@ if (isset($_POST['loginform'])) {
     WHERE
     username = :username
     ";
+    
     $query_params = array(
-        ':username' => $_POST['username']
-        );
+      ':username' => $_POST['username']
+     );
 
     try{
-        $stmt = $db->prepare($query);
-        $result = $stmt->execute($query_params);
+      $stmt = $db->prepare($query);
+      $result = $stmt->execute($query_params);
+    } catch(PDOException $ex){
+      die("Failed to run query: " . $ex->getMessage());
     }
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+    
     $login_ok = false;
     $row = $stmt->fetch();
     if($row){
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
-        for($round = 0; $round < 65536; $round++){
-            $check_password = hash('sha256', $check_password . $row['salt']);
-        }
-        if($check_password === $row['password']){
-            $login_ok = true;
-        }
+      $check_password = hash('sha256', $_POST['password'] . $row['salt']);
+      for($round = 0; $round < 65536; $round++){
+        $check_password = hash('sha256', $check_password . $row['salt']);
+      }
+      if($check_password === $row['password']){
+        $login_ok = true;
+      }
     }
 
     if($login_ok){
-        unset($row['salt']);
-        unset($row['password']);
-        $_SESSION['user'] = $row['username'];
-            //echo "Login succeeded!!!!"
-            //header("Location: secret.php");
-            //die("Redirecting to: secret.php");
+      unset($row['salt']);
+      unset($row['password']);
+      $_SESSION['user'] = $row['username'];
+    } else {
+      reloadWithMsg(1);
+      $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
     }
-    else{
-        echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        The username or password you entered is incorrect.
-        </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
-    }
-}
-else if (isset($_POST['registerform'])) {
+  } else if (isset($_POST['registerform'])) {
     // Ensure that the user fills out fields
     if(empty($_POST['username']) or empty($_POST['password']) or empty($_POST['email']) ){
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please fill in all the fields.
-        </div>';   
-    }
-    else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-        { echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a valid email address.
-        </div>'; }
-   
-    else {
-        // Check if the username is already taken
-    $query = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    username = :username
-    ";
-    $query2 = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    email = :email
-    ";
-    $query_params2 = array(
+      reloadWithMsg(2);
+    } else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      reloadWithMsg(3);
+    } else {
+      // Check if the username is already taken
+      $query = "
+        SELECT
+        1
+        FROM registerUsers
+        WHERE
+        username = :username
+        ";
+      $query2 = "
+        SELECT
+        1
+        FROM registerUsers
+        WHERE
+        email = :email
+        ";
+      $query_params2 = array(
         ':email' => $_POST['email']
-        );
-    $query_params = array( ':username' => $_POST['username'] );
-    try {
+      );
+      $query_params = array( ':username' => $_POST['username'] );
+      
+      try {
         $stmt = $db->prepare($query);
         $result = $stmt->execute($query_params);
-    }
-    catch(PDOException $ex){ }
-    try {
+      } catch(PDOException $ex) { }
+      try {
         $stmt2 = $db->prepare($query2);
         $result2 = $stmt->execute($query_params2);
-    }
-    catch(PDOException $ex){ }
-    $row = $stmt->fetch();
-    $row2 = $stmt2->fetch();
-        if($row){ echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This username is already in use.
-        </div>'; }
-    
-        else if($row2) {
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This email address is already registered.
-        </div>'; }
-    
-    else{
-        echo'<div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
-        </div>';
-    
+      } catch(PDOException $ex) { }
+      
+      $row = $stmt->fetch();
+      $row2 = $stmt2->fetch();
+      
+      if($row){
+        reloadWithMsg(4);
+      } else if($row2) {
+        reloadWithMsg(5);
+      } else{
+        reloadWithMsg(6);
 
         // Add row to database
-    $query = "
-    INSERT INTO registerUsers (
-        username,
-        password,
-        salt,
-        email
-        ) VALUES (
-        :username,
-        :password,
-        :salt,
-        :email
-        )
-";
+        $query = "
+        INSERT INTO registerUsers (
+          username,
+          password,
+          salt,
+          email
+          ) VALUES (
+          :username,
+          :password,
+          :salt,
+          :email
+          )
+        ";
 
         // Security measures
-$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-$password = hash('sha256', $_POST['password'] . $salt);
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
-    $query_params = array(
-        ':username' => $_POST['username'],
-        ':password' => $password,
-        ':salt' => $salt,
-        ':email' => $_POST['email']
-        );
-try {
-    $stmt = $db->prepare($query);
-    $result = $stmt->execute($query_params);
-}
-catch(PDOException $ex){  }
-
-}
-}
+        $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+        $password = hash('sha256', $_POST['password'] . $salt);
+        
+        for($round = 0; $round < 65536; $round++){
+          $password = hash('sha256', $password . $salt);
+        }
+        
+        $query_params = array(
+          ':username' => $_POST['username'],
+          ':password' => $password,
+          ':salt' => $salt,
+          ':email' => $_POST['email']
+          );
+        try {
+          $stmt = $db->prepare($query);
+          $result = $stmt->execute($query_params);
+        } catch(PDOException $ex){ 
+        }
+      }
+    }
+  }
 }
 
 function ifCorrect() {
-  //print "logging in with email=$email pass=$password";
-
-  if(isset($_SESSION['user']))
-  {
-    return true;
+  return isset($_SESSION['user']);
 }
-else {
-	return false;}
-}
-
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
