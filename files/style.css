@@ -40,9 +40,10 @@ text-align:center;
 }
 
 #overall{
-
-    margin-left: 9%;
-    margin-right: 9%;
+	display: block;
+	width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 #content {
     position: relative;
@@ -77,7 +78,7 @@ text-align:center;
 
 #containerfluid {
 	position: relative;
-	width: 360px;
+	width: 340px;
 }
 
 .logout-saved {
@@ -174,7 +175,7 @@ text-align:center;
 
 .toggle-button {
     display: inline;
-    margin-left: 13px;
+    margin-left: 24px;
 }
 
 .toggle-img {
@@ -209,6 +210,7 @@ h1 {
     margin-top: 0;
     margin-left: 0px;
     margin-right: 0px;
+    min-height: 70px;
 }
 
 body {
@@ -319,7 +321,9 @@ a:hover {
 	color: green;
 }
 
-
+.save-error {
+	color: red;
+}
 
 #routes {
 	margin-top: 0px;

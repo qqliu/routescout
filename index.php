@@ -265,7 +265,7 @@ function ifCorrect() {
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
-                     
+
                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
                     "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
@@ -311,7 +311,7 @@ function ifCorrect() {
 
 <div id="overall">
     <div id="content">
-        <div class="container-fluid span15">
+        <div class="container-fluid span15" style="margin: 0px;padding-left:0px;padding-right:0px;">
             <div class="row-fluid">
                 <div class="container-fluid span15">
                     <div class="row-fluid">
@@ -355,6 +355,11 @@ function ifCorrect() {
                         <div class="container-fluid" id="containerfluid">
                             <br>
                             <h2>Possible Routes</h2><br>
+                            <!--<div id="noRouteFound" style="width:320px"></div>-->
+                           <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
+
+        Sorry! No routes were found. Please try again.
+        </div>
 
                             <div id="routes"></div><br>
 
@@ -363,7 +368,7 @@ function ifCorrect() {
                             <table class="test">
                                 <tr>
                                     <td>Overall Safety </td>
-                                    
+                                    <td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -372,7 +377,7 @@ function ifCorrect() {
 
                                 <tr>
                                     <td>Fewest Accidents </td>
-
+									<td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -381,7 +386,7 @@ function ifCorrect() {
 
                                 <tr>
                                     <td>Bike Lanes</td>
-
+									<td><strong>-</strong></td>
                                     <td>
                                        <div class="criteria-slider" id="slider"></div>
                                    </td>
@@ -390,7 +395,7 @@ function ifCorrect() {
 
                                <tr>
                                 <td>Efficiency</td>
-
+								<td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div></td>
                                 </td>
@@ -400,7 +405,7 @@ function ifCorrect() {
 
                             <tr>
                                 <td>Scenery </td>
-
+								<td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
@@ -412,19 +417,20 @@ function ifCorrect() {
 
 
                     <div id="navigation" style="display:none">
-                        
+
                         <div class="row-fluid" id="bottom-buttons">
                             <div class="span1" class="go-back" style="padding: 10px;">
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
-                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:20px; width: 150px;">
+                            <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
-                                Route!</button>
+                                Route</button>
                             <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                            <div class='save-error' id="save-route-error" style="display:none;">Error While Saving</div>
                             </div>
 
-                            <div class="span4 offset5" id="route-find" style="text-align:center">
+                            <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
                             </div>
@@ -478,14 +484,18 @@ function ifCorrect() {
                               Rate!</button>
 
                               <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
+                              <div class='save-error' id="save-rate-error" style="display:none;">Error While Saving</div>
                           </div>
                       </div>
                   </div>
 
                       <div id="saved-routes" style="display:none">
-                          <center>
+                         <div class = "go-back" style="padding: 10px;">
+                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
+                         </div>
+                            <center>
                             <br /><br />
-                            <h2><u>Saved Routes</h2>
+                            <h2>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
                           </ol>
@@ -507,11 +517,11 @@ function ifCorrect() {
 
     <p><a class="btn btn-success btn-large" id=
         "popup-submit">Submit</a></p><br>
-    </div>
+</div>
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
-            <div id="togglefeatures">
+            <div id="togglefeatures" style="margin-top:30px;">
             	<div id="green-buttons">
                     <a class="popup-button btn btn-success btn-large" id=
                     "report-button">Report Accident</a> <a class=
