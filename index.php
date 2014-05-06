@@ -264,7 +264,7 @@ else {
 
 <div id="overall">
     <div id="content">
-        <div class="container-fluid span15">
+        <div class="container-fluid span15" style="margin: 0px;padding-left:0px;padding-right:0px;">
             <div class="row-fluid">
                 <div class="container-fluid span15">
                     <div class="row-fluid">
@@ -445,7 +445,7 @@ else {
                       <div id="saved-routes" style="display:none">
                           <center>
                             <br /><br />
-                            <h2><u>Saved Routes</h2>
+                            <h2>Saved Routes</h2>
                             <br /><br />
                             <ol id="selectable">
                           </ol>
@@ -467,11 +467,11 @@ else {
 
     <p><a class="btn btn-success btn-large" id=
         "popup-submit">Submit</a></p><br>
-    </div>
+</div>
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
-            <div id="togglefeatures">
+            <div id="togglefeatures" style="margin-top:30px;">
             	<div id="green-buttons">
                     <a class="popup-button btn btn-success btn-large" id=
                     "report-button">Report Accident</a> <a class=

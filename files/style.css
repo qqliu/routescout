@@ -40,9 +40,10 @@ text-align:center;
 }
 
 #overall{
-
-    margin-left: 4%;
-    margin-right: 4%;
+	display: block;
+	width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 #content {
     position: relative;
@@ -168,7 +169,7 @@ text-align:center;
 
 .toggle-button {
     display: inline;
-    margin-left: 13px;
+    margin-left: 24px;
 }
 
 .toggle-img {
