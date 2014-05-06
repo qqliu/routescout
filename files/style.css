@@ -352,6 +352,10 @@ table.test td {
     width: auto;
 }
 
+#noRouteFound {
+    display:none;
+}
+
 table.test {
   border-collapse: separate;
   border-spacing: 1px;

@@ -580,7 +580,7 @@ for (route in displayRoutes) {
 
 
   $("#routes").hide();
-    //$("#noRouteFound").show();
+    $("#noRouteFound").show();
               //$("#noroute").show();
    //alert("coulxdn't get directions:" + status);
            //$("#noRouteFound").append('<div id="noroute" class="alert alert-danger alert-dismissable"></div>');
