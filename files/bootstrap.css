@@ -1558,10 +1558,10 @@ table .span12 {
   text-indent: -99999px;
   *text-indent: 0;
   vertical-align: top;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #000000;
-  opacity: 0.3;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #000000;
+  opacity: 1;
   filter: alpha(opacity=30);
   content: "\2193";
 }
@@ -2660,10 +2660,10 @@ button.btn.small, input[type="submit"].btn.small {
 }
 .navbar .divider-vertical {
   height: 40px;
-  width: 1px;
   margin: 0 9px;
   overflow: hidden;
-  background-color: #222222;
+  background-color: #857D7D;
+  width: 2px;
   border-right: 1px solid #333333;
 }
 .navbar .nav.pull-right {

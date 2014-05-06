@@ -1,9 +1,70 @@
 <?php
 
+function reloadWithMsg($type) {
+  header('HTTP/1.1 303 See Other');
+  header("Location: ?msgtype=$type");
+}
+
+function printMsg($type) {
+  switch ($type) {
+    case 1:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        The username or password you entered is incorrect.
+        </div>';
+      break;
+    case 2:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please fill in all the fields.
+        </div>';   
+      break;
+    case 3:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Please enter a valid email address.
+        </div>';
+      break;
+    case 4:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This username is already in use.
+        </div>';
+      break;
+    case 5:
+      echo '<div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        This email address is already registered.
+        </div>';
+      break;
+    case 6:
+      echo '<div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
+        </div>';
+      break;
+    case 7:
+      break;
+    case 8:
+      break;
+    case 9:
+      break;
+    default:
+      break;
+  }
+}
 
 require("./login/initconfig.php");
-$submitted_username = '';
-if (isset($_POST['loginform'])) {
+
+if (isset($_GET['msgtype'])) {
+
+  //this is a GET 303 redirect after register/login was submitted
+  
+} else {
+
+  $submitted_username = '';
+
+  if (isset($_POST['loginform'])) {
     $query = "
     SELECT
     username,
@@ -14,155 +75,132 @@ if (isset($_POST['loginform'])) {
     WHERE
     username = :username
     ";
+    
     $query_params = array(
-        ':username' => $_POST['username']
-        );
+      ':username' => $_POST['username']
+     );
 
     try{
-        $stmt = $db->prepare($query);
-        $result = $stmt->execute($query_params);
+      $stmt = $db->prepare($query);
+      $result = $stmt->execute($query_params);
+    } catch(PDOException $ex){
+      die("Failed to run query: " . $ex->getMessage());
     }
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
+    
     $login_ok = false;
     $row = $stmt->fetch();
     if($row){
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
-        for($round = 0; $round < 65536; $round++){
-            $check_password = hash('sha256', $check_password . $row['salt']);
-        }
-        if($check_password === $row['password']){
-            $login_ok = true;
-        }
+      $check_password = hash('sha256', $_POST['password'] . $row['salt']);
+      for($round = 0; $round < 65536; $round++){
+        $check_password = hash('sha256', $check_password . $row['salt']);
+      }
+      if($check_password === $row['password']){
+        $login_ok = true;
+      }
     }
 
     if($login_ok){
-        unset($row['salt']);
-        unset($row['password']);
-        $_SESSION['user'] = $row['username'];
-            //echo "Login succeeded!!!!"
-            //header("Location: secret.php");
-            //die("Redirecting to: secret.php");
+      unset($row['salt']);
+      unset($row['password']);
+      $_SESSION['user'] = $row['username'];
+      
+      header("Location: ?loggedin");
+    } else {
+      reloadWithMsg(1);
+      $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
     }
-    else{
-        echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        The username or password you entered is incorrect.
-        </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
-    }
-}
-else if (isset($_POST['registerform'])) {
+  } else if (isset($_POST['registerform'])) {
     // Ensure that the user fills out fields
     if(empty($_POST['username']) or empty($_POST['password']) or empty($_POST['email']) ){
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please fill in all the fields.
-        </div>';   
-    }
-    else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-        { echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a valid email address.
-        </div>'; }
-   
-    else {
-        // Check if the username is already taken
-    $query = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    username = :username
-    ";
-    $query2 = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    email = :email
-    ";
-    $query_params2 = array(
+      reloadWithMsg(2);
+    } else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      reloadWithMsg(3);
+    } else {
+      // Check if the username is already taken
+      $query = "
+        SELECT
+        1
+        FROM registerUsers
+        WHERE
+        username = :username
+        ";
+      $query2 = "
+        SELECT
+        1
+        FROM registerUsers
+        WHERE
+        email = :email
+        ";
+      $query_params2 = array(
         ':email' => $_POST['email']
-        );
-    $query_params = array( ':username' => $_POST['username'] );
-    try {
+      );
+      $query_params = array( ':username' => $_POST['username'] );
+      
+      try {
         $stmt = $db->prepare($query);
         $result = $stmt->execute($query_params);
-    }
-    catch(PDOException $ex){ }
-    try {
+      } catch(PDOException $ex) { }
+      try {
         $stmt2 = $db->prepare($query2);
         $result2 = $stmt->execute($query_params2);
-    }
-    catch(PDOException $ex){ }
-    $row = $stmt->fetch();
-    $row2 = $stmt2->fetch();
-        if($row){ echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This username is already in use.
-        </div>'; }
-    
-        else if($row2) {
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This email address is already registered.
-        </div>'; }
-    
-    else{
-        echo'<div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
-        </div>';
-    
-
+      } catch(PDOException $ex) { }
+      
+      $row = $stmt->fetch();
+      $row2 = $stmt2->fetch();
+      
+      if($row){
+        reloadWithMsg(4);
+      } else if($row2) {
+        reloadWithMsg(5);
+      } else{
         // Add row to database
-    $query = "
-    INSERT INTO registerUsers (
-        username,
-        password,
-        salt,
-        email
-        ) VALUES (
-        :username,
-        :password,
-        :salt,
-        :email
-        )
-";
+        $query = "
+        INSERT INTO registerUsers (
+          username,
+          password,
+          salt,
+          email
+          ) VALUES (
+          :username,
+          :password,
+          :salt,
+          :email
+          )
+        ";
 
         // Security measures
-$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-$password = hash('sha256', $_POST['password'] . $salt);
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
-    $query_params = array(
-        ':username' => $_POST['username'],
-        ':password' => $password,
-        ':salt' => $salt,
-        ':email' => $_POST['email']
-        );
-try {
-    $stmt = $db->prepare($query);
-    $result = $stmt->execute($query_params);
-}
-catch(PDOException $ex){  }
-
-}
-}
+        $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+        $password = hash('sha256', $_POST['password'] . $salt);
+        
+        for($round = 0; $round < 65536; $round++){
+          $password = hash('sha256', $password . $salt);
+        }
+        
+        $query_params = array(
+          ':username' => $_POST['username'],
+          ':password' => $password,
+          ':salt' => $salt,
+          ':email' => $_POST['email']
+          );
+        try {
+          $stmt = $db->prepare($query);
+          $result = $stmt->execute($query_params);
+        } catch(PDOException $ex){ 
+        }
+        
+        $_SESSION['user'] = $_POST['username'];
+        reloadWithMsg(6);
+      }
+    }
+  }
 }
 
 function ifCorrect() {
-  //print "logging in with email=$email pass=$password";
-
-  if(isset($_SESSION['user']))
-  {
-    return true;
+  return isset($_SESSION['user']);
 }
-else {
-	return false;}
-}
-
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -202,6 +240,13 @@ else {
 </head>
 
 <body>
+<?php
+
+  if (isset($_GET['msgtype'])) {
+    printMsg($_GET['msgtype']);
+  }
+
+?>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
 
@@ -215,12 +260,12 @@ else {
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form id="registerform" name="registerform" method="post" accept-charset="UTF-8">
+                  <form id="registerform" name="registerform" method="post" action="index.php" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
-                     
+
                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
                     "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
@@ -229,12 +274,13 @@ else {
               </div>
           </li>
 
+          <li class="divider-vertical"></li>
 
           <li class="dropdown">
 
             <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8">
+                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8" action="index.php">
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
@@ -249,6 +295,7 @@ else {
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
+      <li class="divider-vertical"></li>
       <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
@@ -310,7 +357,7 @@ else {
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
                            <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
-        
+
         Sorry! No routes were found. Please try again.
         </div>
 
@@ -370,7 +417,7 @@ else {
 
 
                     <div id="navigation" style="display:none">
-                        
+
                         <div class="row-fluid" id="bottom-buttons">
                             <div class="span1" class="go-back" style="padding: 10px;">
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
@@ -443,7 +490,10 @@ else {
                   </div>
 
                       <div id="saved-routes" style="display:none">
-                          <center>
+                         <div class = "go-back" style="padding: 10px;">
+                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
+                         </div>
+                            <center>
                             <br /><br />
                             <h2>Saved Routes</h2>
                             <br /><br />

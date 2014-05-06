@@ -114,17 +114,23 @@ text-align:center;
 }
 
 #registerLogin {
-    position: relative;
-    margin-left:30px;
-    margin-bottom:40px;
-    top: 12px;
-    font-size: 25px;
-    margin: 0;
-    margin-top: -10px;
-    font-weight: 700;
-    text-rendering: optimizelegibility;
-    color: #fff;
-    font-family: 'Lily Script One', cursive;
+  position: relative;
+  margin-left: 30px;
+  margin-bottom: 40px;
+  top: 0;
+  font-size: 25px;
+  margin: 0;
+  margin-top: 0;
+  font-weight: 700;
+  text-rendering: optimizelegibility;
+  color: #fff;
+  font-family: 'Lily Script One', cursive;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#registerLogin:hover {
+  background-color: darkgray;
 }
 
 #center-this-navbar {
@@ -422,4 +428,9 @@ table.test {
 
 .filters:hover {
 	cursor: pointer;
+}
+
+.thicker-divider {
+	background-color: #857D7D;	!important;
+	width: 3px;	!important;
 }
