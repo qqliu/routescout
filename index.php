@@ -321,7 +321,7 @@ else {
                             <table class="test">
                                 <tr>
                                     <td>Overall Safety </td>
-                                    
+                                    <td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -378,7 +378,7 @@ else {
                             <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
-                                Route!</button>
+                                Route</button>
                             <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
                             <div class='save-error' id="save-route-error" style="display:none;">Error While Saving</div>
                             </div>
