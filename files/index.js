@@ -482,12 +482,12 @@ function initialize() {
               //$("#noroute").hide();
               $("#routes").show();
               $("#routes").append("<ol></ol>");
-              
+
               $("#noRouteFound").css("display","none");
               $("#noRouteFound").css("visibility","hidden");
-                  
 
-              
+
+
               for (i in possibleRoutes) {
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
@@ -502,6 +502,7 @@ function initialize() {
                  $("#rate-route").hide();
                  $("#saved-routes").hide();
                  $("#navigation").show();
+                 savedRouteView = false;
                  var index = e.currentTarget.id.split("route-")[1];
                  for (route in displayRoutes) {
                     if (route != index) {
@@ -731,12 +732,18 @@ $("#route").click(function(e) {
      });
 
      $('#back-to-routes').click(function(e) {
-	e.preventDefault();
-	$("#navigation").hide();
-	$("#containerfluid").show();
-	for (route in displayRoutes) {
-	    displayRoutes[route].setMap(map);
-	}
+     if (!savedRouteView) {
+    	e.preventDefault();
+	    $("#navigation").hide();
+	    $("#containerfluid").show();
+	    for (route in displayRoutes) {
+	        displayRoutes[route].setMap(map);
+	    }
+     } else {
+        $("#containerfluid").hide();
+        $("#saved-routes").show();
+        $("#navigation").hide();
+     }
         return false;
      });
 
