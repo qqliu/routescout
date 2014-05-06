@@ -107,9 +107,21 @@ var icons = {
 
 function refreshMarker(id) {
   m_id = id.split("message")[1];
-  markers[m_id].setMap(null);
-  delete markers[id];
 
+   marker = markers[m_id];
+     
+   adding = marker.type;
+    
+	feature = {
+		user: marker.user,
+		position: marker.position,
+		type: marker.type,
+	};
+	console.log(feature);
+	
+    marker.setMap(null);
+    delete markers[id];
+ 
   addMarker(feature);
   markers[m_id].info.open(map, markers[m_id]);
 }
@@ -142,6 +154,7 @@ function addMarker(feature) {
   content += "</div>";
   marker.message = message;
   marker.messageId = messageId;
+  marker.user = username;
 
   marker.info = new google.maps.InfoWindow({
    content: content,
