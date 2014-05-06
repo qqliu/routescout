@@ -480,14 +480,17 @@ function initialize() {
 
                 //$("#noRouteFound").hide();
               //$("#noroute").hide();
-              document.getElementById("noRouteFound").style.display= "";
-              document.getElementById("noRouteFound").style.visibility= "hidden" ;
-              $("#noRouteFound").css("display","none");
-
               $("#routes").show();
-
               $("#routes").append("<ol></ol>");
+              
+              $("#noRouteFound").css("display","none");
+              $("#noRouteFound").css("visibility","hidden");
+                  
+
+              
               for (i in possibleRoutes) {
+                //document.getElementById("noRouteFound").style.display= "";
+              //document.getElementById("noRouteFound").style.visibility= "hidden" ;
                  $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
                   possibleRoutes[i].summary + '</button></li>');
                  displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
