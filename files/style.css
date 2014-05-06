@@ -419,3 +419,8 @@ table.test {
 .filters:hover {
 	cursor: pointer;
 }
+
+.thicker-divider {
+	background-color: #857D7D;	!important;
+	width: 3px;	!important;
+}

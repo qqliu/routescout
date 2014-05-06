@@ -2660,10 +2660,10 @@ button.btn.small, input[type="submit"].btn.small {
 }
 .navbar .divider-vertical {
   height: 40px;
-  width: 1px;
   margin: 0 9px;
   overflow: hidden;
-  background-color: #222222;
+  background-color: #857D7D;
+  width: 2px;
   border-right: 1px solid #333333;
 }
 .navbar .nav.pull-right {

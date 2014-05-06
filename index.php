@@ -54,13 +54,13 @@ function printMsg($type) {
   }
 }
 
+require("./login/initconfig.php");
+
 if (isset($_GET['msgtype'])) {
 
-  printMsg($_GET['msgtype']);
+  //this is a GET 303 redirect after register/login was submitted
   
 } else {
-
-  require("./login/initconfig.php");
 
   $submitted_username = '';
 
@@ -103,6 +103,8 @@ if (isset($_GET['msgtype'])) {
       unset($row['salt']);
       unset($row['password']);
       $_SESSION['user'] = $row['username'];
+      
+      header("Location: ?loggedin");
     } else {
       reloadWithMsg(1);
       $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
@@ -151,8 +153,6 @@ if (isset($_GET['msgtype'])) {
       } else if($row2) {
         reloadWithMsg(5);
       } else{
-        reloadWithMsg(6);
-
         // Add row to database
         $query = "
         INSERT INTO registerUsers (
@@ -187,6 +187,9 @@ if (isset($_GET['msgtype'])) {
           $result = $stmt->execute($query_params);
         } catch(PDOException $ex){ 
         }
+        
+        $_SESSION['user'] = $_POST['username'];
+        reloadWithMsg(6);
       }
     }
   }
@@ -237,6 +240,13 @@ function ifCorrect() {
 </head>
 
 <body>
+<?php
+
+  if (isset($_GET['msgtype'])) {
+    printMsg($_GET['msgtype']);
+  }
+
+?>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
 
@@ -250,7 +260,7 @@ function ifCorrect() {
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form id="registerform" name="registerform" method="post" accept-charset="UTF-8">
+                  <form id="registerform" name="registerform" method="post" action="index.php" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
@@ -264,12 +274,13 @@ function ifCorrect() {
               </div>
           </li>
 
+          <li class="divider-vertical"></li>
 
           <li class="dropdown">
 
             <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8">
+                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8" action="index.php">
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
@@ -284,6 +295,7 @@ function ifCorrect() {
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
       <li id="savedroutes"><a>My Activity</a></li>
+      <li class="divider-vertical"></li>
       <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
