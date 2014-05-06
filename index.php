@@ -356,7 +356,7 @@ function ifCorrect() {
                             <br>
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
-                           <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
+                           <div id="noRouteFound" style="width:290px" class="alert alert-danger alert-dismissable">
 
         Sorry! No routes were found. Please try again.
         </div>
