@@ -125,6 +125,15 @@ http://leoliu.scripts.mit.edu/routescout/db.php?op=edit_ta&id=id&comment=newcomm
 {"error":""}
 
 ------------------------------------------------
+
+Get All Tips or Accidents for Logged in user
+
+op = get_user_tas
+kind = 0 (for tip), 1 (for accident) INT
+
+http://leoliu.scripts.mit.edu/routescout/db.php?op=get_user_tas&kind=0
+
+------------------------------------------------
 Get All Tips or Accidents
 
 op = get_all_tas
