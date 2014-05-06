@@ -330,7 +330,7 @@ else {
 
                                 <tr>
                                     <td>Fewest Accidents </td>
-
+									<td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -339,7 +339,7 @@ else {
 
                                 <tr>
                                     <td>Bike Lanes</td>
-
+									<td><strong>-</strong></td>
                                     <td>
                                        <div class="criteria-slider" id="slider"></div>
                                    </td>
@@ -348,7 +348,7 @@ else {
 
                                <tr>
                                 <td>Efficiency</td>
-
+								<td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div></td>
                                 </td>
@@ -358,7 +358,7 @@ else {
 
                             <tr>
                                 <td>Scenery </td>
-
+								<td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
