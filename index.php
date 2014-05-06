@@ -57,14 +57,14 @@ else if (isset($_POST['registerform'])) {
      echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please fill in all the fields.
-        </div>';   
+        </div>';
     }
     else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
         { echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Please enter a valid email address.
         </div>'; }
-   
+
     else {
         // Check if the username is already taken
     $query = "
@@ -101,19 +101,19 @@ else if (isset($_POST['registerform'])) {
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         This username is already in use.
         </div>'; }
-    
+
         else if($row2) {
      echo'<div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         This email address is already registered.
         </div>'; }
-    
+
     else{
         echo'<div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         You have successfully registered! Please login now to access saved routes, tips, comments, and more!
         </div>';
-    
+
 
         // Add row to database
     $query = "
@@ -220,7 +220,7 @@ else {
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
-                     
+
                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
                     "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
@@ -310,7 +310,7 @@ else {
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
                            <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
-        
+
         Sorry! No routes were found. Please try again.
         </div>
 
@@ -370,7 +370,7 @@ else {
 
 
                     <div id="navigation" style="display:none">
-                        
+
                         <div class="row-fluid" id="bottom-buttons">
                             <div class="span1" class="go-back" style="padding: 10px;">
                             <a id="back-to-routes"><img src="back-arrow.png"></a>
@@ -443,7 +443,10 @@ else {
                   </div>
 
                       <div id="saved-routes" style="display:none">
-                          <center>
+                         <div class = "go-back" style="padding: 10px;">
+                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
+                         </div>
+                            <center>
                             <br /><br />
                             <h2>Saved Routes</h2>
                             <br /><br />

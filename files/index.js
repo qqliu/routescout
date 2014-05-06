@@ -747,6 +747,11 @@ $("#route").click(function(e) {
         return false;
      });
 
+     $('#back-saved-routes').click(function (e) {
+        $("#saved-routes").hide();
+        $("#containerfluid").show();
+     });
+
      $('#back-to-nav').click(function(e) {
          e.preventDefault();
          $("#rate-route").hide();
