@@ -287,7 +287,6 @@ function get_saved_routes() {
     console.log(res);
     $("#selectable").empty();
     var saved_routes = res.data;
-    console.log(saved_routes);
     for (i in saved_routes) {
         var displayName = saved_routes[i].name;
         var tooltip = '';
@@ -584,12 +583,54 @@ function initialize() {
 
 
               for (i in possibleRoutes) {
+                     var name = possibleRoutes[i].summary;
+                     var steps = possibleRoutes[i].legs[0].steps;
+                     var routeKey = "";
+                     for (i in steps) {
+                            routeKey += steps[i].instructions;
+                        }
+                     var res = $.ajax({
+                            type: 'POST',
+                            url: "db.php",
+                            data: {op: "get_average_ratings", route_key: routeKey},
+                            async:false
+                          }).responseText;
+                       res = JSON.parse(res);
+                       if (res.error == "") {
+                            console.log(res.data);
+                            var safety = res.data.safety.safety;
+                            var efficiency = res.data.efficiency.efficiency;
+                            var scenery = res.data.scenery.scenery;
+                            var routeButton = '<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" data-toggle="tooltip" data-placement="right" data-html="true" id="route-' + c + '" title = "';
+                            if (safety != null && safety != "0") {
+                                   safety = safety.toString().split(".")[0];
+                                   routeButton = routeButton + 'Safety rating: ' + safety + '<br />'; 
+                            }
+                            
+                            if (efficiency != null && efficiency != "0") {
+                                   efficiency = efficiency.toString().split(".")[0];
+                                   routeButton = routeButton + 'Efficiency rating: ' + efficiency + '<br />';
+                            }
+                            
+                            if (scenery != null && scenery != "0") {
+                                   scenery = scenery.toString().split(".")[0];
+                                   routeButton = routeButton + 'Scenery rating: ' + scenery + '<br />';       
+                            }
+                            
+                            if ((safety == null || safety == "0") && (efficiency == null || efficiency == "0") && (scenery != null || scenery != "0")) {
+                                   routeButton = routeButton + 'No ratings available.';
+                            }
+                            routeButton += '">' + name + '</button></li>';
+                            
+                            $($("#routes").find("ol")[0]).append(routeButton);
+                            displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
+                            c += 1;
+                            
+                            $("[data-toggle=tooltip]").tooltip({content: function () {
+                                       return $(this).prop('title');}});
+                     }
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
-                 $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
-                  possibleRoutes[i].summary + '</button></li>');
-                 displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
-                 c += 1;
              }
              $('.route-buttons').click(function(e) {
                  e.preventDefault();
@@ -713,8 +754,6 @@ $("#green-button2").click(function() {
    adding = "star";
    toggleActive("#green-button2");
 });
-
-
 
 $("#destination_loc").keypress(function(event) {
     if (event.which == 13) {
