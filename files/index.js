@@ -606,7 +606,8 @@ function initialize() {
                             displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
                             c += 1;
                             
-                            $("[data-toggle=tooltip]").tooltip();
+                            $("[data-toggle=tooltip]").tooltip({content: function () {
+                                       return $(this).prop('title');}});
                      }
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
