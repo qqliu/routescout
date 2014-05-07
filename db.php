@@ -12,7 +12,7 @@ TODO (if time): to deal with malicious users/XSS:
 //global variables
 
 $debug_force_verbose = False;
-$debug_pretend_single_logged_in_user = True;
+$debug_pretend_single_logged_in_user = False;
 
 $resp = array(
   "error" => ""
@@ -65,7 +65,7 @@ function db_query($query) {
   pp_debug($query);
 
   global $db_link;
-  
+
   $result = $db_link->query($query);
   if (!$result) {
     on_error("db_query: $query " . mysqli_error($db_link));
@@ -113,15 +113,15 @@ function ensure_and_escape_params($params) {
 
 function update_ratings() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key", "safety", "efficiency", "scenery"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
-  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
-  
+
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
+
   if ($_REQUEST["safety"] === "0" && $_REQUEST["efficiency"] === "0" && $_REQUEST["scenery"] === "0") {
     //delete row
     db_query("delete from ratings where user='$user' and route_key='{$hashed_route_key}'");
@@ -143,14 +143,14 @@ function update_ratings() {
 
 function save_route() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key", "name", "from_loc", "to_loc", "route_index"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
-    $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
+
+    $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
     //insert row
     db_query(
       "insert into routes
@@ -168,26 +168,26 @@ function save_route() {
 
 function delete_saved_route() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]); 
+  $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
   //delete row
   db_query("delete from routes where user='$user' and route_key='{$hashed_route_key}'");
 }
 
 function save_ta() {
   global $resp;
-  
+
   ensure_and_escape_params(array("kind", "comment", "x", "y", "flagged"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   //add row
   db_query(
     "insert into tips_and_accidents
@@ -198,26 +198,26 @@ function save_ta() {
 
 function delete_ta() {
   global $resp;
-  
+
   ensure_and_escape_params(array("id"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   //delete row
   db_query("delete from tips_and_accidents where user='$user' and id={$_REQUEST["id"]}");
 }
 
 function edit_ta() {
   global $resp;
-  
+
   ensure_and_escape_params(array("id", "comment"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   //edit row
   db_query("
     update tips_and_accidents
@@ -228,19 +228,19 @@ function edit_ta() {
 
 function get_all_tas() {
   global $resp;
-  
+
   ensure_and_escape_params(array("kind"));
   if (has_error()) return;
-  
+
   $result = db_query("
     select * from tips_and_accidents
     where kind={$_REQUEST["kind"]}
   ");
   if (has_error()) return;
-  
+
   if ($result === True) { //when testing, db_query() returns true
     return;
-  }  
+  }
   $resp["data"] = array();
   while($row = mysqli_fetch_assoc($result)) {
     array_push($resp["data"], $row);
@@ -249,13 +249,13 @@ function get_all_tas() {
 
 function flag_ta() {
   global $resp;
-  
+
   ensure_and_escape_params(array("id"));
   if (has_error()) return;
-  
+
   ensure_logged_in();
   if (has_error()) return;
-  
+
   //flag that thing
   db_query("
     update tips_and_accidents
@@ -266,20 +266,20 @@ function flag_ta() {
 
 function get_saved_routes() {
   global $resp;
-  
+
   ensure_and_escape_params(array());
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   //get rows for that user
   $result = db_query("select * from routes where user='$user'");
   if (has_error()) return;
-  
+
   if ($result === True) { //when testing, db_query() returns true
     return;
-  }  
+  }
   $resp["data"] = array();
   while($row = mysqli_fetch_assoc($result)) {
     array_push($resp["data"], $row);
@@ -288,42 +288,42 @@ function get_saved_routes() {
 
 function get_saved_route() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
-  
+
   $result = db_query("select * from routes where user='$user' and route_key='{$hashed_route_key}'");
   if (has_error()) return;
-  
+
   if ($result === True) { //when testing, db_query() returns true
     return;
-  }  
+  }
   $resp["data"] = mysqli_fetch_assoc($result);
 }
 
 function get_average_ratings() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key", "route_key"));
   if (has_error()) return;
-  
+
   //get average ratings for particular route
-  
+
   $resp["data"] = array();
   $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
-  
+
   foreach (array("safety", "efficiency", "scenery") as $rating_type) {
     $result = db_query("
-      select AVG($rating_type) from ratings
+      select AVG($rating_type) as $rating_type from ratings
       where route_key='{$hashed_route_key}' and $rating_type != 0
     ");
     if (has_error()) return;
-    
+
     if ($result === True) { //when testing, db_query() returns true
       return;
     }
@@ -334,20 +334,20 @@ function get_average_ratings() {
 
 function get_all_ratings_user() {
   global $resp;
-  
+
   ensure_and_escape_params(array());
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   //get rows for that user
   $result = db_query("select * from ratings where user='$user'");
   if (has_error()) return;
-  
+
   if ($result === True) { //when testing, db_query() returns true
     return;
-  }  
+  }
   $resp["data"] = array();
   while($row = mysqli_fetch_assoc($result)) {
     array_push($resp["data"], $row);
@@ -356,21 +356,21 @@ function get_all_ratings_user() {
 
 function get_ratings_route() {
   global $resp;
-  
+
   ensure_and_escape_params(array("route_key"));
   if (has_error()) return;
-  
+
   $user = ensure_logged_in();
   if (has_error()) return;
-  
+
   $hashed_route_key = hash('sha256', $_REQUEST["route_key"]);
-  
+
   $result = db_query("select * from ratings where user='$user' and route_key='{$hashed_route_key}'");
   if (has_error()) return;
-  
+
   if ($result === True) { //when testing, db_query() returns true
     return;
-  }  
+  }
   $resp["data"] = mysqli_fetch_assoc($result);
 }
 
@@ -386,7 +386,7 @@ function main() {
     on_error("missing op");
   } else {
     db_connect();
-    
+
     if (!has_error()) {
       $op = $_REQUEST["op"];
       switch ($op) {
@@ -410,10 +410,10 @@ function main() {
       }
     }
   }
-  
+
   global $resp;
   pp_debug($resp);
-  
+
   print json_encode($resp);
 }
 
