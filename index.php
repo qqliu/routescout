@@ -278,7 +278,7 @@ function ifCorrect() {
 
           <li class="dropdown">
 
-            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
+            <a class="dropdown-toggle right-menubutton" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                 <form id="loginform" name="loginform" method="post" accept-charset="UTF-8" action="index.php">
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
@@ -294,9 +294,9 @@ function ifCorrect() {
       else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
-      <li id="savedroutes"><a>My Activity</a></li>
+      <li id="savedroutes" class="registerlogin clickable" ><a>My Activity</a></li>
       <li class="divider-vertical"></li>
-      <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
+      <li id="registerLogin" class="right-menubutton"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
   <div id="center-this-navbar">
@@ -339,6 +339,7 @@ function ifCorrect() {
                             <div id="route-find" style="text-align:center">
                                 <button class="btn btn-large" id=
                                 "route">Search For Routes!</button>
+                                <img id="loading" src="files/progress-running.gif" />
                             </div>
                         </div>
                     </div>
@@ -539,30 +540,36 @@ function ifCorrect() {
     <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
             <div id="togglefeatures" style="margin-top:30px;">
-            	<div id="green-buttons">
-                    <a class="popup-button btn btn-success btn-large" id=
-                    "report-button">Report Accident</a> <a class=
-                    "popup-button btn btn-success btn-large" id=
-                    "tip-button">Add Tip</a>
-                </div>
+            	<div class="toppanel">
+		            	<div id="green-button1" class="off">
+		                    <a class="popup-button" id=
+		                    "report-button">Report Accident</a> 
+		                </div>
+		               	<div id="green-button2" class="off">
+		                    <a class=
+		                    "popup-button" id=
+		                    "tip-button">Add Tip</a>
+		                </div>
+		            
+	
+	                <div class="toggle-button" id="toggle-label">
+	                    Toggle Visibility:
+	                </div>
+	
+	                <div id="lanes" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
+	                </div>
+	
+	                <div id="star" class="toggle-button filters on2 ">
+	                    <img class="toggle-img" src="popups/star-32.png">Tips
+	                </div>
+	
+	                <div id="caution" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="popups/caution.png">Accidents
+	                </div>
+               </div>
 
-                <div class="toggle-button" id="toggle-label">
-                    Toggle Visibility:
-                </div>
-
-                <div id="lanes" class="toggle-button filters">
-                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
-                </div>
-
-                <div id="star" class="toggle-button filters">
-                    <img class="toggle-img" src="popups/star-32.png">Tips
-                </div>
-
-                <div id="caution" class="toggle-button filters">
-                    <img class="toggle-img" src="popups/caution.png">Accidents
-                </div>
-
-                <div id="googleMap" style="width:700px;height:530px;">
+                <div id="googleMap" style="width:700px;height:519px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>

@@ -344,7 +344,7 @@ function get_average_ratings() {
   
   foreach (array("safety", "efficiency", "scenery") as $rating_type) {
     $result = db_query("
-      select AVG($rating_type) from ratings
+      select AVG($rating_type) as $rating_type from ratings
       where route_key='{$hashed_route_key}' and $rating_type != 0
     ");
     if (has_error()) return;

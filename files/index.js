@@ -76,19 +76,24 @@ var last_route = "";
 var c = 0;
 
 function toggleActive(button) {
-   var active = $(button).hasClass("active");
+   var active = $(button).hasClass("on");
    if (!active) {
-       $(button).addClass("active");
-       if ($(button).attr("id") == "report-button") {
-           $("#tip-button").removeClass("active");
+   		$(button).removeClass("off");
+       $(button).addClass("on");
+       console.log( $(button));
+       if ($(button).attr("id") == "green-button1") {
+           $("#green-button2").removeClass("on");
+           $("#green-button2").addClass("off");
        } else {
-           $("#report-button").removeClass("active");
+           $("#green-button1").removeClass("on");
+           $("#green-button1").addClass("off");
        }
    } else {
        map.setOptions({
            draggableCursor: 'default'
        });
-       $(button).removeClass("active");
+       $(button).removeClass("on");
+       $(button).addClass("off");
        adding = undefined;
    }
 }
@@ -164,6 +169,13 @@ function addMarker(feature) {
   google.maps.event.addListener(marker, 'click', function() {
    marker.info.open(map, this);
 });
+
+  google.maps.event.addListener(marker, 'visible_changed', function() {
+    if (!marker.getVisible()) {
+      marker.info.close();
+    }                  
+  });
+
   map.setOptions({
    draggableCursor: 'default'
 });
@@ -503,6 +515,7 @@ function initialize() {
        provideRouteAlternatives: true
    };
    directionsService.route(request, function(result, status) {
+       $("#loading").css("visibility", "hidden");
        if (status == google.maps.DirectionsStatus.OK) {
           curResult = result;
           var possibleRoutes;
@@ -641,23 +654,24 @@ function toggleLanes(value) {
 }
 
 function showAllRoutes() {
+    $("#loading").css("visibility", "visible");
     Route();
 }
 
-$("#report-button").click(function() {
+$("#green-button1").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/caution.png) 16 30, default"
    });
    adding = "caution";
-   toggleActive(this);
+   toggleActive("#green-button1");
 });
 
-$("#tip-button").click(function() {
+$("#green-button2").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/star-32.png) 16 30, default"
    });
    adding = "star";
-   toggleActive(this);
+   toggleActive("#green-button2");
 });
 
 
@@ -708,9 +722,10 @@ $("#route").click(function(e) {
           messageId += 1;
       }
   });
-     $('.filters:checkbox').click(function() {
-       if (!$(this).is(':checked')) {
-           var id = $(this).attr("value");
+     $('.filters').click(function() {
+       if ($(this).hasClass('on2')) {
+           var id = $(this).attr("id");
+           console.log(id);
            for (var i in markers) {
                if (markers[i].type == id) {
                    markers[i].setVisible(false);
@@ -719,8 +734,11 @@ $("#route").click(function(e) {
            if (id == "lanes") {
               toggleLanes(false);
           }
+          $(this).removeClass('on2');
+          $(this).addClass('off2');
       } else {
-       var id = $(this).attr("value");
+       var id = $(this).attr("id");
+       console.log(id);
        for (var i in markers) {
            if (markers[i].type == id) {
                markers[i].setVisible(true);
@@ -729,6 +747,8 @@ $("#route").click(function(e) {
        if (id == "lanes") {
           toggleLanes(true);
       }
+       $(this).removeClass('off2');
+       $(this).addClass('on2');
   }
 });
  }
