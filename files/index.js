@@ -76,19 +76,24 @@ var last_route = "";
 var c = 0;
 
 function toggleActive(button) {
-   var active = $(button).hasClass("active");
+   var active = $(button).hasClass("on");
    if (!active) {
-       $(button).addClass("active");
-       if ($(button).attr("id") == "report-button") {
-           $("#tip-button").removeClass("active");
+   		$(button).removeClass("off");
+       $(button).addClass("on");
+       console.log( $(button));
+       if ($(button).attr("id") == "green-button1") {
+           $("#green-button2").removeClass("on");
+           $("#green-button2").addClass("off");
        } else {
-           $("#report-button").removeClass("active");
+           $("#green-button1").removeClass("on");
+           $("#green-button1").addClass("off");
        }
    } else {
        map.setOptions({
            draggableCursor: 'default'
        });
-       $(button).removeClass("active");
+       $(button).removeClass("on");
+       $(button).addClass("off");
        adding = undefined;
    }
 }
@@ -107,9 +112,21 @@ var icons = {
 
 function refreshMarker(id) {
   m_id = id.split("message")[1];
-  markers[m_id].setMap(null);
-  delete markers[id];
 
+   marker = markers[m_id];
+     
+   adding = marker.type;
+    
+	feature = {
+		user: marker.user,
+		position: marker.position,
+		type: marker.type,
+	};
+	console.log(feature);
+	
+    marker.setMap(null);
+    delete markers[id];
+ 
   addMarker(feature);
   markers[m_id].info.open(map, markers[m_id]);
 }
@@ -142,6 +159,7 @@ function addMarker(feature) {
   content += "</div>";
   marker.message = message;
   marker.messageId = messageId;
+  marker.user = username;
 
   marker.info = new google.maps.InfoWindow({
    content: content,
@@ -151,6 +169,13 @@ function addMarker(feature) {
   google.maps.event.addListener(marker, 'click', function() {
    marker.info.open(map, this);
 });
+
+  google.maps.event.addListener(marker, 'visible_changed', function() {
+    if (!marker.getVisible()) {
+      marker.info.close();
+    }                  
+  });
+
   map.setOptions({
    draggableCursor: 'default'
 });
@@ -261,7 +286,12 @@ function get_saved_routes() {
     $("#selectable").empty();
     var saved_routes = res.data;
     for (i in saved_routes) {
-       $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');
+        var displayName = saved_routes[i].name;
+        if (displayName.length > 20){
+            displayName = displayName.substring(0,10);
+            displayName += "...";
+        }
+       $("#selectable").append('<li title="' + saved_routes[i].name  +  '" class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
    }
 
                 //add x button to each selectable
@@ -345,6 +375,48 @@ savedRouteView = true;
 });
 }
 
+
+function get_user_tas() {
+ $.post( "db.php", { op: "get_user_tas", kind: 0 })
+ .done(function(res) {
+
+    console.log("results");
+    console.log(res);
+    $("#commentsDisplay").empty();
+    var comments = res.data;
+    console.log(res.data);
+    console.log("HELLO");
+    for (i in comments) {
+        console.log("Comments" + comments[i]);
+        console.log($("#commentsDisplay"));
+        
+       $("#commentsDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+   }
+});
+};
+
+function get_user_accidents() {
+ $.post( "db.php", { op: "get_user_tas", kind: 1 })
+ .done(function(res) {
+$("#accidentDisplay").empty();
+    console.log("results");
+    console.log(res);
+    //$("#commentsDisplay").empty();
+    var comments = res.data;
+    console.log(res.data);
+    console.log("HELLO");
+    for (i in comments) {
+        //console.log("Comments" + comments[i]);
+        //console.log($("#commentsDisplay"));
+        
+       $("#accidentDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+   }
+});
+};
+
+
+
+
 function initialize() {
     var myCenter, directionsService,
     mapProp, starting, ending, rendererOptions;
@@ -355,6 +427,8 @@ function initialize() {
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
 
     get_saved_routes();
+    get_user_tas();
+    get_user_accidents();
 
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
@@ -460,6 +534,7 @@ function initialize() {
        provideRouteAlternatives: true
    };
    directionsService.route(request, function(result, status) {
+       $("#loading").css("visibility", "hidden");
        if (status == google.maps.DirectionsStatus.OK) {
           curResult = result;
           var possibleRoutes;
@@ -607,7 +682,7 @@ for (route in displayRoutes) {
 
 
   $("#routes").hide();
-    //$("#noRouteFound").show();
+    $("#noRouteFound").show();
               //$("#noroute").show();
    //alert("coulxdn't get directions:" + status);
            //$("#noRouteFound").append('<div id="noroute" class="alert alert-danger alert-dismissable"></div>');
@@ -639,23 +714,24 @@ function toggleLanes(value) {
 }
 
 function showAllRoutes() {
+    $("#loading").css("visibility", "visible");
     Route();
 }
 
-$("#report-button").click(function() {
+$("#green-button1").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/caution.png) 16 30, default"
    });
    adding = "caution";
-   toggleActive(this);
+   toggleActive("#green-button1");
 });
 
-$("#tip-button").click(function() {
+$("#green-button2").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/star-32.png) 16 30, default"
    });
    adding = "star";
-   toggleActive(this);
+   toggleActive("#green-button2");
 });
 
 $("#destination_loc").keypress(function(event) {
@@ -704,9 +780,10 @@ $("#route").click(function(e) {
           messageId += 1;
       }
   });
-     $('.filters:checkbox').click(function() {
-       if (!$(this).is(':checked')) {
-           var id = $(this).attr("value");
+     $('.filters').click(function() {
+       if ($(this).hasClass('on2')) {
+           var id = $(this).attr("id");
+           console.log(id);
            for (var i in markers) {
                if (markers[i].type == id) {
                    markers[i].setVisible(false);
@@ -715,8 +792,11 @@ $("#route").click(function(e) {
            if (id == "lanes") {
               toggleLanes(false);
           }
+          $(this).removeClass('on2');
+          $(this).addClass('off2');
       } else {
-       var id = $(this).attr("value");
+       var id = $(this).attr("id");
+       console.log(id);
        for (var i in markers) {
            if (markers[i].type == id) {
                markers[i].setVisible(true);
@@ -725,6 +805,8 @@ $("#route").click(function(e) {
        if (id == "lanes") {
           toggleLanes(true);
       }
+       $(this).removeClass('off2');
+       $(this).addClass('on2');
   }
 });
  }
@@ -747,6 +829,8 @@ $("#route").click(function(e) {
            }
        }
    }).addClass("criteria-slider");
+
+   $(document).tooltip();
 
    populate_tips();
    populate_accidents();
@@ -798,6 +882,16 @@ $("#route").click(function(e) {
      });
 
      $('#route-rate').click(function(e) {
+    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+        .done(function( data ) {
+        if (data.error != "") {
+            $("#save-newrate-error").show();
+            $('#save-newrate-error').delay(500).fadeOut(400);
+        }
+        else {
+
+        } 
+       });
 	e.preventDefault();
 	$("#navigation").hide();
 	$("#containerfluid").hide();
@@ -812,6 +906,52 @@ $("#route").click(function(e) {
          $("#rate-route").hide();
          $("#second").fadeIn();
          $("#saved-routes").show();
+         $("#commentsDisplay").hide();
+         $("#accidentDisplay").hide();
+         $("#commentsDisplay").css("display", "none");
+         $("#selectable").show();
+         return false;
+     });
+
+
+     $('#comments-button').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#selectable").hide();
+         $("#commentsDisplay").show();
+         $("#accidentDisplay").hide();
+         
+         return false;
+     });
+
+
+$('#accident-button').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#selectable").hide();
+         $("#commentsDisplay").hide();
+         $("#accidentDisplay").show();
+         
+         return false;
+     });
+$('#route-rateSaved').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#commentsDisplay").hide();
+         $("#accidentDisplay").hide();
+         $("#selectable").show();
          return false;
      });
 
@@ -827,6 +967,19 @@ $("#route").click(function(e) {
 		}
 	   });
  	});
+
+    $("#route-save").click(function() {
+        $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+        .done(function( data ) {
+        if (data.error != "") {
+            $("#save-rate-error").show();
+            $('#save-rate-error').delay(500).fadeOut(400);
+        } else {
+            $("#save-rate-alert").show();
+            $('#save-rate-alert').delay(500).fadeOut(400);
+        }
+       });
+    });
 
     //add x button handler
     $(".delete-button").click(function() {

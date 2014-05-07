@@ -1,9 +1,70 @@
 <?php
 
+function reloadWithMsg($type) {
+  header('HTTP/1.1 303 See Other');
+  header("Location: ?msgtype=$type");
+}
+
+function printMsg($type) {
+  switch ($type) {
+    case 1:
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    The username or password you entered is incorrect.
+    </div>';
+    break;
+    case 2:
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Please fill in all the fields.
+    </div>';   
+    break;
+    case 3:
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Please enter a valid email address.
+    </div>';
+    break;
+    case 4:
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    This username is already in use.
+    </div>';
+    break;
+    case 5:
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    This email address is already registered.
+    </div>';
+    break;
+    case 6:
+    echo '<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    You have successfully registered! Please login now to access saved routes, tips, comments, and more!
+    </div>';
+    break;
+    case 7:
+    break;
+    case 8:
+    break;
+    case 9:
+    break;
+    default:
+    break;
+}
+}
 
 require("./login/initconfig.php");
-$submitted_username = '';
-if (isset($_POST['loginform'])) {
+
+if (isset($_GET['msgtype'])) {
+
+  //this is a GET 303 redirect after register/login was submitted
+
+} else {
+
+  $submitted_username = '';
+
+  if (isset($_POST['loginform'])) {
     $query = "
     SELECT
     username,
@@ -14,155 +75,132 @@ if (isset($_POST['loginform'])) {
     WHERE
     username = :username
     ";
+    
     $query_params = array(
-        ':username' => $_POST['username']
-        );
+      ':username' => $_POST['username']
+      );
 
     try{
-        $stmt = $db->prepare($query);
-        $result = $stmt->execute($query_params);
-    }
-    catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); }
-    $login_ok = false;
-    $row = $stmt->fetch();
-    if($row){
-        $check_password = hash('sha256', $_POST['password'] . $row['salt']);
-        for($round = 0; $round < 65536; $round++){
-            $check_password = hash('sha256', $check_password . $row['salt']);
-        }
-        if($check_password === $row['password']){
-            $login_ok = true;
-        }
-    }
+      $stmt = $db->prepare($query);
+      $result = $stmt->execute($query_params);
+  } catch(PDOException $ex){
+      die("Failed to run query: " . $ex->getMessage());
+  }
 
-    if($login_ok){
-        unset($row['salt']);
-        unset($row['password']);
-        $_SESSION['user'] = $row['username'];
-            //echo "Login succeeded!!!!"
-            //header("Location: secret.php");
-            //die("Redirecting to: secret.php");
+  $login_ok = false;
+  $row = $stmt->fetch();
+  if($row){
+      $check_password = hash('sha256', $_POST['password'] . $row['salt']);
+      for($round = 0; $round < 65536; $round++){
+        $check_password = hash('sha256', $check_password . $row['salt']);
     }
-    else{
-        echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        The username or password you entered is incorrect.
-        </div>';
-        $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+    if($check_password === $row['password']){
+        $login_ok = true;
     }
 }
-else if (isset($_POST['registerform'])) {
+
+if($login_ok){
+  unset($row['salt']);
+  unset($row['password']);
+  $_SESSION['user'] = $row['username'];
+
+  header("Location: ?loggedin");
+} else {
+  reloadWithMsg(1);
+  $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+}
+} else if (isset($_POST['registerform'])) {
     // Ensure that the user fills out fields
     if(empty($_POST['username']) or empty($_POST['password']) or empty($_POST['email']) ){
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please fill in all the fields.
-        </div>';
-    }
-    else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-        { echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a valid email address.
-        </div>'; }
-
-    else {
-        // Check if the username is already taken
-    $query = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    username = :username
-    ";
-    $query2 = "
-    SELECT
-    1
-    FROM registerUsers
-    WHERE
-    email = :email
-    ";
-    $query_params2 = array(
+      reloadWithMsg(2);
+  } else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      reloadWithMsg(3);
+  } else {
+      // Check if the username is already taken
+      $query = "
+      SELECT
+      1
+      FROM registerUsers
+      WHERE
+      username = :username
+      ";
+      $query2 = "
+      SELECT
+      1
+      FROM registerUsers
+      WHERE
+      email = :email
+      ";
+      $query_params2 = array(
         ':email' => $_POST['email']
         );
-    $query_params = array( ':username' => $_POST['username'] );
-    try {
+      $query_params = array( ':username' => $_POST['username'] );
+      
+      try {
         $stmt = $db->prepare($query);
         $result = $stmt->execute($query_params);
-    }
-    catch(PDOException $ex){ }
+    } catch(PDOException $ex) { }
     try {
         $stmt2 = $db->prepare($query2);
         $result2 = $stmt->execute($query_params2);
-    }
-    catch(PDOException $ex){ }
+    } catch(PDOException $ex) { }
+
     $row = $stmt->fetch();
     $row2 = $stmt2->fetch();
-        if($row){ echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This username is already in use.
-        </div>'; }
 
-        else if($row2) {
-     echo'<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This email address is already registered.
-        </div>'; }
-
-    else{
-        echo'<div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
-        </div>';
-
-
+    if($row){
+        reloadWithMsg(4);
+    } else if($row2) {
+        reloadWithMsg(5);
+    } else{
         // Add row to database
-    $query = "
-    INSERT INTO registerUsers (
-        username,
-        password,
-        salt,
-        email
-        ) VALUES (
-        :username,
-        :password,
-        :salt,
-        :email
-        )
+        $query = "
+        INSERT INTO registerUsers (
+          username,
+          password,
+          salt,
+          email
+          ) VALUES (
+          :username,
+          :password,
+          :salt,
+          :email
+          )
 ";
 
         // Security measures
 $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
 $password = hash('sha256', $_POST['password'] . $salt);
-for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
-    $query_params = array(
-        ':username' => $_POST['username'],
-        ':password' => $password,
-        ':salt' => $salt,
-        ':email' => $_POST['email']
-        );
-try {
-    $stmt = $db->prepare($query);
-    $result = $stmt->execute($query_params);
-}
-catch(PDOException $ex){  }
 
+for($round = 0; $round < 65536; $round++){
+  $password = hash('sha256', $password . $salt);
+}
+
+$query_params = array(
+  ':username' => $_POST['username'],
+  ':password' => $password,
+  ':salt' => $salt,
+  ':email' => $_POST['email']
+  );
+try {
+  $stmt = $db->prepare($query);
+  $result = $stmt->execute($query_params);
+} catch(PDOException $ex){ 
+}
+
+$_SESSION['user'] = $_POST['username'];
+reloadWithMsg(6);
+}
 }
 }
 }
 
 function ifCorrect() {
-  //print "logging in with email=$email pass=$password";
-
-  if(isset($_SESSION['user']))
-  {
-    return true;
+  return isset($_SESSION['user']);
 }
-else {
-	return false;}
-}
-
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,6 +244,13 @@ else {
 </head>
 
 <body>
+    <?php
+
+    if (isset($_GET['msgtype'])) {
+        printMsg($_GET['msgtype']);
+    }
+
+    ?>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
 
@@ -219,31 +264,32 @@ else {
 
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Register <strong class="caret"></strong></a>
                 <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                  <form id="registerform" name="registerform" method="post" accept-charset="UTF-8">
+                  <form id="registerform" name="registerform" method="post" action="index.php" accept-charset="UTF-8">
                       Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                       Email: <input id="user_email" style="margin-bottom: 15px;" type="text" name="email" value="" size="30" />
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
 
-                     <input type="submit"<a class="popup-button btn btn-success btn-large" id=
-                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
+                      "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
                       <input class="btn btn-success btn-large" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                 --> </form>
+                  --> </form>
               </div>
           </li>
 
+          <li class="divider-vertical"></li>
 
           <li class="dropdown">
 
-            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
+            <a class="dropdown-toggle right-menubutton" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8">
+                <form id="loginform" name="loginform" method="post" accept-charset="UTF-8" action="index.php">
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
                   <input type="submit" value="Sign In" <a class="popup-button btn btn-success btn-large" id=
-                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                  "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                   <!--<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
               --></form>
           </div>
@@ -252,8 +298,9 @@ else {
       else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
-      <li id="savedroutes"><a>My Activity</a></li>
-      <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
+      <li id="savedroutes" class="registerlogin clickable" ><a>My Activity</a></li>
+      <li class="divider-vertical"></li>
+      <li id="registerLogin" class="right-menubutton"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
   <div id="center-this-navbar">
@@ -294,8 +341,10 @@ else {
                             </div>
 
                             <div id="route-find" style="text-align:center">
+                                <img class="invisible-spacer" src="files/progress-running.gif" />
                                 <button class="btn btn-large" id=
                                 "route">Search For Routes!</button>
+                                <img id="loading" src="files/progress-running.gif" />
                             </div>
                         </div>
                     </div>
@@ -313,10 +362,10 @@ else {
                             <br>
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
-                           <div id="noRouteFound" style="width:310px" class="alert alert-danger alert-dismissable">
+                            <div id="noRouteFound" style="width:290px" class="alert alert-danger alert-dismissable">
 
-        Sorry! No routes were found. Please try again.
-        </div>
+                                Sorry! No routes were found. Please try again.
+                            </div>
 
                             <div id="routes"></div><br>
 
@@ -334,7 +383,7 @@ else {
 
                                 <tr>
                                     <td>Fewest Accidents </td>
-									<td><strong>-</strong></td>
+                                    <td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -343,7 +392,7 @@ else {
 
                                 <tr>
                                     <td>Bike Lanes</td>
-									<td><strong>-</strong></td>
+                                    <td><strong>-</strong></td>
                                     <td>
                                        <div class="criteria-slider" id="slider"></div>
                                    </td>
@@ -352,7 +401,7 @@ else {
 
                                <tr>
                                 <td>Efficiency</td>
-								<td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div></td>
                                 </td>
@@ -362,7 +411,7 @@ else {
 
                             <tr>
                                 <td>Scenery </td>
-								<td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
@@ -377,21 +426,22 @@ else {
 
                         <div class="row-fluid" id="bottom-buttons">
                             <div class="span1" class="go-back" style="padding: 10px;">
-                            <a id="back-to-routes"><img src="back-arrow.png"></a>
+                                <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
                             <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
                                 Route</button>
-                            <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                            <div class='save-error' id="save-route-error" style="display:none;">Error While Saving</div>
+                                <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                                <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save Route</div>
                             </div>
 
                             <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
+                                    <div class='save-error' id="save-newrate-error" style="display:none;">Please Login to Rate Route</div>
+                                </div>
                             </div>
-                        </div>
                             <h2 id="selectedRoute">Selected Route</h2>
 
                             <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
@@ -446,22 +496,39 @@ else {
                       </div>
                   </div>
 
-                      <div id="saved-routes" style="display:none">
-                         <div class = "go-back" style="padding: 10px;">
-                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
-                         </div>
-                            <center>
-                            <br /><br />
-                            <h2>Saved Routes</h2>
-                            <br /><br />
-                            <ol id="selectable">
-                          </ol>
-                      </center>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+                  <div id="saved-routes" style="display:none">
+                   <div class="row-fluid" id="bottom-buttons">
+
+                    <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 135px;margin-top:10px;">
+                        <button class="btn btn-large" id="route-rateSaved" type="button">Saved Routes </a></button>
+                    </div>
+
+
+                    <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
+                        <button class="btn btn-large" id="accident-button" type="button">Accidents </a></button>
+                    </div>
+                    <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
+                        <button class="btn btn-large" id="comments-button" type="button">
+                            Comments</button>
+                        </div>
+
+                    </div>
+                    <center>
+                        
+                        <!--<h2>Saved Routes</h2>-->
+
+                        
+                        <ol id="commentsDisplay"></ol>
+                        <ol id="accidentDisplay"></ol>
+                        <ol id="selectable">
+                        </ol>
+
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 </div>
@@ -474,35 +541,41 @@ else {
 
     <p><a class="btn btn-success btn-large" id=
         "popup-submit">Submit</a></p><br>
-</div>
+    </div>
 
     <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
             <div id="togglefeatures" style="margin-top:30px;">
-            	<div id="green-buttons">
-                    <a class="popup-button btn btn-success btn-large" id=
-                    "report-button">Report Accident</a> <a class=
-                    "popup-button btn btn-success btn-large" id=
-                    "tip-button">Add Tip</a>
-                </div>
+            	<div class="toppanel">
+		            	<div id="green-button1" class="off">
+		                    <a class="popup-button" id=
+		                    "report-button">Report Accident</a> 
+		                </div>
+		               	<div id="green-button2" class="off">
+		                    <a class=
+		                    "popup-button" id=
+		                    "tip-button">Add Tip</a>
+		                </div>
+		            
+	
+	                <div class="toggle-button" id="toggle-label">
+	                    Toggle Visibility:
+	                </div>
+	
+	                <div id="lanes" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
+	                </div>
+	
+	                <div id="star" class="toggle-button filters on2 ">
+	                    <img class="toggle-img" src="popups/star-32.png">Tips
+	                </div>
+	
+	                <div id="caution" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="popups/caution.png">Accidents
+	                </div>
+               </div>
 
-                <div class="toggle-button" id="toggle-label">
-                    Toggle Visibility:
-                </div>
-
-                <div id="lanes" class="toggle-button filters">
-                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
-                </div>
-
-                <div id="star" class="toggle-button filters">
-                    <img class="toggle-img" src="popups/star-32.png">Tips
-                </div>
-
-                <div id="caution" class="toggle-button filters">
-                    <img class="toggle-img" src="popups/caution.png">Accidents
-                </div>
-
-                <div id="googleMap" style="width:700px;height:530px;">
+                <div id="googleMap" style="width:700px;height:519px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>

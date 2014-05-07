@@ -226,6 +226,31 @@ function edit_ta() {
   ");
 }
 
+function get_user_tas() {
+  global $resp;
+  
+  ensure_and_escape_params(array("kind"));
+  if (has_error()) return;
+  
+  $user = ensure_logged_in();
+  if (has_error()) return;
+  
+  $result = db_query("
+    select * from tips_and_accidents
+    where kind={$_REQUEST["kind"]}
+    and user='$user'
+  ");
+  if (has_error()) return;
+  
+  if ($result === True) { //when testing, db_query() returns true
+    return;
+  }  
+  $resp["data"] = array();
+  while($row = mysqli_fetch_assoc($result)) {
+    array_push($resp["data"], $row);
+  }
+}
+
 function get_all_tas() {
   global $resp;
 
@@ -396,6 +421,7 @@ function main() {
         case "save_ta": save_ta(); break;
         case "delete_ta": delete_ta(); break;
         case "edit_ta": edit_ta(); break;
+        case "get_user_tas": get_user_tas(); break;
         case "get_all_tas": get_all_tas(); break;
         case "flag_ta": flag_ta(); break;
         case "get_saved_routes": get_saved_routes(); break;
