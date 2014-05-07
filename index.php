@@ -8,50 +8,50 @@ function reloadWithMsg($type) {
 function printMsg($type) {
   switch ($type) {
     case 1:
-      echo '<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        The username or password you entered is incorrect.
-        </div>';
-      break;
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    The username or password you entered is incorrect.
+    </div>';
+    break;
     case 2:
-      echo '<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please fill in all the fields.
-        </div>';   
-      break;
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Please fill in all the fields.
+    </div>';   
+    break;
     case 3:
-      echo '<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Please enter a valid email address.
-        </div>';
-      break;
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Please enter a valid email address.
+    </div>';
+    break;
     case 4:
-      echo '<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This username is already in use.
-        </div>';
-      break;
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    This username is already in use.
+    </div>';
+    break;
     case 5:
-      echo '<div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        This email address is already registered.
-        </div>';
-      break;
+    echo '<div class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    This email address is already registered.
+    </div>';
+    break;
     case 6:
-      echo '<div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        You have successfully registered! Please login now to access saved routes, tips, comments, and more!
-        </div>';
-      break;
+    echo '<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    You have successfully registered! Please login now to access saved routes, tips, comments, and more!
+    </div>';
+    break;
     case 7:
-      break;
+    break;
     case 8:
-      break;
+    break;
     case 9:
-      break;
+    break;
     default:
-      break;
-  }
+    break;
+}
 }
 
 require("./login/initconfig.php");
@@ -59,7 +59,7 @@ require("./login/initconfig.php");
 if (isset($_GET['msgtype'])) {
 
   //this is a GET 303 redirect after register/login was submitted
-  
+
 } else {
 
   $submitted_username = '';
@@ -78,81 +78,81 @@ if (isset($_GET['msgtype'])) {
     
     $query_params = array(
       ':username' => $_POST['username']
-     );
+      );
 
     try{
       $stmt = $db->prepare($query);
       $result = $stmt->execute($query_params);
-    } catch(PDOException $ex){
+  } catch(PDOException $ex){
       die("Failed to run query: " . $ex->getMessage());
-    }
-    
-    $login_ok = false;
-    $row = $stmt->fetch();
-    if($row){
+  }
+
+  $login_ok = false;
+  $row = $stmt->fetch();
+  if($row){
       $check_password = hash('sha256', $_POST['password'] . $row['salt']);
       for($round = 0; $round < 65536; $round++){
         $check_password = hash('sha256', $check_password . $row['salt']);
-      }
-      if($check_password === $row['password']){
+    }
+    if($check_password === $row['password']){
         $login_ok = true;
-      }
     }
+}
 
-    if($login_ok){
-      unset($row['salt']);
-      unset($row['password']);
-      $_SESSION['user'] = $row['username'];
-      
-      header("Location: ?loggedin");
-    } else {
-      reloadWithMsg(1);
-      $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
-    }
-  } else if (isset($_POST['registerform'])) {
+if($login_ok){
+  unset($row['salt']);
+  unset($row['password']);
+  $_SESSION['user'] = $row['username'];
+
+  header("Location: ?loggedin");
+} else {
+  reloadWithMsg(1);
+  $submitted_username = htmlentities($_POST['username'], ENT_QUOTES, 'UTF-8');
+}
+} else if (isset($_POST['registerform'])) {
     // Ensure that the user fills out fields
     if(empty($_POST['username']) or empty($_POST['password']) or empty($_POST['email']) ){
       reloadWithMsg(2);
-    } else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+  } else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
       reloadWithMsg(3);
-    } else {
+  } else {
       // Check if the username is already taken
       $query = "
-        SELECT
-        1
-        FROM registerUsers
-        WHERE
-        username = :username
-        ";
+      SELECT
+      1
+      FROM registerUsers
+      WHERE
+      username = :username
+      ";
       $query2 = "
-        SELECT
-        1
-        FROM registerUsers
-        WHERE
-        email = :email
-        ";
+      SELECT
+      1
+      FROM registerUsers
+      WHERE
+      email = :email
+      ";
       $query_params2 = array(
         ':email' => $_POST['email']
-      );
+        );
       $query_params = array( ':username' => $_POST['username'] );
       
       try {
         $stmt = $db->prepare($query);
         $result = $stmt->execute($query_params);
-      } catch(PDOException $ex) { }
-      try {
+    } catch(PDOException $ex) { }
+    try {
         $stmt2 = $db->prepare($query2);
         $result2 = $stmt->execute($query_params2);
-      } catch(PDOException $ex) { }
-      
-      $row = $stmt->fetch();
-      $row2 = $stmt2->fetch();
-      
-      if($row){
+    } catch(PDOException $ex) { }
+
+    $row = $stmt->fetch();
+    $row2 = $stmt2->fetch();
+
+    if($row){
         reloadWithMsg(4);
-      } else if($row2) {
+    } else if($row2) {
         reloadWithMsg(5);
-      } else{
+    } else{
         // Add row to database
         $query = "
         INSERT INTO registerUsers (
@@ -166,33 +166,33 @@ if (isset($_GET['msgtype'])) {
           :salt,
           :email
           )
-        ";
+";
 
         // Security measures
-        $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-        $password = hash('sha256', $_POST['password'] . $salt);
-        
-        for($round = 0; $round < 65536; $round++){
-          $password = hash('sha256', $password . $salt);
-        }
-        
-        $query_params = array(
-          ':username' => $_POST['username'],
-          ':password' => $password,
-          ':salt' => $salt,
-          ':email' => $_POST['email']
-          );
-        try {
-          $stmt = $db->prepare($query);
-          $result = $stmt->execute($query_params);
-        } catch(PDOException $ex){ 
-        }
-        
-        $_SESSION['user'] = $_POST['username'];
-        reloadWithMsg(6);
-      }
-    }
-  }
+$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+$password = hash('sha256', $_POST['password'] . $salt);
+
+for($round = 0; $round < 65536; $round++){
+  $password = hash('sha256', $password . $salt);
+}
+
+$query_params = array(
+  ':username' => $_POST['username'],
+  ':password' => $password,
+  ':salt' => $salt,
+  ':email' => $_POST['email']
+  );
+try {
+  $stmt = $db->prepare($query);
+  $result = $stmt->execute($query_params);
+} catch(PDOException $ex){ 
+}
+
+$_SESSION['user'] = $_POST['username'];
+reloadWithMsg(6);
+}
+}
+}
 }
 
 function ifCorrect() {
@@ -240,13 +240,13 @@ function ifCorrect() {
 </head>
 
 <body>
-<?php
+    <?php
 
-  if (isset($_GET['msgtype'])) {
-    printMsg($_GET['msgtype']);
-  }
+    if (isset($_GET['msgtype'])) {
+        printMsg($_GET['msgtype']);
+    }
 
-?>
+    ?>
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
 
@@ -266,11 +266,11 @@ function ifCorrect() {
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
 
-                     <input type="submit"<a class="popup-button btn btn-success btn-large" id=
-                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
+                      "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
                       <input class="btn btn-success btn-large" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                 --> </form>
+                  --> </form>
               </div>
           </li>
 
@@ -285,7 +285,7 @@ function ifCorrect() {
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
                   <input type="submit" value="Sign In" <a class="popup-button btn btn-success btn-large" id=
-                    "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                  "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                   <!--<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
               --></form>
           </div>
@@ -358,10 +358,10 @@ function ifCorrect() {
                             <br>
                             <h2>Possible Routes</h2><br>
                             <!--<div id="noRouteFound" style="width:320px"></div>-->
-                           <div id="noRouteFound" style="width:290px" class="alert alert-danger alert-dismissable">
+                            <div id="noRouteFound" style="width:290px" class="alert alert-danger alert-dismissable">
 
-        Sorry! No routes were found. Please try again.
-        </div>
+                                Sorry! No routes were found. Please try again.
+                            </div>
 
                             <div id="routes"></div><br>
 
@@ -379,7 +379,7 @@ function ifCorrect() {
 
                                 <tr>
                                     <td>Fewest Accidents </td>
-									<td><strong>-</strong></td>
+                                    <td><strong>-</strong></td>
                                     <td>
                                         <div class="criteria-slider" id="slider"></div>
                                     </td>
@@ -388,7 +388,7 @@ function ifCorrect() {
 
                                 <tr>
                                     <td>Bike Lanes</td>
-									<td><strong>-</strong></td>
+                                    <td><strong>-</strong></td>
                                     <td>
                                        <div class="criteria-slider" id="slider"></div>
                                    </td>
@@ -397,7 +397,7 @@ function ifCorrect() {
 
                                <tr>
                                 <td>Efficiency</td>
-								<td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div></td>
                                 </td>
@@ -407,7 +407,7 @@ function ifCorrect() {
 
                             <tr>
                                 <td>Scenery </td>
-								<td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
                                 <td>
                                     <div class="criteria-slider" id="slider"></div>
                                 </td>
@@ -422,22 +422,22 @@ function ifCorrect() {
 
                         <div class="row-fluid" id="bottom-buttons">
                             <div class="span1" class="go-back" style="padding: 10px;">
-                            <a id="back-to-routes"><img src="back-arrow.png"></a>
+                                <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
                             <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
                                 <button class="btn btn-large" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
                                 Route</button>
-                            <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                            <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save Route</div>
+                                <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
+                                <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save Route</div>
                             </div>
 
                             <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
                                 <button class="btn btn-large" id="route-rate" type="button">Rate this
                                     Route</a></button>
                                     <div class='save-error' id="save-newrate-error" style="display:none;">Please Login to Rate Route</div>
+                                </div>
                             </div>
-                        </div>
                             <h2 id="selectedRoute">Selected Route</h2>
 
                             <div id="directions_list" style="padding-top: 0px; padding-left: 30px; padding-bottom: 10px; padding-right: 10px;"></div>
@@ -454,7 +454,7 @@ function ifCorrect() {
                         </div>
 
                         <h2 style="text-align:center">Rate this Route</h2>
- 
+
                         <div style="padding-left: 50px; padding-top: 20px; padding-bottom: 20px;">
                          <div class="row-fluid">
                              <div class="span4"><h3>Safety:</h3></div>
@@ -492,36 +492,38 @@ function ifCorrect() {
                       </div>
                   </div>
 
-                      <div id="saved-routes" style="display:none">
-                       <div class="row-fluid" id="bottom-buttons">
-                            
-                            <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 140px;margin-top:10px;">
-                                <button class="btn btn-large" id="route-rate" type="button">Saved Routes </a></button>
-                                </div>
-            
+                  <div id="saved-routes" style="display:none">
+                   <div class="row-fluid" id="bottom-buttons">
 
-                            <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 100px;margin-top:10px;">
-                                <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
-                                </div>
-                            <div class="span3 offset3" id="route-rate-button" style="text-align:center; width: 120px;margin-top:10px;">
-                                <button class="btn btn-large" id="route-rate" type="button">
-                                    Comments</a></button>
-                                </div>
+                    <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 135px;margin-top:10px;">
+                        <button class="btn btn-large" id="route-rateSaved" type="button">Saved Routes </a></button>
+                    </div>
 
+
+                    <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
+                        <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
+                    </div>
+                    <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
+                        <button class="btn btn-large" id="comments-button" type="button">
+                            My Comments</button>
                         </div>
+
+                    </div>
                     <center>
                         <br /><br />
                         <!--<h2>Saved Routes</h2>-->
-                        
-                      <br /><br />
-                      <ol id="selectable">
-                      </ol>
-                  </center>
-              </div>
-              </div>
-          </div>
-      </div>
-  </div>
+
+                        <br /><br />
+                        <ol id="commentsDisplay"></ol>
+                        <ol id="selectable">
+                        </ol>
+
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 </div>
@@ -534,7 +536,7 @@ function ifCorrect() {
 
     <p><a class="btn btn-success btn-large" id=
         "popup-submit">Submit</a></p><br>
-</div>
+    </div>
 
     <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
