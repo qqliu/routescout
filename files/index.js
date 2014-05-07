@@ -359,6 +359,34 @@ savedRouteView = true;
 });
 }
 
+
+function get_user_tas() {
+ $.post( "db.php", { op: "get_user_tas", kind: 0 })
+ .done(function(res) {
+
+    console.log("results");
+    console.log(res);
+    $("#commentsDisplay").empty();
+    var comments = res.data;
+    console.log(res.data);
+    console.log("HELLO");
+    for (i in comments) {
+
+        console.log("Comments" + comments[i]);
+        console.log($("#commentsDisplay"));
+        
+       $("#commentsDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+   }
+
+                
+                
+
+
+});
+};
+
+
+
 function initialize() {
     var myCenter, directionsService,
     mapProp, starting, ending, rendererOptions;
@@ -369,6 +397,7 @@ function initialize() {
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
 
     get_saved_routes();
+    get_user_tas();
 
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
@@ -780,14 +809,14 @@ $("#route").click(function(e) {
             $('#save-newrate-error').delay(500).fadeOut(400);
         }
         else {
-    e.preventDefault();
-    $("#navigation").hide();
-    $("#containerfluid").hide();
-    $("#saved-routes").hide();
-    $("#rate-route").show();        
+
         } 
        });
-	
+	e.preventDefault();
+	$("#navigation").hide();
+	$("#containerfluid").hide();
+	$("#saved-routes").hide();
+	$("#rate-route").show();
      });
 
      $('#savedroutes').click(function(e) {
@@ -797,6 +826,35 @@ $("#route").click(function(e) {
          $("#rate-route").hide();
          $("#second").fadeIn();
          $("#saved-routes").show();
+         $("#commentsDisplay").hide();
+         $("#commentsDisplay").css("display", "none");
+         $("#selectable").show();
+         return false;
+     });
+
+
+     $('#comments-button').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#selectable").hide();
+         $("#commentsDisplay").show();
+         
+         return false;
+     });
+
+$('#route-rateSaved').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#commentsDisplay").hide();
+         $("#selectable").show();
          return false;
      });
 
