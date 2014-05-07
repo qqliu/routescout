@@ -501,11 +501,11 @@ function ifCorrect() {
 
 
                     <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
-                        <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
+                        <button class="btn btn-large" id="accident-button" type="button">Accidents </a></button>
                     </div>
                     <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
                         <button class="btn btn-large" id="comments-button" type="button">
-                            My Comments</button>
+                            Comments</button>
                         </div>
 
                     </div>
@@ -515,6 +515,7 @@ function ifCorrect() {
 
                         <br /><br />
                         <ol id="commentsDisplay"></ol>
+                        <ol id="accidentDisplay"></ol>
                         <ol id="selectable">
                         </ol>
 
