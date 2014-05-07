@@ -40,7 +40,7 @@ function printMsg($type) {
     case 6:
     echo '<div class="alert alert-success alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    You have successfully registered! Please login now to access saved routes, tips, comments, and more!
+    You have successfully registered! You are now logged in to access saved routes, tips, comments, and more!
     </div>';
     break;
     case 7:
