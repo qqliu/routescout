@@ -30,15 +30,15 @@ h2,h1 {
 }
 
 #lanes:hover {
-	background-color: #E8E8E8;
+	background-color: #D8D8D8;
 }
 
 #star:hover {
-	background-color: #E8E8E8;
+	background-color: #D8D8D8;
 }
 
 #caution:hover {
-	background-color: #E8E8E8;
+	background-color: #D8D8D8;
 }
 
 #star {
@@ -98,7 +98,7 @@ h2,h1 {
     height: 20px;
     border-top: 0px;
     margin: 0px;
-    margin-right: 43px;
+    margin-right: 55px;
 }
 
 #green-button1 a {
@@ -132,7 +132,7 @@ h2,h1 {
 }
 
 .on2 {
-	background-color: #D8D8D8;
+	background-color: #C8C8C8;
 }
 
 .off {
@@ -140,7 +140,7 @@ h2,h1 {
 }
 
 .off2 {
-	background-color: #F8F8F8;
+	background-color: #E8E8E8;
 }
 
 
