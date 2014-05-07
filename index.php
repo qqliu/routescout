@@ -549,15 +549,15 @@ function ifCorrect() {
                     Toggle Visibility:
                 </div>
 
-                <div id="lanes" class="toggle-button filters">
+                <div id="lanes" class="toggle-button filters on">
                     <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
                 </div>
 
-                <div id="star" class="toggle-button filters">
+                <div id="star" class="toggle-button filters on ">
                     <img class="toggle-img" src="popups/star-32.png">Tips
                 </div>
 
-                <div id="caution" class="toggle-button filters">
+                <div id="caution" class="toggle-button filters on">
                     <img class="toggle-img" src="popups/caution.png">Accidents
                 </div>
 

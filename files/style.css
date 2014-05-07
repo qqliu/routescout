@@ -39,6 +39,14 @@ text-align:center;
     left: 8px;
 }
 
+.on {
+	background-color: #E8E8E8;
+}
+
+.off {
+	background-color: #ffffff;
+}
+
 #overall{
 	display: block;
 	width: 1200px;
