@@ -574,7 +574,7 @@ function ifCorrect() {
 	                </div>
                </div>
 
-                <div id="googleMap" style="width:700px;height:519px;">
+                <div id="googleMap" style="width:700px;height:520px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>
