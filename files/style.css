@@ -519,13 +519,13 @@ table.test {
 #feedback { font-size: 1.4em; }
 #selectable .ui-selecting { background: #FECA40; }
 #selectable .ui-selected { background: #F39814; color: white; }
-#selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#selectable { list-style-type: none; margin: 0; padding: 0; width: 80%; }
 #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
 
-#commentsDisplay { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#commentsDisplay { list-style-type: none; margin: 0; padding: 0; width: 80%; }
 #commentsDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
 
-#accidentDisplay { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#accidentDisplay { list-style-type: none; margin: 0; padding: 0; width: 80%; }
 #accidentDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
 
 .delete-button {

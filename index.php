@@ -510,10 +510,10 @@ function ifCorrect() {
 
                     </div>
                     <center>
-                        <br /><br />
+                        
                         <!--<h2>Saved Routes</h2>-->
 
-                        <br /><br />
+                        
                         <ol id="commentsDisplay"></ol>
                         <ol id="accidentDisplay"></ol>
                         <ol id="selectable">
