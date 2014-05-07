@@ -76,19 +76,24 @@ var last_route = "";
 var c = 0;
 
 function toggleActive(button) {
-   var active = $(button).hasClass("active");
+   var active = $(button).hasClass("on");
    if (!active) {
-       $(button).addClass("active");
-       if ($(button).attr("id") == "report-button") {
-           $("#tip-button").removeClass("active");
+   		$(button).removeClass("off");
+       $(button).addClass("on");
+       console.log( $(button));
+       if ($(button).attr("id") == "green-button1") {
+           $("#green-button2").removeClass("on");
+           $("#green-button2").addClass("off");
        } else {
-           $("#report-button").removeClass("active");
+           $("#green-button1").removeClass("on");
+           $("#green-button1").addClass("off");
        }
    } else {
        map.setOptions({
            draggableCursor: 'default'
        });
-       $(button).removeClass("active");
+       $(button).removeClass("on");
+       $(button).addClass("off");
        adding = undefined;
    }
 }
@@ -615,20 +620,20 @@ function showAllRoutes() {
     Route();
 }
 
-$("#report-button").click(function() {
+$("#green-button1").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/caution.png) 16 30, default"
    });
    adding = "caution";
-   toggleActive(this);
+   toggleActive("#green-button1");
 });
 
-$("#tip-button").click(function() {
+$("#green-button2").click(function() {
    map.setOptions({
        draggableCursor: "url(popups/star-32.png) 16 30, default"
    });
    adding = "star";
-   toggleActive(this);
+   toggleActive("#green-button2");
 });
 
 
@@ -680,7 +685,7 @@ $("#route").click(function(e) {
       }
   });
      $('.filters').click(function() {
-       if ($(this).hasClass('on')) {
+       if ($(this).hasClass('on2')) {
            var id = $(this).attr("id");
            console.log(id);
            for (var i in markers) {
@@ -691,8 +696,8 @@ $("#route").click(function(e) {
            if (id == "lanes") {
               toggleLanes(false);
           }
-          $(this).removeClass('on');
-          $(this).addClass('off');
+          $(this).removeClass('on2');
+          $(this).addClass('off2');
       } else {
        var id = $(this).attr("id");
        console.log(id);
@@ -704,8 +709,8 @@ $("#route").click(function(e) {
        if (id == "lanes") {
           toggleLanes(true);
       }
-       $(this).removeClass('off');
-       $(this).addClass('on');
+       $(this).removeClass('off2');
+       $(this).addClass('on2');
   }
 });
  }
