@@ -266,8 +266,8 @@ function ifCorrect() {
                       Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                       <input type="hidden" name="registerform" value="registerform">
 
-                      <input type="submit"<a class="popup-button btn btn-success btn-large" id=
-                      "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                      <input type="submit" <a class="popup-button" id=
+                      "report-button2" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                     <!--<button type="submit" value=" Send" class="btn btn-success" id="submit" />
                       <input class="btn btn-success btn-large" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
                   --> </form>
@@ -284,8 +284,8 @@ function ifCorrect() {
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
                   Password: <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" value="" size="30" />
                   <input type="hidden" name="loginform" value="loginform">
-                  <input type="submit" value="Sign In" <a class="popup-button btn btn-success btn-large" id=
-                  "report-button" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
+                  <input type="submit" value="Sign In" <a class="popup-button" id=
+                  "report-button2" style="clear: left; width: 100%; height: 32px; font-size: 13px;"></a>
                   <!--<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
               --></form>
           </div>
@@ -338,7 +338,7 @@ function ifCorrect() {
 
                             <div id="route-find" style="text-align:center">
                                 <img class="invisible-spacer" src="files/progress-running.gif" />
-                                <button class="btn btn-large" id=
+                                <button class="button" id=
                                 "route">Search For Routes!</button>
                                 <img id="loading" src="files/progress-running.gif" />
                             </div>
@@ -425,17 +425,17 @@ function ifCorrect() {
                                 <a id="back-to-routes"><img src="back-arrow.png"></a>
                             </div>
                             <div class="span1 " id="route-find" style="text-align:center; float: left; padding-left:0px; width: 150px;">
-                                <button class="btn btn-large" data-target="#saveModal"
+                                <button class="button" data-target="#saveModal"
                                 data-toggle="modal" id="savedButton">Save
                                 Route</button>
                                 <div class='save-alert' id="save-route-alert" style="display:none;">Successfully Saved!</div>
-                                <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save Route</div>
+                                <div class='save-error' id="save-route-error" style="display:none;">Please Login to Save</div>
                             </div>
 
                             <div class="span4 offset5" id="route-rate-button" style="text-align:center; width: 150px;margin-top:10px;">
-                                <button class="btn btn-large" id="route-rate" type="button">Rate this
+                                <button class="button" id="route-rate" type="button">Rate this
                                     Route</a></button>
-                                    <div class='save-error' id="save-newrate-error" style="display:none;">Please Login to Rate Route</div>
+                                    <div class='save-error' id="save-newrate-error" style="display:none;">Please Login to Rate</div>
                                 </div>
                             </div>
                             <h2 id="selectedRoute">Selected Route</h2>
@@ -483,8 +483,8 @@ function ifCorrect() {
 
                      <div id="bottom-buttons" class="row-fluid">
                          <div id="route-find" style="text-align:center">
-                          <button id="route-save" type="button" class="btn btn-large">
-                              Rate!</button>
+                          <button id="route-save" type="button" class="button">
+                              Rate Route</button>
 
                               <div class='save-alert' id="save-rate-alert" style="display:none;">Successfully Saved!</div>
                               <div class='save-error' id="save-rate-error" style="display:none;">Error While Saving</div>
@@ -501,11 +501,11 @@ function ifCorrect() {
 
 
                     <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
-                        <button class="btn btn-large" id="accident-button" type="button">Accidents </a></button>
+                        <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
                     </div>
                     <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
                         <button class="btn btn-large" id="comments-button" type="button">
-                            Comments</button>
+                            My Comments</button>
                         </div>
 
                     </div>
@@ -515,7 +515,6 @@ function ifCorrect() {
 
                         <br /><br />
                         <ol id="commentsDisplay"></ol>
-                        <ol id="accidentDisplay"></ol>
                         <ol id="selectable">
                         </ol>
 

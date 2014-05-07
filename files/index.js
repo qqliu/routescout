@@ -561,7 +561,7 @@ function initialize() {
               for (i in possibleRoutes) {
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
-                 $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" id="route-' + c + '" type="button">' +
+                 $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="button2 route-buttons" id="route-' + c + '" type="button">' +
                   possibleRoutes[i].summary + '</button></li>');
                  displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
                  c += 1;
@@ -844,15 +844,14 @@ $("#route").click(function(e) {
             $('#save-newrate-error').delay(500).fadeOut(400);
         }
         else {
-
-        } 
+			e.preventDefault();
+			$("#navigation").hide();
+			$("#containerfluid").hide();
+			$("#saved-routes").hide();
+			$("#rate-route").show();
+		} 
+		});
        });
-	e.preventDefault();
-	$("#navigation").hide();
-	$("#containerfluid").hide();
-	$("#saved-routes").hide();
-	$("#rate-route").show();
-     });
 
      $('#savedroutes').click(function(e) {
          e.preventDefault();
