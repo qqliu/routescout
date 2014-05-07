@@ -598,3 +598,7 @@ table.test {
 	vertical-align: middle;
 	visibility: hidden;
 }
+
+#back-to-routes {
+	cursor: pointer;
+}
