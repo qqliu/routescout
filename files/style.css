@@ -591,6 +591,7 @@ table.test {
 	float:right;
 	border:1px solid black;
 	cursor: pointer;
+	visibility: hidden;
 }
 
 .route:hover {
