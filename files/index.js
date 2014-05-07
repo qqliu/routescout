@@ -1,3 +1,5 @@
+ var MAX_SELECTABLE_TEXT = 20;  //must be > 3
+ 
  var map, adding, message, feature, messageId = 0;
  var markers = {};
  var curResult;
@@ -288,11 +290,13 @@ function get_saved_routes() {
     console.log(saved_routes);
     for (i in saved_routes) {
         var displayName = saved_routes[i].name;
-        if (displayName.length > 12){
-            displayName = displayName.substring(0,10);
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
             displayName += "...";
+            tooltip = 'title="' + saved_routes[i].name  +  '"';
         }
-       $("#selectable").append('<li title="' + saved_routes[i].name  +  '" class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
+       $("#selectable").append('<li ' + tooltip + ' class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
    }
 
                 //add x button to each selectable
@@ -391,7 +395,15 @@ function get_user_tas() {
         console.log("Comments" + comments[i]);
         console.log($("#commentsDisplay"));
         
-       $("#commentsDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+        var displayName = comments[i].comment;
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
+            displayName += "...";
+            tooltip = 'title="' + comments[i].comment  +  '"';
+        }
+      
+       $("#commentsDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
@@ -410,7 +422,15 @@ $("#accidentDisplay").empty();
         //console.log("Comments" + comments[i]);
         //console.log($("#commentsDisplay"));
         
-       $("#accidentDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+        var displayName = comments[i].comment;
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
+            displayName += "...";
+            tooltip = 'title="' + comments[i].comment  +  '"';
+        }
+      
+       $("#accidentDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
