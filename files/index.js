@@ -288,7 +288,7 @@ function get_saved_routes() {
     console.log(saved_routes);
     for (i in saved_routes) {
         var displayName = saved_routes[i].name;
-        if (displayName.length > 12){
+        if (displayName.length > 20){
             displayName = displayName.substring(0,10);
             displayName += "...";
         }
