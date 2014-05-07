@@ -910,15 +910,16 @@ $("#route").click(function(e) {
             $('#save-newrate-error').delay(500).fadeOut(400);
         }
         else {
-
-        } 
-       });
     e.preventDefault();
     $("#navigation").hide();
     $("#containerfluid").hide();
     $("#saved-routes").hide();
-    $("#rate-route").show();
+    $("#rate-route").show();        
+        } 
+       });
+
      });
+
 
      $('#savedroutes').click(function(e) {
          e.preventDefault();
