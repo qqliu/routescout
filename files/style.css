@@ -113,13 +113,13 @@ text-align:center;
     font-family: 'Lily Script One', cursive;
 }
 
-#registerLogin {
+#registerLogin, #savedroutes {
   position: relative;
   margin-left: 30px;
   margin-bottom: 40px;
   top: 0;
   font-size: 25px;
-  margin: 0;
+  margin-left: 0;
   margin-top: 0;
   font-weight: 700;
   text-rendering: optimizelegibility;
@@ -127,9 +127,10 @@ text-align:center;
   font-family: 'Lily Script One', cursive;
   padding-left: 20px;
   padding-right: 20px;
+  margin-top: 5px;
 }
 
-#registerLogin:hover {
+#registerLogin:hover, #savedroutes:hover {
   background-color: darkgray;
 }
 
@@ -139,10 +140,11 @@ text-align:center;
     margin: 0 auto;
 }
 
-#logout {
+#logout, .clickable {
     cursor: pointer;
 }
 
+/*
 #savedroutes {
     position: relative;
     margin-left:30px;
@@ -157,6 +159,7 @@ text-align:center;
     font-family: 'Lily Script One', cursive;
     cursor: pointer;
 }
+*/
 
 #second {
     display: none;
@@ -437,4 +440,8 @@ table.test {
 .thicker-divider {
 	background-color: #857D7D;	!important;
 	width: 3px;	!important;
+}
+
+.right-menubutton {
+	margin-right: 9px;	!important;
 }

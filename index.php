@@ -278,7 +278,7 @@ function ifCorrect() {
 
           <li class="dropdown">
 
-            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
+            <a class="dropdown-toggle right-menubutton" href="#" data-toggle="dropdown" id="registerLogin" >Login <strong class="caret"></strong></a>
             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                 <form id="loginform" name="loginform" method="post" accept-charset="UTF-8" action="index.php">
                   Username: <input id="user_username" style="margin-bottom: 15px;" type="text" name="username" value="" size="30" />
@@ -294,9 +294,9 @@ function ifCorrect() {
       else { ?>
       <li class="divider-vertical"></li>
       <!--<a class="logout-saved" id="savedroutes">Saved Routes</a>-->
-      <li id="savedroutes"><a>My Activity</a></li>
+      <li id="savedroutes" class="registerlogin clickable" ><a>My Activity</a></li>
       <li class="divider-vertical"></li>
-      <li id="registerLogin"><a href="/routescout/logout.php">Logout</a></li>
+      <li id="registerLogin" class="right-menubutton"><a href="/routescout/logout.php">Logout</a></li>
       <?php } ?>
   </ul>
   <div id="center-this-navbar">

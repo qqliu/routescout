@@ -2642,9 +2642,9 @@ button.btn.small, input[type="submit"].btn.small {
 }
 .navbar .nav > li > a {
   float: none;
-  padding: 10px 10px 11px;
+  padding: 10px 0px 11px;
   line-height: 19px;
-  color: #999999;
+  color: white;
   text-decoration: none;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -2665,6 +2665,7 @@ button.btn.small, input[type="submit"].btn.small {
   background-color: #857D7D;
   width: 2px;
   border-right: 1px solid #333333;
+  margin-top: 5px;
 }
 .navbar .nav.pull-right {
   margin-left: 10px;
