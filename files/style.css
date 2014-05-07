@@ -520,13 +520,13 @@ table.test {
 #selectable .ui-selecting { background: #FECA40; }
 #selectable .ui-selected { background: #F39814; color: white; }
 #selectable { list-style-type: none; margin: 0; padding: 0; width: 80%; }
-#selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+#selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; cursor: pointer; }
 
 #commentsDisplay { list-style-type: none; margin: 0; padding: 0; width: 80%; }
-#commentsDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+#commentsDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; cursor: pointer; }
 
 #accidentDisplay { list-style-type: none; margin: 0; padding: 0; width: 80%; }
-#accidentDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+#accidentDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; cursor: pointer; }
 
 .delete-button {
 	float:right;
