@@ -287,7 +287,12 @@ function get_saved_routes() {
     var saved_routes = res.data;
     console.log(saved_routes);
     for (i in saved_routes) {
-       $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');
+        var displayName = saved_routes[i].name;
+        if (displayName.length > 12){
+            displayName = displayName.substring(0,10);
+            displayName += "...";
+        }
+       $("#selectable").append('<li title="' + saved_routes[i].name  +  '" class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
    }
 
                 //add x button to each selectable
@@ -786,6 +791,8 @@ $("#route").click(function(e) {
            }
        }
    }).addClass("criteria-slider");
+
+   $(document).tooltip();
 
    populate_tips();
    populate_accidents();
