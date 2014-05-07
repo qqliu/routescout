@@ -231,6 +231,10 @@ function ifCorrect() {
     <script src="files/bootstrap-collapse.js"></script>
     <script src="files/bootstrap-carousel.js"></script>
     <script src="files/bootstrap-typeahead.js"></script>
+    <script src="bootstrap/js/bootstrap-alert.js"></script>
+    <script src="bootstrap/js/bootstrap-modal.js"></script>
+    <script src="bootstrap/js/bootstrap-transition.js"></script>
+    <script src="bootstrap/js/bootstrap-tooltip.js"></script>
     <script src="ratePlugin/jquery.raty.min.js"></script>
     <script src="files/jquery-ui-1.10.4/ui/jquery-ui.js" type=
     "text/javascript"></script>
@@ -510,10 +514,10 @@ function ifCorrect() {
 
                     </div>
                     <center>
-                        <br /><br />
+                        
                         <!--<h2>Saved Routes</h2>-->
 
-                        <br /><br />
+                        
                         <ol id="commentsDisplay"></ol>
                         <ol id="selectable">
                         </ol>

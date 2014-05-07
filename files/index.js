@@ -1,3 +1,5 @@
+ var MAX_SELECTABLE_TEXT = 20;  //must be > 3
+ 
  var map, adding, message, feature, messageId = 0;
  var markers = {};
  var curResult;
@@ -285,9 +287,15 @@ function get_saved_routes() {
     console.log(res);
     $("#selectable").empty();
     var saved_routes = res.data;
-    console.log(saved_routes);
     for (i in saved_routes) {
-       $("#selectable").append('<li class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + saved_routes[i].name + '</li>');
+        var displayName = saved_routes[i].name;
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
+            displayName += "...";
+            tooltip = 'title="' + saved_routes[i].name  +  '"';
+        }
+       $("#selectable").append('<li ' + tooltip + ' class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
    }
 
                 //add x button to each selectable
@@ -386,7 +394,15 @@ function get_user_tas() {
         console.log("Comments" + comments[i]);
         console.log($("#commentsDisplay"));
         
-       $("#commentsDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+        var displayName = comments[i].comment;
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
+            displayName += "...";
+            tooltip = 'title="' + comments[i].comment  +  '"';
+        }
+      
+       $("#commentsDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
@@ -405,7 +421,15 @@ $("#accidentDisplay").empty();
         //console.log("Comments" + comments[i]);
         //console.log($("#commentsDisplay"));
         
-       $("#accidentDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+        var displayName = comments[i].comment;
+        var tooltip = '';
+        if (displayName.length >= MAX_SELECTABLE_TEXT){
+            displayName = displayName.substring(0, MAX_SELECTABLE_TEXT-3);
+            displayName += "...";
+            tooltip = 'title="' + comments[i].comment  +  '"';
+        }
+      
+       $("#accidentDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
@@ -559,12 +583,54 @@ function initialize() {
 
 
               for (i in possibleRoutes) {
+                     var name = possibleRoutes[i].summary;
+                     var steps = possibleRoutes[i].legs[0].steps;
+                     var routeKey = "";
+                     for (i in steps) {
+                            routeKey += steps[i].instructions;
+                        }
+                     var res = $.ajax({
+                            type: 'POST',
+                            url: "db.php",
+                            data: {op: "get_average_ratings", route_key: routeKey},
+                            async:false
+                          }).responseText;
+                       res = JSON.parse(res);
+                       if (res.error == "") {
+                            console.log(res.data);
+                            var safety = res.data.safety.safety;
+                            var efficiency = res.data.efficiency.efficiency;
+                            var scenery = res.data.scenery.scenery;
+                            var routeButton = '<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="button2 route-buttons" data-toggle="tooltip" data-placement="right" data-html="true" id="route-' + c + '" title = "';
+                            if (safety != null && safety != "0") {
+                                   safety = safety.toString().split(".")[0];
+                                   routeButton = routeButton + 'Safety rating: ' + safety + '<br />'; 
+                            }
+                            
+                            if (efficiency != null && efficiency != "0") {
+                                   efficiency = efficiency.toString().split(".")[0];
+                                   routeButton = routeButton + 'Efficiency rating: ' + efficiency + '<br />';
+                            }
+                            
+                            if (scenery != null && scenery != "0") {
+                                   scenery = scenery.toString().split(".")[0];
+                                   routeButton = routeButton + 'Scenery rating: ' + scenery + '<br />';       
+                            }
+                            
+                            if ((safety == null || safety == "0") && (efficiency == null || efficiency == "0") && (scenery != null || scenery != "0")) {
+                                   routeButton = routeButton + 'No ratings available.';
+                            }
+                            routeButton += '">' + name + '</button></li>';
+                            
+                            $($("#routes").find("ol")[0]).append(routeButton);
+                            displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
+                            c += 1;
+                            
+                            $("[data-toggle=tooltip]").tooltip({content: function () {
+                                       return $(this).prop('title');}});
+                     }
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
-                 $($("#routes").find("ol")[0]).append('<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="button2 route-buttons" id="route-' + c + '" type="button">' +
-                  possibleRoutes[i].summary + '</button></li>');
-                 displayRoutes.push(displayRoute(c, result, colors[c % colors.length]));
-                 c += 1;
              }
              $('.route-buttons').click(function(e) {
                  e.preventDefault();
@@ -689,8 +755,6 @@ $("#green-button2").click(function() {
    toggleActive("#green-button2");
 });
 
-
-
 $("#destination_loc").keypress(function(event) {
     if (event.which == 13) {
         $("#rate-route").hide();
@@ -786,6 +850,8 @@ $("#route").click(function(e) {
            }
        }
    }).addClass("criteria-slider");
+
+   $(document).tooltip();
 
    populate_tips();
    populate_accidents();
