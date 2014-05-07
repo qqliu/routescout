@@ -500,15 +500,15 @@ function ifCorrect() {
                    <div class="row-fluid" id="bottom-buttons">
 
                     <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 135px;margin-top:10px;">
-                        <button class="btn btn-large" id="route-rateSaved" type="button">Saved Routes </a></button>
+                        <button class="button" id="route-rateSaved" type="button">Saved Routes </a></button>
                     </div>
 
 
                     <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
-                        <button class="btn btn-large" id="route-rate" type="button">Ratings </a></button>
+                        <button class="button" id="route-rate" type="button">Ratings </a></button>
                     </div>
                     <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
-                        <button class="btn btn-large" id="comments-button" type="button">
+                        <button class="button" id="comments-button" type="button">
                             My Comments</button>
                         </div>
 
