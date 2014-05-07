@@ -41,6 +41,11 @@ h2,h1 {
 	background-color: #D8D8D8;
 }
 
+#toggle-label {
+	position: relative;
+	top: 2px;
+}
+
 #star {
 	text-align: left;
     display: inline-block;
@@ -82,6 +87,46 @@ h2,h1 {
     height: 20px;
     padding: 10px;
     margin: 0px;
+}
+
+.button {
+	border: none;
+	background-color: #D8D8D8;
+	    border-top-left-radius:.5em; 
+	border-top-right-radius:.5em;
+	border-bottom-left-radius:.5em; 
+	border-bottom-right-radius:.5em;
+	height: 40px;
+	padding: 10px;	
+	outline: none;
+}
+
+.button:hover {
+	background-color: #C8C8C8;
+}
+
+.button:active {
+	background-color: #B8B8B8;
+}
+
+.button2 {
+	background-color: #F8F8F8;
+	    border-top-left-radius:.5em; 
+	border-top-right-radius:.5em;
+	border-bottom-left-radius:.5em; 
+	border-bottom-right-radius:.5em;
+	height: 40px;
+	padding: 10px;
+	border-style: solid;
+	outline: none;
+}
+
+.button2:hover {
+	background-color: #E8E8E8;
+}
+
+.button2:active {
+	background-color: #D8D8D8;
 }
 
 #green-button2 {
@@ -256,9 +301,9 @@ text-align:center;
 #registerLogin, #savedroutes {
   position: relative;
   margin-left: 30px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   top: 0;
-  font-size: 25px;
+  font-size: 22px;
   margin-left: 0;
   margin-top: 0;
   font-weight: 700;
@@ -271,7 +316,16 @@ text-align:center;
 }
 
 #registerLogin:hover, #savedroutes:hover {
-  background-color: darkgray;
+  color: darkgray;
+}
+
+#registerLogin:hover .caret, #savedroutes:hover .caret {
+  border-top-color: darkgray;
+  border-bottom-color: darkgray;
+}
+
+#registerLogin a:hover, #savedroutes a:hover {
+  color: darkgray;
 }
 
 #center-this-navbar {
@@ -462,6 +516,11 @@ a:hover {
 
 .save-alert {
 	color: green;
+}
+
+#report-button2 {
+	color: #ffffff;
+	background-color: #339900;
 }
 
 .save-error {

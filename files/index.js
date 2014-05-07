@@ -601,7 +601,7 @@ function initialize() {
                             var safety = res.data.safety.safety;
                             var efficiency = res.data.efficiency.efficiency;
                             var scenery = res.data.scenery.scenery;
-                            var routeButton = '<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="btn btn-large route-buttons" data-toggle="tooltip" data-placement="right" data-html="true" id="route-' + c + '" title = "';
+                            var routeButton = '<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="button2 route-buttons" data-toggle="tooltip" data-placement="right" data-html="true" id="route-' + c + '" title = "';
                             if (safety != null && safety != "0") {
                                    safety = safety.toString().split(".")[0];
                                    routeButton = routeButton + 'Safety rating: ' + safety + '<br />'; 
@@ -919,6 +919,7 @@ $("#route").click(function(e) {
        });
 
      });
+
 
 
      $('#savedroutes').click(function(e) {
