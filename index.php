@@ -339,6 +339,7 @@ function ifCorrect() {
                             <div id="route-find" style="text-align:center">
                                 <button class="btn btn-large" id=
                                 "route">Search For Routes!</button>
+                                <img id="loading" src="files/progress-running.gif" />
                             </div>
                         </div>
                     </div>

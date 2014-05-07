@@ -565,3 +565,8 @@ table.test {
 .right-menubutton {
 	margin-right: 9px;	!important;
 }
+
+#loading {
+	vertical-align: middle;
+	visibility: hidden;
+}

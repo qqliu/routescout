@@ -479,6 +479,7 @@ function initialize() {
        provideRouteAlternatives: true
    };
    directionsService.route(request, function(result, status) {
+       $("#loading").css("visibility", "hidden");
        if (status == google.maps.DirectionsStatus.OK) {
           curResult = result;
           var possibleRoutes;
@@ -617,6 +618,7 @@ function toggleLanes(value) {
 }
 
 function showAllRoutes() {
+    $("#loading").css("visibility", "visible");
     Route();
 }
 
