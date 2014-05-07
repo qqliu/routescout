@@ -383,19 +383,33 @@ function get_user_tas() {
     console.log(res.data);
     console.log("HELLO");
     for (i in comments) {
-
         console.log("Comments" + comments[i]);
         console.log($("#commentsDisplay"));
         
        $("#commentsDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
    }
-
-                
-                
-
-
 });
 };
+
+function get_user_accidents() {
+ $.post( "db.php", { op: "get_user_tas", kind: 1 })
+ .done(function(res) {
+$("#accidentDisplay").empty();
+    console.log("results");
+    console.log(res);
+    //$("#commentsDisplay").empty();
+    var comments = res.data;
+    console.log(res.data);
+    console.log("HELLO");
+    for (i in comments) {
+        //console.log("Comments" + comments[i]);
+        //console.log($("#commentsDisplay"));
+        
+       $("#accidentDisplay").append('<li class="ui-widget-content">' + comments[i].comment + '</li>');
+   }
+});
+};
+
 
 
 
@@ -410,6 +424,7 @@ function initialize() {
 
     get_saved_routes();
     get_user_tas();
+    get_user_accidents();
 
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
     //google.maps.event.addDomListener(document.getElementById('country'), 'change',
@@ -847,6 +862,7 @@ $("#route").click(function(e) {
          $("#second").fadeIn();
          $("#saved-routes").show();
          $("#commentsDisplay").hide();
+         $("#accidentDisplay").hide();
          $("#commentsDisplay").css("display", "none");
          $("#selectable").show();
          return false;
@@ -862,10 +878,25 @@ $("#route").click(function(e) {
          $("#saved-routes").show();
          $("#selectable").hide();
          $("#commentsDisplay").show();
+         $("#accidentDisplay").hide();
          
          return false;
      });
 
+
+$('#accident-button').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#second").fadeIn();
+         $("#saved-routes").show();
+         $("#selectable").hide();
+         $("#commentsDisplay").hide();
+         $("#accidentDisplay").show();
+         
+         return false;
+     });
 $('#route-rateSaved').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -874,6 +905,7 @@ $('#route-rateSaved').click(function(e) {
          $("#second").fadeIn();
          $("#saved-routes").show();
          $("#commentsDisplay").hide();
+         $("#accidentDisplay").hide();
          $("#selectable").show();
          return false;
      });
