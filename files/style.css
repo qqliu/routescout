@@ -505,6 +505,9 @@ table.test {
 #commentsDisplay { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 #commentsDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
 
+#accidentDisplay { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#accidentDisplay li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
 .delete-button {
 	float:right;
 	border:1px solid black;
