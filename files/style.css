@@ -570,3 +570,8 @@ table.test {
 	vertical-align: middle;
 	visibility: hidden;
 }
+
+.invisible-spacer {
+	vertical-align: middle;
+	visibility: hidden;
+}
