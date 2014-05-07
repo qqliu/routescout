@@ -538,30 +538,36 @@ function ifCorrect() {
     <div class="container-fluid" style="padding:0px;">
         <div class="span8" id="map">
             <div id="togglefeatures" style="margin-top:30px;">
-            	<div id="green-buttons">
-                    <a class="popup-button btn btn-success btn-large" id=
-                    "report-button">Report Accident</a> <a class=
-                    "popup-button btn btn-success btn-large" id=
-                    "tip-button">Add Tip</a>
-                </div>
+            	<div class="toppanel">
+		            	<div id="green-button1" class="off">
+		                    <a class="popup-button" id=
+		                    "report-button">Report Accident</a> 
+		                </div>
+		               	<div id="green-button2" class="off">
+		                    <a class=
+		                    "popup-button" id=
+		                    "tip-button">Add Tip</a>
+		                </div>
+		            
+	
+	                <div class="toggle-button" id="toggle-label">
+	                    Toggle Visibility:
+	                </div>
+	
+	                <div id="lanes" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
+	                </div>
+	
+	                <div id="star" class="toggle-button filters on2 ">
+	                    <img class="toggle-img" src="popups/star-32.png">Tips
+	                </div>
+	
+	                <div id="caution" class="toggle-button filters on2">
+	                    <img class="toggle-img" src="popups/caution.png">Accidents
+	                </div>
+               </div>
 
-                <div class="toggle-button" id="toggle-label">
-                    Toggle Visibility:
-                </div>
-
-                <div id="lanes" class="toggle-button filters on">
-                    <img class="toggle-img" src="files/icon_biking.png">Bike Lanes
-                </div>
-
-                <div id="star" class="toggle-button filters on ">
-                    <img class="toggle-img" src="popups/star-32.png">Tips
-                </div>
-
-                <div id="caution" class="toggle-button filters on">
-                    <img class="toggle-img" src="popups/caution.png">Accidents
-                </div>
-
-                <div id="googleMap" style="width:700px;height:530px;">
+                <div id="googleMap" style="width:700px;height:519px;">
                 </div>
             </div><!--/.fluid-container-->
         </div>
