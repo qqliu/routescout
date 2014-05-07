@@ -190,12 +190,12 @@ function deleteMarker(id) {
      id: parseInt(m_id)
  };
 
- return $.ajax('db.php', {
+ var text = $.ajax('db.php', {
    data : data_obj,
    type : 'POST',
    async: false
 }).responseText;
-
+   return text;
 };
 
 function save_tip_accident(message, feature) {
@@ -204,7 +204,6 @@ function save_tip_accident(message, feature) {
  } else {
      kind = 0;
  }
- console.log("saving tip and accient");
  data_obj = {
      op: "save_ta",
      kind: kind,
@@ -376,7 +375,6 @@ savedRouteView = true;
 function get_user_tips() {
  $.post( "db.php", { op: "get_user_tas", kind: 0 })
  .done(function(res) {
-   console.log(res);
     $("#tips").empty();
     var comments = res.data;
     for (i in comments) { 
@@ -780,7 +778,6 @@ $("#route").click(function(e) {
       } else {
           message = $('#popup-textbox').val();
           result = save_tip_accident(message, feature);
-         console.log(result);
           $("#popup").dialog('close');
           addStarCaution();
           $("#popup-textbox").val("");
