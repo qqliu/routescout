@@ -679,9 +679,10 @@ $("#route").click(function(e) {
           messageId += 1;
       }
   });
-     $('.filters:checkbox').click(function() {
-       if (!$(this).is(':checked')) {
-           var id = $(this).attr("value");
+     $('.filters').click(function() {
+       if ($(this).hasClass('on')) {
+           var id = $(this).attr("id");
+           console.log(id);
            for (var i in markers) {
                if (markers[i].type == id) {
                    markers[i].setVisible(false);
@@ -690,8 +691,11 @@ $("#route").click(function(e) {
            if (id == "lanes") {
               toggleLanes(false);
           }
+          $(this).removeClass('on');
+          $(this).addClass('off');
       } else {
-       var id = $(this).attr("value");
+       var id = $(this).attr("id");
+       console.log(id);
        for (var i in markers) {
            if (markers[i].type == id) {
                markers[i].setVisible(true);
@@ -700,6 +704,8 @@ $("#route").click(function(e) {
        if (id == "lanes") {
           toggleLanes(true);
       }
+       $(this).removeClass('off');
+       $(this).addClass('on');
   }
 });
  }
