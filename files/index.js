@@ -1,4 +1,4 @@
- var MAX_SELECTABLE_TEXT = 20;  //must be > 3
+var MAX_SELECTABLE_TEXT = 20;  //must be > 3
  
  var map, adding, message, feature, messageId = 0;
  var markers = {};
@@ -9,7 +9,7 @@
 
 
  function populate_tips() {
- 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
+    $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=0', {
        type : 'GET',
        success: function(res) {
           for (var i=0;i<res.data.length;i++) {
@@ -32,7 +32,7 @@
  }
 
  function populate_accidents(res) {
- 	$.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=1', {
+    $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php?op=get_all_tas&kind=1', {
        type : 'GET',
        success: function(res) {
           for (var i=0;i<res.data.length;i++) {
@@ -80,7 +80,7 @@ var c = 0;
 function toggleActive(button) {
    var active = $(button).hasClass("on");
    if (!active) {
-   		$(button).removeClass("off");
+        $(button).removeClass("off");
        $(button).addClass("on");
        console.log( $(button));
        if ($(button).attr("id") == "green-button1") {
@@ -119,13 +119,13 @@ function refreshMarker(id) {
      
    adding = marker.type;
     
-	feature = {
-		user: marker.user,
-		position: marker.position,
-		type: marker.type,
-	};
-	console.log(feature);
-	
+    feature = {
+        user: marker.user,
+        position: marker.position,
+        type: marker.type,
+    };
+    console.log(feature);
+
     marker.setMap(null);
     delete markers[id];
  
@@ -715,7 +715,7 @@ for (route in displayRoutes) {
 }
 
 function toggleLanes(value) {
-	if (value) {
+    if (value) {
        bikeLayer.setMap(map);
    } else {
        bikeLayer.setMap(null);
@@ -778,15 +778,15 @@ $("#route").click(function(e) {
      //install handler for submit button
      $('#popup-submit').click(function() {
 
-     	title = $("#popup-title").text();
-     	if (title.indexOf("Edit") > -1) {
-     		m = $('#popup-textbox').val();
-     		message = edit_tip_or_accident(m, messageId);
-     		str_id = 'message' + messageId;
-     		refreshMarker(str_id);
+        title = $("#popup-title").text();
+        if (title.indexOf("Edit") > -1) {
+            m = $('#popup-textbox').val();
+            message = edit_tip_or_accident(m, messageId);
+            str_id = 'message' + messageId;
+            refreshMarker(str_id);
 
-     		$("#popup").dialog('close');
-     		$("#popup-textbox").val("");
+            $("#popup").dialog('close');
+            $("#popup-textbox").val("");
           $("#report-button").removeClass("active");
           $("#tip-button").removeClass("active");
       } else {
@@ -857,31 +857,31 @@ $("#route").click(function(e) {
    populate_accidents();
 
    $('.dropdown-menu').click(function(e) {
-	        e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
-	    });
+            e.stopPropagation(); //This will prevent the event from bubbling up and close the dropdown when you type/click on text boxes.
+        });
 
      $("#routes button").width("100%");
      $("#savedButton").click(function() {
-	$.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
-	    .done(function( data ) {
-		if (data.error != "") {
-			$("#save-route-error").show();
-		    $('#save-route-error').delay(500).fadeOut(400);
-		} else {
-		    $("#save-route-alert").show();
-		    $('#save-route-alert').delay(500).fadeOut(400);
-		}
-	});
+    $.post( "db.php", { op: "save_route", route_key: last_route[0], name: last_route[1], from_loc: last_route[2], to_loc: last_route[3], route_index: last_route[4] })
+        .done(function( data ) {
+        if (data.error != "") {
+            $("#save-route-error").show();
+            $('#save-route-error').delay(500).fadeOut(400);
+        } else {
+            $("#save-route-alert").show();
+            $('#save-route-alert').delay(500).fadeOut(400);
+        }
+    });
      });
 
      $('#back-to-routes').click(function(e) {
      if (!savedRouteView) {
-    	e.preventDefault();
-	    $("#navigation").hide();
-	    $("#containerfluid").show();
-	    for (route in displayRoutes) {
-	        displayRoutes[route].setMap(map);
-	    }
+        e.preventDefault();
+        $("#navigation").hide();
+        $("#containerfluid").show();
+        for (route in displayRoutes) {
+            displayRoutes[route].setMap(map);
+        }
      } else {
         $("#containerfluid").hide();
         $("#saved-routes").show();
@@ -975,18 +975,18 @@ $('#route-rateSaved').click(function(e) {
          return false;
      });
 
-	$("#route-save").click(function() {
-	    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
- 	    .done(function( data ) {
-		if (data.error != "") {
+    $("#route-save").click(function() {
+        $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
+        .done(function( data ) {
+        if (data.error != "") {
             $("#save-rate-error").show();
-		    $('#save-rate-error').delay(500).fadeOut(400);
-		} else {
-		    $("#save-rate-alert").show();
-		    $('#save-rate-alert').delay(500).fadeOut(400);
-		}
-	   });
- 	});
+            $('#save-rate-error').delay(500).fadeOut(400);
+        } else {
+            $("#save-rate-alert").show();
+            $('#save-rate-alert').delay(500).fadeOut(400);
+        }
+       });
+    });
 
     $("#route-save").click(function() {
         $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
