@@ -164,6 +164,13 @@ function addMarker(feature) {
   google.maps.event.addListener(marker, 'click', function() {
    marker.info.open(map, this);
 });
+
+  google.maps.event.addListener(marker, 'visible_changed', function() {
+    if (!marker.getVisible()) {
+      marker.info.close();
+    }                  
+  });
+
   map.setOptions({
    draggableCursor: 'default'
 });
