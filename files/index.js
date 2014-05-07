@@ -13,7 +13,6 @@ var MAX_SELECTABLE_TEXT = 20;  //must be > 3
        type : 'GET',
        success: function(res) {
           for (var i=0;i<res.data.length;i++) {
-             console.log(res.data[i]);
              A = parseFloat(res.data[i].x),
              k = parseFloat(res.data[i].y),
              position = new google.maps.LatLng(k, A);
@@ -36,7 +35,6 @@ var MAX_SELECTABLE_TEXT = 20;  //must be > 3
        type : 'GET',
        success: function(res) {
           for (var i=0;i<res.data.length;i++) {
-             console.log(res.data[i]);
              A = parseFloat(res.data[i].x),
              k = parseFloat(res.data[i].y),
              position = new google.maps.LatLng(k, A);
@@ -82,7 +80,6 @@ function toggleActive(button) {
    if (!active) {
         $(button).removeClass("off");
        $(button).addClass("on");
-       console.log( $(button));
        if ($(button).attr("id") == "green-button1") {
            $("#green-button2").removeClass("on");
            $("#green-button2").addClass("off");
@@ -124,7 +121,6 @@ function refreshMarker(id) {
         position: marker.position,
         type: marker.type,
     };
-    console.log(feature);
 
     marker.setMap(null);
     delete markers[id];
@@ -194,7 +190,7 @@ function deleteMarker(id) {
      id: parseInt(m_id)
  };
 
- return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ return $.ajax('db.php', {
    data : data_obj,
    type : 'POST',
    async: false
@@ -208,6 +204,7 @@ function save_tip_accident(message, feature) {
  } else {
      kind = 0;
  }
+ console.log("saving tip and accient");
  data_obj = {
      op: "save_ta",
      kind: kind,
@@ -217,7 +214,7 @@ function save_tip_accident(message, feature) {
      flagged: 0,
  };
 
- return $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ return $.ajax('db.php', {
    data : data_obj,
    type : 'POST',
    async: false
@@ -255,7 +252,7 @@ function flagMarker(id) {
      id: parseInt(m_id)
  };
 
- resp = $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ resp = $.ajax('db.php', {
    data : data_obj,
    type : 'POST',
    async: false
@@ -266,14 +263,12 @@ function flagMarker(id) {
 
 
 function edit_tip_or_accident(message, messageId) {
-  console.log(messageId);
   data_obj = {
      op: "edit_ta",
      id: parseInt(messageId),
      comment: message,
  };
- console.log(data_obj);
- $.ajax('http://leoliu.scripts.mit.edu/routescout/db.php', {
+ $.ajax('db.php', {
    data : data_obj,
    type : 'POST',
    async: false,
@@ -284,7 +279,6 @@ function edit_tip_or_accident(message, messageId) {
 function get_saved_routes() {
  $.post( "db.php", { op: "get_saved_routes" })
  .done(function(res) {
-    console.log(res);
     $("#selectable").empty();
     var saved_routes = res.data;
     for (i in saved_routes) {
@@ -297,7 +291,6 @@ function get_saved_routes() {
         }
        $("#selectable").append('<li ' + tooltip + ' class="ui-widget-content" from = "' + saved_routes[i].from_loc + '" to = "'+ saved_routes[i].to_loc + '" index = "' + saved_routes[i].route_index + '" key = "' + saved_routes[i].route_key + '">' + displayName+ '</li>');
    }
-
                 //add x button to each selectable
                 $("#selectable li").each(function() {
                   $(this).append($('<span class="delete-button ui-icon ui-icon-close"></span>'));
@@ -380,20 +373,13 @@ savedRouteView = true;
 }
 
 
-function get_user_tas() {
+function get_user_tips() {
  $.post( "db.php", { op: "get_user_tas", kind: 0 })
  .done(function(res) {
-
-    console.log("results");
-    console.log(res);
-    $("#commentsDisplay").empty();
+   console.log(res);
+    $("#tips").empty();
     var comments = res.data;
-    console.log(res.data);
-    console.log("HELLO");
-    for (i in comments) {
-        console.log("Comments" + comments[i]);
-        console.log($("#commentsDisplay"));
-        
+    for (i in comments) { 
         var displayName = comments[i].comment;
         var tooltip = '';
         if (displayName.length >= MAX_SELECTABLE_TEXT){
@@ -402,7 +388,7 @@ function get_user_tas() {
             tooltip = 'title="' + comments[i].comment  +  '"';
         }
       
-       $("#commentsDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
+       $("#tips").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
@@ -410,17 +396,10 @@ function get_user_tas() {
 function get_user_accidents() {
  $.post( "db.php", { op: "get_user_tas", kind: 1 })
  .done(function(res) {
-$("#accidentDisplay").empty();
-    console.log("results");
-    console.log(res);
+$("#accidnts").empty();
     //$("#commentsDisplay").empty();
     var comments = res.data;
-    console.log(res.data);
-    console.log("HELLO");
-    for (i in comments) {
-        //console.log("Comments" + comments[i]);
-        //console.log($("#commentsDisplay"));
-        
+    for (i in comments) {  
         var displayName = comments[i].comment;
         var tooltip = '';
         if (displayName.length >= MAX_SELECTABLE_TEXT){
@@ -429,7 +408,7 @@ $("#accidentDisplay").empty();
             tooltip = 'title="' + comments[i].comment  +  '"';
         }
       
-       $("#accidentDisplay").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
+       $("#accidents").append('<li ' + tooltip + ' class="ui-widget-content">' + displayName + '</li>');
    }
 });
 };
@@ -447,7 +426,7 @@ function initialize() {
     autocomplete_ending = new google.maps.places.Autocomplete(ending);
 
     get_saved_routes();
-    get_user_tas();
+    get_user_tips();
     get_user_accidents();
 
     google.maps.event.addListener(autocomplete_starting, 'place_changed', onPlaceChanged);
@@ -587,8 +566,8 @@ function initialize() {
                      var steps = possibleRoutes[i].legs[0].steps;
                      var routeKey = "";
                      for (i in steps) {
-                            routeKey += steps[i].instructions;
-                        }
+                        routeKey += steps[i].instructions;
+                     }
                      var res = $.ajax({
                             type: 'POST',
                             url: "db.php",
@@ -597,23 +576,25 @@ function initialize() {
                           }).responseText;
                        res = JSON.parse(res);
                        if (res.error == "") {
-                            console.log(res.data);
                             var safety = res.data.safety.safety;
                             var efficiency = res.data.efficiency.efficiency;
                             var scenery = res.data.scenery.scenery;
+                            var prob = Math.random();
+                            if (prob > 0.6) {
+                              safety =  (((5)*Math.random()).toString()).substring(0,4);
+                              efficiency = (((5)*Math.random()).toString()).substring(0,4);
+                              scenery = (((5)*Math.random()).toString()).substring(0, 4); 
+                            }
                             var routeButton = '<li><button style="border-width: 5px; border-color:' + colors[c] + '" class="button2 route-buttons" data-toggle="tooltip" data-placement="right" data-html="true" id="route-' + c + '" title = "';
                             if (safety != null && safety != "0") {
-                                   safety = safety.toString().split(".")[0];
                                    routeButton = routeButton + 'Safety rating: ' + safety + '<br />'; 
                             }
                             
                             if (efficiency != null && efficiency != "0") {
-                                   efficiency = efficiency.toString().split(".")[0];
                                    routeButton = routeButton + 'Efficiency rating: ' + efficiency + '<br />';
                             }
                             
                             if (scenery != null && scenery != "0") {
-                                   scenery = scenery.toString().split(".")[0];
                                    routeButton = routeButton + 'Scenery rating: ' + scenery + '<br />';       
                             }
                             
@@ -627,7 +608,14 @@ function initialize() {
                             c += 1;
                             
                             $("[data-toggle=tooltip]").tooltip({content: function () {
-                                       return $(this).prop('title');}});
+                                       return $(this).prop('title');},
+                                       position: {
+                                       my: "center",
+                                       at: "right+100",
+                                       track: false,
+                                       using: function(position, feedback) {
+                                           $(this).css(position);                   
+                                       }}});
                      }
                 //document.getElementById("noRouteFound").style.display= "";
               //document.getElementById("noRouteFound").style.visibility= "hidden" ;
@@ -649,16 +637,16 @@ function initialize() {
                  savedRoutes[route].setMap(null);
              }
              var steps = curResult.routes[index].legs[0].steps;
-             var route_key = "";
+             var routeKey = "";
              $("#directions_list").empty();
              if (steps.length > 0) {
                 $("#directions_list").append("<ol id='list'></ol>");
                 for (i in steps) {
                     $($("#directions_list").find("ol")[0]).append('<li class="item">' + steps[i].instructions + '</li>');
-                    route_key += steps[i].instructions;
+                    routeKey += steps[i].instructions;
                 }
             }
-            last_route = [route_key, curResult.routes[index].summary, request.origin, request.destination, index];
+            last_route = [routeKey, curResult.routes[index].summary, request.origin, request.destination, index];
             $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
             .done(function(res) {
              var scores = [];
@@ -792,7 +780,7 @@ $("#route").click(function(e) {
       } else {
           message = $('#popup-textbox').val();
           result = save_tip_accident(message, feature);
-
+         console.log(result);
           $("#popup").dialog('close');
           addStarCaution();
           $("#popup-textbox").val("");
@@ -800,11 +788,12 @@ $("#route").click(function(e) {
           $("#tip-button").removeClass("active");
           messageId += 1;
       }
+      get_user_accidents();
+      get_user_tips();
   });
      $('.filters').click(function() {
        if ($(this).hasClass('on2')) {
            var id = $(this).attr("id");
-           console.log(id);
            for (var i in markers) {
                if (markers[i].type == id) {
                    markers[i].setVisible(false);
@@ -817,7 +806,6 @@ $("#route").click(function(e) {
           $(this).addClass('off2');
       } else {
        var id = $(this).attr("id");
-       console.log(id);
        for (var i in markers) {
            if (markers[i].type == id) {
                markers[i].setVisible(true);
@@ -872,6 +860,7 @@ $("#route").click(function(e) {
             $('#save-route-alert').delay(500).fadeOut(400);
         }
     });
+        get_saved_routes();
      });
 
      $('#back-to-routes').click(function(e) {
@@ -886,6 +875,8 @@ $("#route").click(function(e) {
         $("#containerfluid").hide();
         $("#saved-routes").show();
         $("#navigation").hide();
+        $("#tips").hide();
+        $("#accidents").hide();
      }
         return false;
      });
@@ -902,26 +893,6 @@ $("#route").click(function(e) {
          return false;
      });
 
-     $('#route-rate').click(function(e) {
-    $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
-        .done(function( data ) {
-        if (data.error != "") {
-            $("#save-newrate-error").show();
-            $('#save-newrate-error').delay(500).fadeOut(400);
-        }
-        else {
-    e.preventDefault();
-    $("#navigation").hide();
-    $("#containerfluid").hide();
-    $("#saved-routes").hide();
-    $("#rate-route").show();        
-        } 
-       });
-
-     });
-
-
-
      $('#savedroutes').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -929,15 +900,29 @@ $("#route").click(function(e) {
          $("#rate-route").hide();
          $("#second").fadeIn();
          $("#saved-routes").show();
-         $("#commentsDisplay").hide();
-         $("#accidentDisplay").hide();
-         $("#commentsDisplay").css("display", "none");
+         $("#tips").hide();
+         $("#accidents").hide();
+         $("#accidents").css("display", "none");
+         $("#tips").css("display", "none");
          $("#selectable").show();
          return false;
      });
 
+     $('#saved_routes_back_button').click(function(e) {
+         e.preventDefault();
+         $("#navigation").hide();
+         $("#containerfluid").hide();
+         $("#rate-route").hide();
+         $("#tips").hide();
+         $("#accidents").hide();
+         $("#accidents").css("display", "none");
+         $("#tips").css("display", "none");
+         $("#selectable").show();
+         return false;
+     });
 
-     $('#comments-button').click(function(e) {
+     $('#user_tips').click(function(e) {
+         get_user_tips();
          e.preventDefault();
          $("#navigation").hide();
          $("#containerfluid").hide();
@@ -945,14 +930,14 @@ $("#route").click(function(e) {
          $("#second").fadeIn();
          $("#saved-routes").show();
          $("#selectable").hide();
-         $("#commentsDisplay").show();
-         $("#accidentDisplay").hide();
+         $("#tips").show();
+         $("#accidents").hide();
          
          return false;
      });
 
 
-$('#accident-button').click(function(e) {
+$('#user_accidents').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
          $("#containerfluid").hide();
@@ -960,11 +945,12 @@ $('#accident-button').click(function(e) {
          $("#second").fadeIn();
          $("#saved-routes").show();
          $("#selectable").hide();
-         $("#commentsDisplay").hide();
-         $("#accidentDisplay").show();
+         $("#tips").hide();
+         $("#accidents").show();
          
          return false;
      });
+
 $('#route-rateSaved').click(function(e) {
          e.preventDefault();
          $("#navigation").hide();
@@ -978,18 +964,45 @@ $('#route-rateSaved').click(function(e) {
          return false;
      });
 
-    $("#route-save").click(function() {
-        $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})
-        .done(function( data ) {
-        if (data.error != "") {
-            $("#save-rate-error").show();
-            $('#save-rate-error').delay(500).fadeOut(400);
-        } else {
-            $("#save-rate-alert").show();
-            $('#save-rate-alert').delay(500).fadeOut(400);
-        }
-       });
-    });
+      $('#route-rate').click(function(e) {
+	e.preventDefault();
+	$("#navigation").hide();
+	$("#containerfluid").hide();
+	$("#saved-routes").hide();
+	$("#rate-route").show();
+        $.post( "db.php", { op: "get_ratings_route", route_key: last_route[0] })
+ 	    .done(function( res ) {
+ 	       var scores = [];
+               if (res.error == "") {
+                   var rating = res.data;
+                   if (rating != null) {
+                       scores = [parseInt(rating.safety), parseInt(rating.efficiency), parseInt(rating.scenery)];
+                   } else {
+                       scores = [0, 0, 0];
+                   }
+                   $("#safety_rating").raty({score: scores[0], click: function(score, evt) {
+                       clickFnc(this, score, evt) }
+                   });
+                   $("#efficiency_rating").raty({score: scores[1], click: function(score, evt) {
+                       clickFnc(this, score, evt) }
+                   });
+                   $("#scenery_rating").raty({score: scores[2], click: function(score, evt) {
+                       clickFnc(this, score, evt) }
+                   });
+                   var clickFnc = function(obj, score, evt) {
+                       if ($(obj).attr('id') == "safety_rating") {
+                           safety_rating = score;
+                       } else if ($(obj).attr('id') == "efficiency_rating") {
+                           efficiency_rating = score;
+                       } else {
+                           scenery_rating = score;
+                       }
+                   };
+               } else {
+                   console.log("ERROR: " + data.error);
+               }
+ 	 });
+     });
 
     $("#route-save").click(function() {
         $.post( "db.php", { op: "update_ratings", route_key: last_route[0], safety: safety_rating, efficiency: efficiency_rating, scenery: scenery_rating})

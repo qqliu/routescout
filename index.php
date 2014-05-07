@@ -231,10 +231,6 @@ function ifCorrect() {
     <script src="files/bootstrap-collapse.js"></script>
     <script src="files/bootstrap-carousel.js"></script>
     <script src="files/bootstrap-typeahead.js"></script>
-    <script src="bootstrap/js/bootstrap-alert.js"></script>
-    <script src="bootstrap/js/bootstrap-modal.js"></script>
-    <script src="bootstrap/js/bootstrap-transition.js"></script>
-    <script src="bootstrap/js/bootstrap-tooltip.js"></script>
     <script src="ratePlugin/jquery.raty.min.js"></script>
     <script src="files/jquery-ui-1.10.4/ui/jquery-ui.js" type=
     "text/javascript"></script>
@@ -498,18 +494,16 @@ function ifCorrect() {
 
                   <div id="saved-routes" style="display:none">
                    <div class="row-fluid" id="bottom-buttons">
+                    <div class = "go-back" style="padding: 10px;">
+                            <a id="back-saved-routes"><img src="back-arrow.png"></a>
+                        </div>
+                    <div style="margin-left: 10%; margin-bottom: 5%">
+                        <button class="button" id="saved_routes_back_button" type="button">Saved Routes </a></button>
 
-                    <div class="span1 offset11" id="route-rate-button" style="text-align:center; width: 135px;margin-top:10px;">
-                        <button class="button" id="route-rateSaved" type="button">Saved Routes </a></button>
-                    </div>
 
-
-                    <div class="span3 offset10" id="route-rate-button" style="text-align:center; width: 95px;margin-top:10px;">
-                        <button class="button" id="route-rate" type="button">Ratings </a></button>
-                    </div>
-                    <div class="span3 offset3" id="comments-button" style="text-align:center; width: 125px;margin-top:10px;">
-                        <button class="button" id="comments-button" type="button">
-                            My Comments</button>
+                        <button class="button" id="user_tips" type="button">Tips </a></button>
+                        <button class="button" id="user_accidents" type="button">
+                            Accident Reports</button>
                         </div>
 
                     </div>
@@ -518,7 +512,8 @@ function ifCorrect() {
                         <!--<h2>Saved Routes</h2>-->
 
                         
-                        <ol id="commentsDisplay"></ol>
+                        <ol id="accidents"></ol>
+                        <ol id="tips"></ol>
                         <ol id="selectable">
                         </ol>
 
